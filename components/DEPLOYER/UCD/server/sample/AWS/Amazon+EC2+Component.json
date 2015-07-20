@@ -1,0 +1,311 @@
+{
+    "securityResourceId": "10edf2c8-dbc8-4fa0-9f7e-7774cfdbcbe3",
+    "path": "componentTemplates\/0241105b-82eb-40ba-8f4f-91672aba012c",
+    "name": "Amazon EC2 Component",
+    "description": "Template for an EC2 cloud instance",
+    "ignoreQualifiers": 0,
+    "componentType": "STANDARD",
+    "tags": [],
+    "active": true,
+    "envPropDefs": [
+        {
+            "name": "cloudHostName",
+            "label": "cloudHostName",
+            "pattern": "",
+            "type": "TEXT",
+            "required": false,
+            "description": "",
+            "placeholder": ""
+        },
+        {
+            "name": "cloudInstanceID",
+            "label": "cloudInstanceID",
+            "pattern": "",
+            "type": "TEXT",
+            "required": false,
+            "description": "",
+            "placeholder": ""
+        }
+    ],
+    "propDefs": [
+        {
+            "name": "AMI_ID",
+            "label": "AMI_ID",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "ami-2aa0ba42",
+            "required": true,
+            "description": "Amazon Machine Image ID",
+            "placeholder": ""
+        },
+        {
+            "name": "accessKeyId",
+            "label": "accessKeyId",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "AKIAJVA3SHRMJJOIPOSQ",
+            "required": true,
+            "description": "Amazon auth  key ID",
+            "placeholder": ""
+        },
+        {
+            "name": "secretKey",
+            "label": "secretKey",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "92Xh3bh8wopWc3vpqEYPwQ2lJ2gYGipugwCFo06U",
+            "required": true,
+            "description": "Required auth secret",
+            "placeholder": ""
+        },
+        {
+            "name": "keyPairName",
+            "label": "keyPairName",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "github_rsa",
+            "required": true,
+            "description": "Name of existing key pair in AWS account",
+            "placeholder": ""
+        }
+    ],
+    "properties": [
+        {
+            "name": "AWSjarName",
+            "value": "\/install\/aws-java-sdk-1.3.7.jar",
+            "description": "",
+            "secure": false
+        },
+        {
+            "name": "cloudHostName",
+            "description": "",
+            "secure": false
+        },
+        {
+            "name": "cloudInstanceID",
+            "description": "",
+            "secure": false
+        }
+    ],
+    "processes": [
+        {
+            "name": "EC2 Component Launcher",
+            "description": "",
+            "defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+            "takesVersion": false,
+            "status": "",
+            "active": true,
+            "path": "componentTemplates\/0241105b-82eb-40ba-8f4f-91672aba012c\/processes\/1108eef5-d45c-404f-b3a0-bb2b249f1aac",
+            "propDefs": [],
+            "rootActivity": {
+                "edges": [
+                    {
+                        "to": "Set DNS Environment Property",
+                        "from": "Launch_Instances",
+                        "type": "SUCCESS",
+                        "value": ""
+                    },
+                    {
+                        "to": "097600fb6bc314dc4d45a0cd2dbd09",
+                        "from": "Set DNS Environment Property",
+                        "type": "SUCCESS",
+                        "value": ""
+                    },
+                    {
+                        "to": "Launch_Instances",
+                        "type": "ALWAYS",
+                        "value": ""
+                    },
+                    {
+                        "to": "097600fb6bc314dc4d45a0cd2dbd09",
+                        "from": "Set Instance ID Environment Property",
+                        "type": "SUCCESS",
+                        "value": ""
+                    },
+                    {
+                        "to": "Set Instance ID Environment Property",
+                        "from": "Launch_Instances",
+                        "type": "SUCCESS",
+                        "value": ""
+                    }
+                ],
+                "offsets": [
+                    {
+                        "name": "Launch_Instances",
+                        "x": -60,
+                        "y": 100,
+                        "h": 60,
+                        "w": 200
+                    },
+                    {
+                        "name": "Set DNS Environment Property",
+                        "x": -320,
+                        "y": 230,
+                        "h": 60,
+                        "w": 320
+                    },
+                    {
+                        "name": "097600fb6bc314dc4d45a0cd2dbd09",
+                        "x": -5,
+                        "y": 420,
+                        "h": 50,
+                        "w": 90
+                    },
+                    {
+                        "name": "Set Instance ID Environment Property",
+                        "x": 80,
+                        "y": 230,
+                        "h": 60,
+                        "w": 320
+                    }
+                ],
+                "type": "graph",
+                "name": "0acf8a35-4a89-4938-8642-a7d1c93b9946",
+                "children": [
+                    {
+                        "type": "finish",
+                        "name": "097600fb6bc314dc4d45a0cd2dbd09",
+                        "children": []
+                    },
+                    {
+                        "allowFailure": false,
+                        "useImpersonation": false,
+                        "showHidden": false,
+                        "impersonationUseSudo": false,
+                        "commandName": "Launch Instances",
+                        "pluginName": "AmazonEC2",
+                        "pluginVersion": 5,
+                        "properties": {
+                            "accessKeyId": "${p:accessKeyId}",
+                            "secretKey": "${p:secretKey}",
+                            "number": "1",
+                            "instanceType": "t1.micro",
+                            "group": "",
+                            "zone": "",
+                            "keypair": "${p:keyPairName}",
+                            "ami": "${p:AMI_ID}",
+                            "options": "",
+                            "sdkJar": "${p:component\/AWSjarName}"
+                        },
+                        "type": "plugin",
+                        "name": "Launch_Instances",
+                        "children": []
+                    },
+                    {
+                        "allowFailure": false,
+                        "useImpersonation": false,
+                        "showHidden": false,
+                        "impersonationUseSudo": false,
+                        "commandName": "Set Component Environment Property",
+                        "pluginName": "IBM UrbanCode Deploy Environments",
+                        "pluginVersion": 68,
+                        "properties": {
+                            "component": "${p:component.id}",
+                            "environment": "${p:environment.id}",
+                            "application": "",
+                            "name": "cloudHostName",
+                            "value": "${p:Launch_Instances\/dns}",
+                            "isSecure": "false"
+                        },
+                        "type": "plugin",
+                        "name": "Set DNS Environment Property",
+                        "children": []
+                    },
+                    {
+                        "allowFailure": false,
+                        "useImpersonation": false,
+                        "showHidden": false,
+                        "impersonationUseSudo": false,
+                        "commandName": "Set Component Environment Property",
+                        "pluginName": "IBM UrbanCode Deploy Environments",
+                        "pluginVersion": 68,
+                        "properties": {
+                            "component": "${p:component.id}",
+                            "environment": "${p:environment.id}",
+                            "application": "",
+                            "name": "cloudInstanceID",
+                            "value": "${p:Launch_Instances\/instances}",
+                            "isSecure": "false"
+                        },
+                        "type": "plugin",
+                        "name": "Set Instance ID Environment Property",
+                        "children": []
+                    }
+                ]
+            }
+        },
+        {
+            "name": "EC2 Component Launcher - CLI",
+            "description": "",
+            "defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+            "takesVersion": true,
+            "inventoryActionType": "ADD",
+            "status": "Active",
+            "configActionType": "ADD",
+            "active": true,
+            "path": "componentTemplates\/0241105b-82eb-40ba-8f4f-91672aba012c\/processes\/5a6c19b2-0c6f-4560-bd28-919424ceccd3",
+            "propDefs": [],
+            "rootActivity": {
+                "edges": [
+                    {
+                        "to": "48d6cf16adce7966e06eadd65f90eb",
+                        "from": "Run EC2 Instance",
+                        "type": "SUCCESS",
+                        "value": ""
+                    },
+                    {
+                        "to": "Run EC2 Instance",
+                        "type": "ALWAYS",
+                        "value": ""
+                    }
+                ],
+                "offsets": [
+                    {
+                        "name": "48d6cf16adce7966e06eadd65f90eb",
+                        "x": -5,
+                        "y": 420,
+                        "h": 50,
+                        "w": 90
+                    },
+                    {
+                        "name": "Run EC2 Instance",
+                        "x": -1.5,
+                        "y": 175,
+                        "h": 60,
+                        "w": 180
+                    }
+                ],
+                "type": "graph",
+                "name": "b25aa7b4-d845-4ea2-95a0-fed3b1e369e1",
+                "children": [
+                    {
+                        "type": "finish",
+                        "name": "48d6cf16adce7966e06eadd65f90eb",
+                        "children": []
+                    },
+                    {
+                        "allowFailure": false,
+                        "useImpersonation": false,
+                        "showHidden": false,
+                        "impersonationUseSudo": false,
+                        "commandName": "Shell",
+                        "pluginName": "Shell",
+                        "pluginVersion": 6,
+                        "properties": {
+                            "directoryOffset": ".",
+                            "shellInterpreter": "",
+                            "scriptBody": "aws ec2 run-instances --image-id ami-60a10117 --count 1 --instance-type t2.micro --key-name github_rsa --security-group-ids sg-66dc4703 --subnet-id subnet-7cf03b25\n",
+                            "runAsDaemon": "false",
+                            "outputFile": ""
+                        },
+                        "type": "plugin",
+                        "name": "Run EC2 Instance",
+                        "children": []
+                    }
+                ]
+            }
+        }
+    ],
+    "genericProcesses": [],
+    "teamMappings": []
+}

@@ -1,0 +1,22 @@
+{
+  "application": "Artifactory-JPetStore",
+  "description": "Requesting deployment",
+  "applicationProcess": "Deploy JPetStore",
+  "environment": "DEV",
+  "onlyChanged": "false",
+  "properties": {},
+  "versions": [
+	{
+		"version": "1.0",
+		"component": "Artifactory-JPetStore-APP"
+	},
+	{
+		"version": "1.0",
+		"component": "Artifactory-JPetStore-WEB"
+	},
+	{
+		"version": "1.0",
+		"component": "Artifactory-JPetStore-DB"
+	}
+  ]
+}

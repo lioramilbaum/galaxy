@@ -1,0 +1,240 @@
+{
+    "securityResourceId": "eb242530-5b4c-4313-ac92-91a290a54e48",
+    "path": "componentTemplates\/b0565915-d1e6-4e2e-8969-30a5da944ae0",
+    "name": "Amazon EC2 Component",
+    "description": "Template for an EC2 cloud instance",
+    "ignoreQualifiers": 0,
+    "componentType": "STANDARD",
+    "tags": [],
+    "active": true,
+    "envPropDefs": [
+        {
+            "name": "cloudHostName",
+            "label": "cloudHostName",
+            "pattern": "",
+            "type": "TEXT",
+            "required": false,
+            "description": "",
+            "placeholder": ""
+        },
+        {
+            "name": "cloudInstanceID",
+            "label": "cloudInstanceID",
+            "pattern": "",
+            "type": "TEXT",
+            "required": false,
+            "description": "",
+            "placeholder": ""
+        }
+    ],
+    "propDefs": [
+        {
+            "name": "AMI_ID",
+            "label": "AMI_ID",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "ami-2aa0ba42",
+            "required": true,
+            "description": "Amazon Machine Image ID",
+            "placeholder": ""
+        },
+        {
+            "name": "accessKeyId",
+            "label": "accessKeyId",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "AKIAJYDFBDR2AZDGMWLA",
+            "required": true,
+            "description": "Amazon auth  key ID",
+            "placeholder": ""
+        },
+        {
+            "name": "secretKey",
+            "label": "secretKey",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "LVhynfXI4WRnlrXj1+zhrnU5noxz2zef\/hqrIH4T",
+            "required": true,
+            "description": "Required auth secret",
+            "placeholder": ""
+        },
+        {
+            "name": "keyPairName",
+            "label": "keyPairName",
+            "pattern": "",
+            "type": "TEXT",
+            "value": "github_rsa",
+            "required": true,
+            "description": "Name of existing key pair in AWS account",
+            "placeholder": ""
+        }
+    ],
+    "properties": [
+        {
+            "name": "AWSjarName",
+            "value": "\/install\/aws-java-sdk-1.3.7.jar",
+            "description": "",
+            "secure": false
+        },
+        {
+            "name": "cloudHostName",
+            "description": "",
+            "secure": false
+        },
+        {
+            "name": "cloudInstanceID",
+            "description": "",
+            "secure": false
+        }
+    ],
+    "processes": [{
+        "name": "EC2 Component Launcher",
+        "description": "",
+        "defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+        "takesVersion": false,
+        "status": "",
+        "active": true,
+        "path": "componentTemplates\/b0565915-d1e6-4e2e-8969-30a5da944ae0\/processes\/f9eefd64-4525-4bf8-9262-3cc46d60fd7c",
+        "propDefs": [],
+        "rootActivity": {
+            "edges": [
+                {
+                    "to": "097600fb6bc314dc4d45a0cd2dbd09",
+                    "from": "Install Agent with SSH",
+                    "type": "SUCCESS",
+                    "value": ""
+                },
+                {
+                    "to": "Install Agent with SSH",
+                    "from": "Set DNS as Component Environment Property",
+                    "type": "SUCCESS",
+                    "value": ""
+                },
+                {
+                    "to": "Set DNS as Component Environment Property",
+                    "from": "Launch_Instances",
+                    "type": "SUCCESS",
+                    "value": ""
+                },
+                {
+                    "to": "Launch_Instances",
+                    "type": "ALWAYS",
+                    "value": ""
+                }
+            ],
+            "offsets": [
+                {
+                    "name": "Set DNS as Component Environment Property",
+                    "x": -411.5,
+                    "y": 200,
+                    "h": 60,
+                    "w": 330
+                },
+                {
+                    "name": "097600fb6bc314dc4d45a0cd2dbd09",
+                    "x": -5,
+                    "y": 420,
+                    "h": 50,
+                    "w": 90
+                },
+                {
+                    "name": "Launch_Instances",
+                    "x": -60,
+                    "y": 100,
+                    "h": 60,
+                    "w": 200
+                },
+                {
+                    "name": "Install Agent with SSH",
+                    "x": 98.5,
+                    "y": 200,
+                    "h": 60,
+                    "w": 240
+                }
+            ],
+            "type": "graph",
+            "name": "bc0d2b7d-fde5-443c-9c74-912fabceaf27",
+            "children": [
+                {
+                    "type": "finish",
+                    "name": "097600fb6bc314dc4d45a0cd2dbd09",
+                    "children": []
+                },
+                {
+                    "allowFailure": false,
+                    "useImpersonation": false,
+                    "showHidden": false,
+                    "impersonationUseSudo": false,
+                    "commandName": "Launch Instances",
+                    "pluginName": "AmazonEC2",
+                    "pluginVersion": 5,
+                    "properties": {
+                        "accessKeyId": "${p:accessKeyId}",
+                        "secretKey": "${p:secretKey}",
+                        "number": "1",
+                        "instanceType": "t1.micro",
+                        "group": "",
+                        "zone": "",
+                        "keypair": "${p:keyPairName}",
+                        "ami": "${p:AMI_ID}",
+                        "options": "",
+                        "sdkJar": "${p:component\/AWSjarName}"
+                    },
+                    "type": "plugin",
+                    "name": "Launch_Instances",
+                    "children": []
+                },
+                {
+                    "allowFailure": false,
+                    "useImpersonation": false,
+                    "showHidden": false,
+                    "impersonationUseSudo": false,
+                    "commandName": "Install Agent with SSH",
+                    "pluginName": "IBM UrbanCode Deploy Resources",
+                    "pluginVersion": 67,
+                    "properties": {
+                        "name": "${p:Launch_Instances\/dns}",
+                        "host": "${p:Launch_Instances\/dns}",
+                        "sshUsername": "",
+                        "sshPassword": "crypt_v1{AES\/CBC\/PKCS5Padding|aes128key8ph4|zoiWmcmvHX2fef7\/IFvJSw==|aAV\/BZ1jo8Vb6xufDhMdMA==}",
+                        "installDir": "\/opt\/ibm-ucd\/agent",
+                        "javaHomePath": "",
+                        "serverHost": "lmb-ucd-server",
+                        "mutualAuth": "false",
+                        "waitForOnline": "true",
+                        "port": "22",
+                        "serverPort": "7918",
+                        "proxyHost": "",
+                        "proxyPort": "20080",
+                        "tempDirPath": "\/tmp"
+                    },
+                    "type": "plugin",
+                    "name": "Install Agent with SSH",
+                    "children": []
+                },
+                {
+                    "allowFailure": false,
+                    "useImpersonation": false,
+                    "showHidden": false,
+                    "impersonationUseSudo": false,
+                    "commandName": "Set Component Environment Property",
+                    "pluginName": "IBM UrbanCode Deploy Environments",
+                    "pluginVersion": 68,
+                    "properties": {
+                        "component": "${p:component.id}",
+                        "environment": "${p:environment.id}",
+                        "application": "",
+                        "name": "cloudHostName",
+                        "value": "${p:Launch_Instances\/dns}",
+                        "isSecure": "false"
+                    },
+                    "type": "plugin",
+                    "name": "Set DNS as Component Environment Property",
+                    "children": []
+                }
+            ]
+        }
+    }],
+    "genericProcesses": [],
+    "teamMappings": []
+}

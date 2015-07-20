@@ -1,0 +1,319 @@
+{
+    "name": "helloApplication",
+    "enforceCompleteSnapshots": false,
+    "propSheet": {"properties": []},
+    "notificationSchemeName": "Default Notification Scheme",
+    "components": [{
+        "name": "helloWorld",
+        "description": "",
+        "created": 1426747057926,
+        "componentType": "STANDARD",
+        "ignoreQualifiers": 0,
+        "importAutomatically": false,
+        "useVfs": true,
+        "active": true,
+        "deleted": false,
+        "defaultVersionType": "FULL",
+        "cleanupDaysToKeep": 0,
+        "cleanupCountToKeep": 0,
+        "sourceConfigPluginName": "File System (Versioned)",
+        "envPropDefs": [],
+        "resPropDefs": [],
+        "versionPropDefs": [],
+        "propSheetGroup": {"propSheets": [
+            {
+                "name": "template",
+                "properties": []
+            },
+            {
+                "name": "custom",
+                "properties": [{
+                    "name": "helloHome",
+                    "value": "\/tmp\/helloWorld",
+                    "description": "",
+                    "secure": false
+                }]
+            },
+            {
+                "name": "FileSystemVersionedComponentProperties",
+                "properties": [{
+                    "name": "basePath",
+                    "value": "\/tmp\/helloWorld",
+                    "description": "",
+                    "secure": false
+                }]
+            }
+        ]},
+        "processes": [{
+            "name": "helloProcess",
+            "description": "",
+            "defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+            "takesVersion": true,
+            "inventoryActionType": "ADD",
+            "status": "Active",
+            "configActionType": "ADD",
+            "active": true,
+            "path": "components\/52ce724c-c282-46e1-a644-deddc79e9c98\/processes\/f0911e48-b499-4ca0-a0a3-fff9b0ef1491",
+            "propDefs": [],
+            "rootActivity": {
+                "edges": [
+                    {
+                        "to": "Compress artifacts",
+                        "from": "Download Artifacts",
+                        "type": "SUCCESS",
+                        "value": ""
+                    },
+                    {
+                        "to": "FINISH",
+                        "from": "Deploy artifacts",
+                        "type": "SUCCESS",
+                        "value": ""
+                    },
+                    {
+                        "to": "Download Artifacts",
+                        "from": "Clean work space",
+                        "type": "SUCCESS",
+                        "value": ""
+                    },
+                    {
+                        "to": "Deploy artifacts",
+                        "from": "Compress artifacts",
+                        "type": "SUCCESS",
+                        "value": ""
+                    },
+                    {
+                        "to": "Clean work space",
+                        "type": "SUCCESS",
+                        "value": ""
+                    }
+                ],
+                "offsets": [
+                    {
+                        "name": "FINISH",
+                        "x": -65,
+                        "y": 500
+                    },
+                    {
+                        "name": "Download Artifacts",
+                        "x": -65,
+                        "y": 210
+                    },
+                    {
+                        "name": "Compress artifacts",
+                        "x": -65,
+                        "y": 300
+                    },
+                    {
+                        "name": "Clean work space",
+                        "x": -65,
+                        "y": 90
+                    },
+                    {
+                        "name": "Deploy artifacts",
+                        "x": -65,
+                        "y": 400
+                    }
+                ],
+                "type": "graph",
+                "name": "534c633b-154f-4a51-bc4b-4dbd085ea8a8",
+                "children": [
+                    {
+                        "allowFailure": false,
+                        "useImpersonation": false,
+                        "showHidden": false,
+                        "impersonationUseSudo": false,
+                        "commandName": "Delete Files and Directories",
+                        "pluginName": "File Utils",
+                        "pluginVersion": 39,
+                        "properties": {
+                            "baseDir": ".",
+                            "includes": "*",
+                            "excludes": "",
+                            "followSymlinks": "",
+                            "caseSensitive": "true"
+                        },
+                        "type": "plugin",
+                        "name": "Clean work space",
+                        "children": []
+                    },
+                    {
+                        "allowFailure": false,
+                        "useImpersonation": false,
+                        "showHidden": false,
+                        "impersonationUseSudo": false,
+                        "commandName": "Download Artifacts",
+                        "pluginName": "IBM UrbanCode Deploy Versioned File Storage",
+                        "pluginVersion": 21,
+                        "properties": {
+                            "directoryOffset": ".",
+                            "artifactSetBaseDir": "",
+                            "fileIncludePatterns": "**\/*",
+                            "fileExcludePatterns": "",
+                            "syncMode": "true",
+                            "fullVerification": "true",
+                            "setFileExecuteBits": "false",
+                            "verifyFileIntegrity": "false",
+                            "versionId": "${p:version.id}",
+                            "serverUrl": "${p:server.url}",
+                            "compId": "${p:component.id}",
+                            "resId": "${p:resource.id}",
+                            "charset": ""
+                        },
+                        "type": "plugin",
+                        "name": "Download Artifacts",
+                        "children": []
+                    },
+                    {
+                        "allowFailure": false,
+                        "useImpersonation": false,
+                        "showHidden": false,
+                        "impersonationUseSudo": false,
+                        "commandName": "Create .zip File",
+                        "pluginName": "File Utils",
+                        "pluginVersion": 39,
+                        "properties": {
+                            "zipName": "helloWorld.zip",
+                            "baseDir": ".",
+                            "includes": "*",
+                            "excludes": "",
+                            "update": "",
+                            "followSymlinks": "",
+                            "caseSensitive": "true"
+                        },
+                        "type": "plugin",
+                        "name": "Compress artifacts",
+                        "children": []
+                    },
+                    {
+                        "allowFailure": false,
+                        "useImpersonation": false,
+                        "showHidden": false,
+                        "impersonationUseSudo": false,
+                        "commandName": "Move Directory",
+                        "pluginName": "File Utils",
+                        "pluginVersion": 39,
+                        "properties": {
+                            "sourceDir": ".",
+                            "destDir": "${p:helloHome}\/target",
+                            "includes": "*.zip",
+                            "excludes": "",
+                            "mapperRules": ""
+                        },
+                        "type": "plugin",
+                        "name": "Deploy artifacts",
+                        "children": []
+                    },
+                    {
+                        "type": "finish",
+                        "name": "FINISH",
+                        "children": []
+                    }
+                ]
+            }
+        }],
+        "configTemplates": [],
+        "genericProcesses": [],
+        "teamMappings": []
+    }],
+    "environments": [{
+        "name": "helloDeploy",
+        "color": "#ffffff",
+        "requireApprovals": false,
+        "exemptProcesses": [],
+        "lockSnapshots": false,
+        "cleanupDaysToKeep": 0,
+        "cleanupCountToKeep": 0,
+        "order": 0,
+        "active": true,
+        "propSheet": {"properties": []},
+        "baseResources": [{
+            "path": "\/helloWorldTutorial",
+            "id": "f01ccdcd-93c0-4c81-870d-5a4a3a06e356"
+        }],
+        "componentPropSheets": [{
+            "properties": [],
+            "componentName": "helloWorld"
+        }],
+        "versionConditions": [],
+        "teamMappings": []
+    }],
+    "processes": [{
+        "name": "hello App Process",
+        "description": "",
+        "inventoryManagementType": "AUTOMATIC",
+        "offlineAgentHandling": "PRE_EXECUTION_CHECK",
+        "rootActivity": {
+            "edges": [
+                {
+                    "to": "FINISH",
+                    "from": "Deploy helloWorld",
+                    "type": "ALWAYS",
+                    "value": ""
+                },
+                {
+                    "to": "Deploy helloWorld",
+                    "type": "ALWAYS",
+                    "value": ""
+                }
+            ],
+            "offsets": [
+                {
+                    "name": "Deploy helloWorld",
+                    "x": -35,
+                    "y": 210
+                },
+                {
+                    "name": "FINISH",
+                    "x": 0,
+                    "y": 420
+                }
+            ],
+            "type": "graph",
+            "name": "545cf9ed-1a12-47ae-9aa2-a92dc5ff7254",
+            "children": [
+                {
+                    "componentName": "helloWorld",
+                    "properties": [
+                        {
+                            "name": "failFast",
+                            "value": "false"
+                        },
+                        {
+                            "name": "runOnlyOnFirst",
+                            "value": "false"
+                        },
+                        {
+                            "name": "maxIteration",
+                            "value": "-1"
+                        }
+                    ],
+                    "type": "componentEnvironmentIterator",
+                    "name": "Deploy helloWorld",
+                    "children": [{
+                        "componentName": "helloWorld",
+                        "status": "Active",
+                        "type": "inventoryVersionDiff",
+                        "name": "29f7c713-1975-4526-8280-213b7f2f4993",
+                        "children": [{
+                            "componentProcessName": "helloProcess",
+                            "componentName": "helloWorld",
+                            "allowFailure": false,
+                            "properties": {},
+                            "type": "componentProcess",
+                            "name": "Deploy HelloWorld",
+                            "children": []
+                        }]
+                    }]
+                },
+                {
+                    "type": "finish",
+                    "name": "FINISH",
+                    "children": []
+                }
+            ]
+        },
+        "propDefs": []
+    }],
+    "genericProcesses": [],
+    "teamMappings": []
+}

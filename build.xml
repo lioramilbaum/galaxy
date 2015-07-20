@@ -1,0 +1,356 @@
+<project name="Galaxy" default="up">
+	
+	<loadproperties srcFile="conf/Galaxy.properties"/>
+	
+	<target name="base">
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+			<arg line="/c vagrant destroy --force" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>
+		<delete file="package.box"/>
+		<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+				<arg line="/c vagrant up ubuntu --provider=virtualbox --no-parallel" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>
+		<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+				<arg line="/c vagrant package ubuntu" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>
+		<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+				<arg line="/c vagrant box add Opscode-ubuntu-12.04-Galaxy package.box --force" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>
+		<delete file="package.box"/>
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+			<arg line="/c vagrant destroy --force" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>	
+
+		<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+				<arg line="/c vagrant up centos --provider=virtualbox --no-parallel" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>
+		<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+				<arg line="/c vagrant package centos" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>
+		<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+				<arg line="/c vagrant box add CentOS-6.6-x86_64-v20150426-Galaxy package.box --force" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>
+		<delete file="package.box"/>
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+			<arg line="/c vagrant destroy --force" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>				
+	</target>
+	
+	<target name="init">
+
+		<fixcrlf srcdir="${GALAXY_HOME}/conf" includes="**/*.properties,**/*.yaml"
+			eol="crlf"/>
+
+		<copy file="${GALAXY_HOME}/conf/Galaxy.yaml" tofile="${GALAXY_HOME}/conf/nodes.properties" />
+		<replaceregexp file="${GALAXY_HOME}/conf/nodes.properties" match=":" replace="=" flags="g" byline="true" />
+
+		<concat destfile="${GALAXY_HOME}/conf/Galaxy.cfg">
+			<filelist dir="${GALAXY_HOME}/conf"
+				files="Galaxy.properties,Galaxy.yaml" />
+		</concat>
+		<replaceregexp file="${GALAXY_HOME}/conf/Galaxy.cfg" match=":\s+" replace="=" flags="g" byline="true" />
+		<replaceregexp file="${GALAXY_HOME}/conf/Galaxy.cfg" match="\{|\}" replace="" flags="g" byline="true" />
+		<replaceregexp file="${GALAXY_HOME}/conf/Galaxy.cfg" match="\s+=\s+" replace="=" flags="g" byline="true" />
+		<fixcrlf srcdir="${GALAXY_HOME}/conf" includes="**/*.cfg"
+			eol="lf"/>
+		
+		<loadproperties srcfile="${GALAXY_HOME}/conf/nodes.properties" />
+	</target>
+	
+	<target name="destroy" depends="">
+		
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+			<arg line="/c vagrant destroy --force" />
+		</exec>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>
+		
+	</target>
+	
+	<target name="up" depends="destroy">
+					
+		<if>
+			<equals arg1="${PROVISION_GIT}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up git --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		
+		<if>
+			<equals arg1="${PROVISION_STASH}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up stash --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		
+		<if>
+			<equals arg1="${PROVISION_GITHUB}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up github --provider=aws --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		<if>
+			<equals arg1="${PROVISION_DB}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up db --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		<if>
+			<equals arg1="${PROVISION_CLM}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up clm --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+
+		<if>
+			<equals arg1="${PROVISION_RRDI}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up rrdi --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		
+		<if>
+			<equals arg1="${PROVISION_CI}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up ci --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		
+		<if>
+			<equals arg1="${PROVISION_UCD}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up ucd --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		
+		<if>
+			<equals arg1="${PROVISION_UCDwP}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up ucdwp --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		
+		<if>
+			<equals arg1="${PROVISION_AGENT1}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up agent1 --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		<if>
+			<equals arg1="${PROVISION_AGENT2}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up agent2 --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		<if>
+			<equals arg1="${PROVISION_UCR}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up ucr --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		<if>
+			<equals arg1="${PROVISION_JIRA}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up jira --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		<if>
+			<equals arg1="${PROVISION_RLIA}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up rlia --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		<if>
+			<equals arg1="${PROVISION_ANSIBLE}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up ansible --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>							
+	</target>
+	
+	<target name="packer-local">
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
+			<arg line="/c berks vendor C:\temp\cookbooks" />
+		</exec>
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
+			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
+			<!-- 
+			<env key="PACKER_LOG" value="1"/>
+			-->
+			<arg line="/c packer build -var-file=variables.json galaxy.json" />
+		</exec>
+		<delete dir="C:\temp\cookbooks" />
+	</target>
+	
+	<target name="vagrant-push">
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
+			<arg line="/c vagrant push" />
+		</exec>
+	</target>
+	
+	<target name="packer-push">
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
+			<arg line="/c packer push -name liora/galaxy galaxy.json" />
+		</exec>
+	</target>
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="ant-contrib-0.6-bin/lib/ant-contrib-0.6.jar"/>
+	  </classpath>
+	</taskdef>
+	
+</project>

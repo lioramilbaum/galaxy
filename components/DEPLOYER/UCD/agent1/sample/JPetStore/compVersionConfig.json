@@ -1,0 +1,20 @@
+{
+	"name":"COMP_NAME",
+	"description":"",
+	"templateId":"",
+	"componentType":"STANDARD",
+	"sourceConfigPlugin":"File System (Versioned)",
+	"importAutomatically":"false",
+	"useVfs":"true",
+	"defaultVersionType":"FULL",
+	"importAgentType":"agent",
+	"integrationAgent":"AGENT_ID",
+	"inheritSystemCleanup":"true",
+	"runVersionCreationProcess":"false",
+	"existingId":"",
+	"properties": {
+		"FileSystemVersionedComponentProperties\/basePath": 
+		"/tmp/artifacts/shared/COMP_BASE"
+	},
+	"teamMappings":[]
+}

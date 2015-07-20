@@ -1,0 +1,4 @@
+{
+  "parent": "/PARENT_RESOURCE/AGENT_HOSTNAME",
+  "role": "COMP_NAME"
+}

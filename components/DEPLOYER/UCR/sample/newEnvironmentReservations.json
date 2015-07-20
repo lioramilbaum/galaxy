@@ -1,0 +1,8 @@
+{
+	"startDate": 1431464400000,
+	"endDate": 1431464400000,
+	"phase": {
+		"id": "QA"
+	},
+	"environment": { "QA-1" }
+}

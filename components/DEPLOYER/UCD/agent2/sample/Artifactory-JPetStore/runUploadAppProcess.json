@@ -1,0 +1,26 @@
+{
+  "application": "Artifactory-JPetStore-Upload",
+  "description": "",
+  "applicationProcess": "Upload",
+  "environment": "DEV",
+  "onlyChanged": "false",
+  "properties": {},
+  "versions": [
+	{
+		"version": "1.0",
+		"component": "Artifactory-JPetStore-WEB"
+	},
+	{
+		"version": "1.1",
+		"component": "Artifactory-JPetStore-WEB"
+	},
+	{
+		"version": "1.0",
+		"component": "Artifactory-JPetStore-DB"
+	},
+	{
+		"version": "1.1",
+		"component": "Artifactory-JPetStore-DB"
+	}
+  ]
+}

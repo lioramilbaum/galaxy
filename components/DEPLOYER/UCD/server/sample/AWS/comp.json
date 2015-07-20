@@ -1,0 +1,9 @@
+{
+  "name": "EC2-Ubuntu-AMI",
+  "description": "",
+  "importAutomatically": false,
+  "useVfs": true,
+  "sourceConfigPlugin": "",
+  "defaultVersionType": "FULL",
+  "properties": [],
+}

@@ -1,0 +1,6 @@
+{
+    "name": "Artifactory-JPetStore-Upload",
+    "description": "",
+    "notificationScheme": "Default Notification Scheme",
+    "enforceCompleteSnapshots": false
+}

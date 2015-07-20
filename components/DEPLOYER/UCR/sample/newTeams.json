@@ -1,0 +1,17 @@
+{
+    "name": "Core1 Release Team",
+    "description": "Core1 Release Team",
+    "userRoleForTeam": [
+        {
+            "user": {
+                "id": "00000000-0000-0000-0000-000000000002",
+                "name": "admin"
+            },
+            "role": {
+                "id": "00000000-0000-0000-0000-000000000003",
+                "name": "Admin"
+            }
+        }
+    ],
+    "groupRoleForTeam": []
+}

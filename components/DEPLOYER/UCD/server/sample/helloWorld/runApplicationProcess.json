@@ -1,0 +1,15 @@
+{
+  "application": "helloApplication",
+  "description": "Requesting deployment",
+  "applicationProcess": "hello App Process",
+  "environment": "helloDeploy",
+  "onlyChanged": "false",
+  "properties": {
+  },
+  "versions":  [
+    {
+      "version": "1.0",
+      "component": "helloWorld"
+    }
+  ]
+}

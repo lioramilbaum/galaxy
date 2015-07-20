@@ -1,0 +1,116 @@
+{
+	"name": "Deploy database component",
+	"component": "Artifactory-JPetStore-DB",
+	"description": "",
+	"defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+	"takesVersion": true,
+	"inventoryActionType": "ADD",
+	"status": "Active",
+	"configActionType": "ADD",
+	"active": true,
+	"path": "",
+	"propDefs": [],
+	"rootActivity": {
+		"edges": [
+			{
+				"to": "Finish",
+				"from": "Upgrade DB",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "Download Artifacts",
+				"type": "ALWAYS",
+				"value": ""
+			},
+			{
+				"to": "Upgrade DB",
+				"from": "Download Artifacts",
+				"type": "SUCCESS",
+				"value": ""
+			}
+		],
+		"offsets": [
+			{
+				"name": "Finish",
+				"x": 0,
+				"y": 420,
+				"h": 50,
+				"w": 80
+			},
+			{
+				"name": "Download Artifacts",
+				"x": -65,
+				"y": 110,
+				"h": 60,
+				"w": 210
+			},
+			{
+				"name": "Upgrade DB",
+				"x": -45,
+				"y": 250,
+				"h": 60,
+				"w": 170
+			}
+		],
+		"type": "graph",
+		"children": [
+			{
+				"type": "finish",
+				"name": "Finish",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Download Artifacts",
+				"pluginName": "IBM UrbanCode Deploy Versioned File Storage",
+				"pluginVersion": null,
+				"properties": {
+					"directoryOffset": ".",
+					"artifactSetBaseDir": "",
+					"fileIncludePatterns": "**\/*",
+					"fileExcludePatterns": "",
+					"syncMode": "true",
+					"fullVerification": "true",
+					"setFileExecuteBits": "false",
+					"verifyFileIntegrity": "false",
+					"versionId": "${p:version.id}",
+					"serverUrl": "${p:server.url}",
+					"compId": "${p:component.id}",
+					"resId": "${p:resource.id}",
+					"charset": ""
+				},
+				"type": "plugin",
+				"name": "Download Artifacts",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Upgrade DB",
+				"pluginName": "DBUpgrader",
+				"pluginVersion": null,
+				"properties": {
+					"driver": "com.mysql.jdbc.Driver",
+					"dbJar": "lib\/mysql-connector-java-5.1.20-bin.jar",
+					"dbUrl": "${p:environment\/db.url}",
+					"dbUser": "jpetstore",
+					"dbPass": "jppwd",
+					"sqlFilePath": ".",
+					"sqlFileInclude": "*.xml",
+					"currentVersionSql": "SELECT VER FROM DB_VERSION WHERE RELEASE_NAME = ?",
+					"deleteVersionSql": "DELETE FROM DB_VERSION WHERE RELEASE_NAME = ?",
+					"updateVersionSql": "INSERT INTO DB_VERSION (RELEASE_NAME,VER) VALUES(?,?)"
+				},
+				"type": "plugin",
+				"name": "Upgrade DB",
+				"children": []
+			}
+		]
+	}
+}

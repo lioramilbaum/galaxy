@@ -1,0 +1,7 @@
+name             'rhel'
+maintainer       'Liora Milbaum'
+maintainer_email 'liora@lmb.co.il'
+license          'MIT'
+description      'rhel'
+long_description 'rhel'
+version          '0.0.1'

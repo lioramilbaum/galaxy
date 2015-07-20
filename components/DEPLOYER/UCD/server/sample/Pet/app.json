@@ -1,0 +1,5 @@
+{
+  name: "APP",
+  "notificationScheme": "Default Notification Scheme",
+  "enforceCompleteSnapshots": "false"
+}

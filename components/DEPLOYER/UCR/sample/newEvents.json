@@ -1,0 +1,40 @@
+[
+	{
+		"name": "Bob on vacation",
+		"description": "Bob Snorkeling in Cabos",
+		"startDate": "1430859600000",
+		"endDate": "1431205200000",
+		"type": {
+			"id": "Holiday"
+		}
+	},
+	{
+		"name": "End of 2nd quarter",
+		"description": "End of 2nd quarter - do not deploy any new versions",
+		"startDate": "1435093200000",
+		"endDate": "1435438800000",
+		"type": {
+			"id": "Blackout"
+		}
+	},
+	{
+		"name": "Release 1.0",
+		"description": "Release 1.0 OUT",
+		"startDate": "1435698000000",
+		"endDate": "1435698000000",
+		"isOneDay": "true",
+		"type": {
+			"id": "Enterprise Release"
+		}
+	},
+	{
+		"name": "December employee retreat",
+		"description": "December",
+		"startDate": "1435698000000",
+		"endDate": "1435698000000",
+		"isOneDay": "false",
+		"type": {
+			"id": "Monthly employee retreat"
+		}
+	}
+]

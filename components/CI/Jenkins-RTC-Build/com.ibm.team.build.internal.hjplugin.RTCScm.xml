@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<com.ibm.team.build.internal.hjplugin.RTCScm_-DescriptorImpl plugin="teamconcert@1.1.9">
+  <generation>1</generation>
+  <globalBuildTool>5.0.2</globalBuildTool>
+  <globalServerURI>https://ALM_HOSTNAME:9443/ccm</globalServerURI>
+  <globalTimeout>480</globalTimeout>
+  <globalCredentialsId>5ae803de-d61d-45b9-9ba1-a1752dd40d39</globalCredentialsId>
+  <globalAvoidUsingToolkit>false</globalAvoidUsingToolkit>
+</com.ibm.team.build.internal.hjplugin.RTCScm_-DescriptorImpl>

@@ -1,0 +1,22 @@
+{
+  "application": "JPetStore",
+  "description": "Requesting deployment",
+  "applicationProcess": "Deploy JPetStore",
+  "environment": "DEV-1",
+  "onlyChanged": "false",
+  "properties": {},
+  "versions": [
+	{
+		"version": "1.0",
+		"component": "JPetStore-APP"
+	},
+	{
+		"version": "1.0",
+		"component": "JPetStore-WEB"
+	},
+	{
+		"version": "1.0",
+		"component": "JPetStore-DB"
+	}
+  ]
+}

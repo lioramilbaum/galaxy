@@ -1,0 +1,181 @@
+{
+	"application": "JPetStore",
+  	"name": "Deploy JPetStore",
+	"description": "",
+	"inventoryManagementType": "AUTOMATIC",
+	"offlineAgentHandling": "PRE_EXECUTION_CHECK",
+	"rootActivity": {
+		"edges": [
+			{
+				"to": "0c3a8a9690e691c495da5ceaff4127",
+				"from": "0de6534c8f0ab82663ee0d17668c15",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "be3ad3486bb8b5192f3a093cbda4a2",
+				"from": "0de6534c8f0ab82663ee0d17668c15",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "7baa81c2d68e1bb23306a29ce665ee",
+				"from": "be3ad3486bb8b5192f3a093cbda4a2",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "0de6534c8f0ab82663ee0d17668c15",
+				"type": "ALWAYS",
+				"value": ""
+			},
+			{
+				"to": "7baa81c2d68e1bb23306a29ce665ee",
+				"from": "0c3a8a9690e691c495da5ceaff4127",
+				"type": "SUCCESS",
+				"value": ""
+			}
+		],
+		"offsets": [
+			{
+				"name": "7baa81c2d68e1bb23306a29ce665ee",
+				"x": 0,
+				"y": 420,
+				"h": 50,
+				"w": 80
+			},
+			{
+				"name": "0de6534c8f0ab82663ee0d17668c15",
+				"x": -75,
+				"y": 110,
+				"h": 60,
+				"w": 230
+			},
+			{
+				"name": "0c3a8a9690e691c495da5ceaff4127",
+				"x": 103,
+				"y": 227,
+				"h": 60,
+				"w": 230
+			},
+			{
+				"name": "be3ad3486bb8b5192f3a093cbda4a2",
+				"x": -217,
+				"y": 227,
+				"h": 60,
+				"w": 200
+			}
+		],
+		"type": "graph",
+		"name": "a61898cf-6e3f-45c3-a066-305fa0ce230b",
+		"children": [
+			{
+				"type": "finish",
+				"name": "7baa81c2d68e1bb23306a29ce665ee",
+				"children": []
+			},
+			{
+				"componentName": "JPetStore-APP",
+				"properties": [
+					{
+						"name": "failFast",
+						"value": "false"
+					},
+					{
+						"name": "runOnlyOnFirst",
+						"value": "false"
+					},
+					{
+						"name": "maxIteration",
+						"value": "-1"
+					}
+				],
+				"type": "componentEnvironmentIterator",
+				"name": "0de6534c8f0ab82663ee0d17668c15",
+				"children": [{
+					"componentName": "JPetStore-APP",
+					"status": "Active",
+					"type": "inventoryVersionDiff",
+					"name": "f2e187d1-8b4f-4269-b649-a9c8ee1f53d3",
+					"children": [{
+						"componentProcessName": "Deploy application component",
+						"componentName": "JPetStore-APP",
+						"allowFailure": false,
+						"properties": {},
+						"type": "componentProcess",
+						"name": "Deploy application component",
+						"children": []
+					}]
+				}]
+			},
+			{
+				"componentName": "JPetStore-WEB",
+				"properties": [
+					{
+						"name": "failFast",
+						"value": "false"
+					},
+					{
+						"name": "runOnlyOnFirst",
+						"value": "false"
+					},
+					{
+						"name": "maxIteration",
+						"value": "-1"
+					}
+				],
+				"type": "componentEnvironmentIterator",
+				"name": "be3ad3486bb8b5192f3a093cbda4a2",
+				"children": [{
+					"componentName": "JPetStore-WEB",
+					"status": "Active",
+					"type": "inventoryVersionDiff",
+					"name": "34b73e78-d734-4468-82d4-f90bac77b53c",
+					"children": [{
+						"componentProcessName": "Deploy web component",
+						"componentName": "JPetStore-WEB",
+						"allowFailure": false,
+						"properties": {},
+						"type": "componentProcess",
+						"name": "Deploy web component",
+						"children": []
+					}]
+				}]
+			},
+			{
+				"componentName": "JPetStore-DB",
+				"properties": [
+					{
+						"name": "failFast",
+						"value": "false"
+					},
+					{
+						"name": "runOnlyOnFirst",
+						"value": "false"
+					},
+					{
+						"name": "maxIteration",
+						"value": "-1"
+					}
+				],
+				"type": "componentEnvironmentIterator",
+				"name": "0c3a8a9690e691c495da5ceaff4127",
+				"children": [{
+					"componentName": "JPetStore-DB",
+					"status": "Active",
+					"type": "inventoryVersionDiff",
+					"name": "40b7a14d-2a89-4ee1-b6a4-fea9c96ca478",
+					"children": [{
+						"componentProcessName": "Deploy database component",
+						"componentName": "JPetStore-DB",
+						"allowFailure": false,
+						"properties": {},
+						"type": "componentProcess",
+						"name": "Deploy database component",
+						"children": []
+					}]
+				}]
+			}
+		]
+	}
+}

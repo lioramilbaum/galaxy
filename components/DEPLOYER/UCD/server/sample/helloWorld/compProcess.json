@@ -1,0 +1,165 @@
+{
+  "name": "helloProcess",
+  "component": "helloWorld",
+  "description": "",
+  "defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+  "takesVersion": "true",
+  "inventoryActionType": "ADD",
+  "status": "Active",
+  "configActionType": "ADD",
+  "active": "true",
+  "propDefs": [
+  ],
+  "rootActivity": {
+    "type": "graph",
+    "name": "GRAPH",
+    "edges": [
+      {
+        "to": "Clean work space",
+        "type": "SUCCESS",
+        "value": ""
+      },
+      {
+        "to": "Download Artifacts",
+        "from": "Clean work space",
+        "type": "SUCCESS",
+        "value": ""
+      },
+      {
+        "to": "Compress artifacts",
+        "from": "Download Artifacts",
+        "type": "SUCCESS",
+        "value": ""
+      },
+      {
+        "to": "Deploy artifacts",
+        "from": "Compress artifacts",
+        "type": "SUCCESS",
+        "value": ""
+      },
+      {
+        "to": "FINISH",
+        "from": "Deploy artifacts",
+        "type": "SUCCESS",
+        "value": ""
+      }
+    ],
+    "offsets": [
+      {
+        "name": "Clean work space",
+        "x": "-65",
+        "y": "90"
+      },
+      {
+        "name": "Download Artifacts",
+        "x": "-65",
+        "y": "210"
+      },
+      {
+        "name": "Compress artifacts",
+        "x": "-65",
+        "y": "300"
+      },
+      {
+        "name": "Deploy artifacts",
+        "x": "-65",
+        "y": "400"
+      },
+      {
+        "name": "FINISH",
+        "x": "-65",
+        "y": "500"
+      }
+    ],
+    "children": [
+      {
+        "allowFailure": false,
+        "useImpersonation": false,
+        "showHIdden": false,
+        "impersonationUseSudo": false,
+        "commandName": "Delete Files and Directories",
+        "pluginName": "FileUtils",
+        "pluginVersion": 39,
+        "type": "plugin",
+        "name": "Clean work space",
+        "children": [
+        ],
+        "properties": {
+          "baseDir": ".",
+          "includes": "*",
+        }
+      },
+      {
+        "allowFailure": false,
+        "useImpersonation": false,
+        "showHIdden": false,
+        "impersonationUseSudo": false,
+        "commandName": "Download Artifacts",
+        "pluginName": "IBM UrbanCode Deploy Versioned File Storage",
+        "pluginVersion": 21,
+        "type": "plugin",
+        "name": "Download Artifacts",
+        "children": [
+        ],
+        "properties": {
+          "directoryOffset": ".",
+          "artifactSetBaseDir": "",
+          "fileIncludePatterns": "**\/*",
+          "fileExcludePatterns": "",
+          "syncMode": true,
+          "fullVerification": true,
+          "setFileExecuteBits": false,
+          "verifyFileIntegrity": false,
+          "repositoryUrl": "${p:server.url}\/vfs",
+          "repositoryId": "${p:component\/code_station\/repository}",
+          "label": "${p:version.name",
+          "serverUrl": "${p:server.url}",
+          "compId": "${p:component.id}",
+          "resId": "${p:resource.id}"
+        }
+      },
+      {
+        "allowFailure": false,
+        "useImpersonation": false,
+        "showHIdden": false,
+        "impersonationUseSudo": false,
+        "commandName": "Create .zip File",
+        "pluginName": "FileUtils",
+        "pluginVersion": 39,
+        "type": "plugin",
+        "name": "Compress artifacts",
+        "children": [
+        ],
+        "properties": {
+          "baseDir": ".",
+          "includes": "*",
+          "zipName": "helloWorld.zip"
+        }
+      },
+      {
+        "allowFailure": false,
+        "useImpersonation": false,
+        "showHIdden": false,
+        "impersonationUseSudo": false,
+        "commandName": "Move Directory",
+        "pluginName": "FileUtils",
+        "pluginVersion": 39,
+        "type": "plugin",
+        "name": "Deploy artifacts",
+        "children": [
+        ],
+        "properties": {
+          "sourceDir": ".",
+          "destDir": "${p:helloHome}/target",
+          "includes": "*.zip",
+        }
+      },
+      {
+        "type": "finish",
+        "name": "FINISH",
+        "children": [
+        ]
+      }
+    ]
+  }
+}

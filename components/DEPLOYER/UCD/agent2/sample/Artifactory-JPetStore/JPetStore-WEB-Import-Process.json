@@ -1,0 +1,78 @@
+{
+	"name": "Upload Artifacts",
+	"component": "Artifactory-JPetStore-WEB",
+	"description": "",
+	"defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+	"takesVersion": true,
+	"active": true,
+	"path": "",
+	"propDefs": [],
+	"rootActivity": {
+		"edges": [
+			{
+				"to": "Upload Artifacts",
+				"type": "ALWAYS",
+				"value": ""
+			},
+			{
+				"to": "Finish",
+				"from": "Upload Artifacts",
+				"type": "SUCCESS",
+				"value": ""
+			}
+		],
+		"offsets": [
+			{
+				"name": "Finish",
+				"x": 0,
+				"y": 420,
+				"h": 50,
+				"w": 80
+			},
+			{
+				"name": "Upload Artifacts",
+				"x": 21.5,
+				"y": 187,
+				"h": 60,
+				"w": 200
+			}
+		],
+		"type": "graph",
+		"children": [
+			{
+				"type": "finish",
+				"name": "Finish",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Upload Artifacts",
+				"pluginName": "IBM UrbanCode Deploy Versioned File Storage",
+				"pluginVersion": 21,
+				"properties": {
+					"directoryOffset": "/tmp/artifacts/shared/web/${p:version.name}",
+					"fileIncludePatterns": "images\/*",
+					"fileExcludePatterns": "",
+					"saveFileExecuteBits": "false",
+					"extensions": "",
+					"versionId": "${p:version.id}",
+					"serverUrl": "${p:server.url}",
+					"useImpersonation": false,
+					"impersonationGroup": "",
+					"impersonationPassword": "",
+					"impersonationUseSudo": false,
+					"workingDir": "",
+					"preconditionScript": "",
+					"postProcessingScript": "",
+					"showHidden": false
+				},
+				"type": "plugin",
+				"name": "Upload Artifacts",
+				"children": []
+			}
+		]
+	}
+}

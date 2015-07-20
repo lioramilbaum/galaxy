@@ -1,0 +1,84 @@
+{
+    "securityResourceId": "eea848f8-066b-42b5-9ca5-1e5bc092bd1c",
+    "path": "componentTemplates\/bf978126-098a-406b-bd46-cacae2f51b1a",
+    "name": "Amazon EC2 - CLI",
+    "description": "",
+    "ignoreQualifiers": 0,
+    "componentType": "STANDARD",
+    "tags": [],
+    "active": true,
+    "envPropDefs": [],
+    "propDefs": [],
+    "properties": [],
+    "processes": [{
+        "name": "Run Instance",
+        "description": "",
+        "defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+        "takesVersion": false,
+        "status": "",
+        "active": true,
+        "path": "componentTemplates\/bf978126-098a-406b-bd46-cacae2f51b1a\/processes\/82cd0815-2090-4b92-8923-6b8ee34de5ac",
+        "propDefs": [],
+        "rootActivity": {
+            "edges": [
+                {
+                    "to": "9d488529df7d76db9a1b2ba95f637d",
+                    "from": "Run Instance",
+                    "type": "SUCCESS",
+                    "value": ""
+                },
+                {
+                    "to": "Run Instance",
+                    "type": "ALWAYS",
+                    "value": ""
+                }
+            ],
+            "offsets": [
+                {
+                    "name": "9d488529df7d76db9a1b2ba95f637d",
+                    "x": -5,
+                    "y": 420,
+                    "h": 50,
+                    "w": 90
+                },
+                {
+                    "name": "Run Instance",
+                    "x": 4.5,
+                    "y": 194,
+                    "h": 60,
+                    "w": 150
+                }
+            ],
+            "type": "graph",
+            "name": "7379a992-d1bd-4b27-8335-d09353fe75b9",
+            "children": [
+                {
+                    "type": "finish",
+                    "name": "9d488529df7d76db9a1b2ba95f637d",
+                    "children": []
+                },
+                {
+                    "allowFailure": false,
+                    "useImpersonation": false,
+                    "showHidden": false,
+                    "impersonationUseSudo": false,
+                    "commandName": "Shell",
+                    "pluginName": "Shell",
+                    "pluginVersion": 6,
+                    "properties": {
+                        "directoryOffset": ".",
+                        "shellInterpreter": "",
+                        "scriptBody": "aws ec2 run-instances --image-id ami-60a10117 --count 1 --instance-type t2.micro --key-name github_rsa --security-group-ids sg-66dc4703 --subnet-id subnet-7cf03b25\n",
+                        "runAsDaemon": "false",
+                        "outputFile": ""
+                    },
+                    "type": "plugin",
+                    "name": "Run Instance",
+                    "children": []
+                }
+            ]
+        }
+    }],
+    "genericProcesses": [],
+    "teamMappings": []
+}

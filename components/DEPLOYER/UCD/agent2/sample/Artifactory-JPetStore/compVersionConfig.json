@@ -1,0 +1,31 @@
+{
+	"name":"COMP_NAME",
+	"description":"",
+	"templateId":"",
+	"componentType":"STANDARD",
+	"sourceConfigPlugin":"Artifactory",
+	"importAutomatically":"false",
+	"useVfs":"true",
+	"defaultVersionType":"FULL",
+	"importAgentType":"agent",
+	"integrationAgent":"AGENT_ID",
+	"inheritSystemCleanup":"true",
+	"runVersionCreationProcess":"false",
+	"existingId":"",
+	"properties": {
+		"ArtifactoryComponentProperties\/repoUrl": "http://lmb-ci-server:8081/artifactory",
+		"ArtifactoryComponentProperties\/repoName": "lmb-repo/shared/COMP_BASE",
+		"ArtifactoryComponentProperties\/user": "admin",
+		"ArtifactoryComponentProperties\/password": "password",
+		"ArtifactoryComponentProperties\/extension": "EXTENSION",
+		"ArtifactoryComponentProperties\/versionPattern": ".*",
+		"ArtifactoryComponentProperties\/copyCount": "2",
+		"ArtifactoryComponentProperties\/saveFileExecuteBits": "false",
+		"ArtifactoryComponentProperties\/artifactId": "",
+		"ArtifactoryComponentProperties\/extensions": "",
+		"ArtifactoryComponentProperties\/groupId": "",
+		"ArtifactoryComponentProperties\/nuGetPackage": "",
+		"ArtifactoryComponentProperties\/nuGetVersion": ""
+	},
+	"teamMappings":[]
+}

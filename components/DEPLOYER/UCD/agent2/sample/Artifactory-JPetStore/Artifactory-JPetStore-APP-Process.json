@@ -1,0 +1,309 @@
+{
+	"name": "Deploy application component",
+	"component": "Artifactory-JPetStore-APP",
+	"description": "",
+	"defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+	"takesVersion": true,
+	"inventoryActionType": "ADD",
+	"status": "Active",
+	"configActionType": "ADD",
+ 	"active": true,
+	"path": "",
+ 	"propDefs": [],
+	"rootActivity": {
+		"edges": [
+			{
+				"to": "Start Tomcat",
+				"from": "Update WAR",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "Update property file",
+ 				"from": "Expand WAR",
+				"type": "SUCCESS",
+				"value": ""
+			},
+ 			{
+				"to": "Undeploy Application",
+				"from": "Start Tomcat",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "Expand WAR",
+				"from": "Download Artifacts",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "Clean working directory",
+ 				"type": "ALWAYS",
+				"value": ""
+			},
+			{
+				"to": "Update WAR",
+				"from": "Update property file",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "Deploy Application",
+				"from": "Undeploy Application",
+				"type": "ALWAYS",
+				"value": ""
+			},
+			{
+				"to": "Finish",
+				"from": "Deploy Application",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+ 				"to": "Download Artifacts",
+				"from": "Clean working directory",
+				"type": "SUCCESS",
+				"value": ""
+			}
+		],
+		"offsets": [
+			{
+				"name": "Download Artifacts",
+				"x": -25.000000000000114,
+				"y": 89.99999999999999,
+				"h": 60,
+				"w": 210
+			},
+ 			{
+ 				"name": "Clean working directory",
+				"x": -340.9999999999999,
+				"y": 90.00000000000001,
+				"h": 60,
+				"w": 260
+			},
+			{
+				"name": "Deploy Application",
+				"x": -34.00000000000034,
+				"y": 310.00000000000006,
+				"h": 60,
+				"w": 200
+			},
+			{
+				"name": "Finish",
+				"x": -8.999999999999886,
+				"y": 500,
+				"h": 50,
+				"w": 80
+			},
+			{
+				"name": "Start Tomcat",
+				"x": 219.0000000000001,
+				"y": 190.00000000000006,
+				"h": 60,
+				"w": 170
+			},
+			{
+				"name": "Expand WAR",
+				"x": 249.0000000000001,
+				"y": 79.99999999999997,
+				"h": 60,
+				"w": 150
+			},
+			{
+				"name": "Undeploy Application",
+				"x": -330.9999999999999,
+				"y": 310,
+				"h": 60,
+				"w": 210
+			},
+			{
+				"name": "Update WAR",
+				"x": -24.000000000000227,
+				"y": 190.00000000000003,
+				"h": 60,
+				"w": 190
+			},
+			{
+				"name": "Update property file",
+				"x": -320.99999999999994,
+				"y": 190,
+				"h": 60,
+				"w": 220
+			}
+		],
+		"type": "graph",
+		"children": [
+			{
+				"type": "finish",
+				"name": "Finish",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Delete Files and Directories",
+				"pluginName": "File Utils",
+				"pluginVersion": null,
+				"properties": {
+					"baseDir": ".",
+					"includes": "*",
+					"excludes": "",
+					"followSymlinks": "false",
+					"caseSensitive": "true"
+				},
+				"type": "plugin",
+				"name": "Clean working directory",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Download Artifacts",
+				"pluginName": "IBM UrbanCode Deploy Versioned File Storage",
+				"pluginVersion": null,
+				"properties": {
+					"directoryOffset": ".",
+					"artifactSetBaseDir": "",
+					"fileIncludePatterns": "**\/*",
+					"fileExcludePatterns": "",
+					"syncMode": "true",
+					"fullVerification": "true",
+					"setFileExecuteBits": "false",
+					"verifyFileIntegrity": "false",
+					"versionId": "${p:version.id}",
+					"serverUrl": "${p:server.url}",
+					"compId": "${p:component.id}",
+					"resId": "${p:resource.id}",
+					"charset": ""
+				},
+				"type": "plugin",
+				"name": "Download Artifacts",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Unzip",
+				"pluginName": "File Utils",
+				"pluginVersion": null,
+				"properties": {
+					"dir": ".\/JPetStore_expanded",
+					"zip": "JPetStore.war",
+					"includes": "**\/*",
+					"excludes": "",
+					"overwrite": "false"
+				},
+				"type": "plugin",
+				"name": "Expand WAR",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Update Java Properties File",
+				"pluginName": "File Utils",
+				"pluginVersion": null,
+				"properties": {
+					"dir": ".\/JPetStore_expanded\/WEB-INF\/classes\/properties",
+					"includes": "database.properties",
+					"updateProps": "url=${p:environment\/db.url}",
+					"additionalProps": "",
+					"additionalPropsPrefix": "",
+					"deleteProps": ""
+				},
+				"type": "plugin",
+				"name": "Update property file",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Create .zip File",
+				"pluginName": "File Utils",
+				"pluginVersion": null,
+				"properties": {
+					"zipName": "JPetStore.war",
+					"baseDir": ".\/JPetStore_expanded",
+					"includes": "**\/*",
+					"excludes": "",
+					"update": "true",
+					"followSymlinks": "false",
+					"caseSensitive": "true"
+				},
+				"type": "plugin",
+				"name": "Update WAR",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Start Tomcat",
+				"pluginName": "Tomcat",
+				"pluginVersion": null,
+				"properties": {
+					"launcherLocation": "${p:environment\/tomcat.start}",
+					"options": "",
+					"timeout": "60",
+					"port": "8080",
+					"hostname": "",
+					"catalinaBase": "",
+					"catalinaHome": "",
+					"javaHome": ""
+				},
+				"type": "plugin",
+				"name": "Start Tomcat",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Deploy Application",
+				"pluginName": "Tomcat",
+				"pluginVersion": null,
+				"properties": {
+					"tomcatManagerUrl": "${p:environment\/tomcat.manager.url}",
+					"tomcatUsername": "tomcatmanager",
+					"tomcatPassword": "tomcatmanager",
+					"tomcatContext": "\/JPetStore",
+					"warFile": ".\/JPetStore.war",
+					"configFile": ""
+				},
+				"type": "plugin",
+				"name": "Deploy Application",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Undeploy Application",
+				"pluginName": "Tomcat",
+				"pluginVersion": null,
+				"properties": {
+					"tomcatManagerUrl": "${p:environment\/tomcat.manager.url}",
+					"tomcatUsername": "tomcatmanager",
+					"tomcatPassword": "tomcatmanager",
+					"tomcatContext": "\/JPetStore"
+				},
+				"type": "plugin",
+				"name": "Undeploy Application",
+				"children": []
+			}
+		]
+	}
+}

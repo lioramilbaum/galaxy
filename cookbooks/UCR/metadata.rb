@@ -1,0 +1,10 @@
+name             'UCR'
+maintainer       'Liora Milbaum'
+maintainer_email 'liora@lmb.co.il'
+license          'MIT'
+description      'base cookbook to install IBM UrbanCode Release'
+long_description 'install IBM UrbanCode Release'
+version          '0.0.1'
+
+depends 'IM'
+depends 'rlks'

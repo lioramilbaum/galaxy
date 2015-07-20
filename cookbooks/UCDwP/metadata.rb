@@ -1,0 +1,7 @@
+name             'UCDwP'
+maintainer       'Liora Milbaum'
+maintainer_email 'liora@lmb.co.il'
+license          'MIT'
+description      'UCDwP'
+long_description 'UCDwP'
+version          '0.0.1'

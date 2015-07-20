@@ -1,0 +1,1 @@
+default['IM']['zip'] = 'agent.installer.linux.gtk.x86_64_1.8.3000.20150606_0047.zip'

@@ -1,0 +1,9 @@
+log_level         :info
+log_location      STDOUT
+local_mode        true
+chef_zero.enabled true
+ssl_verify_mode   "verify_peer"
+environment_path  "/tmp/packer-chef-client/environments"
+cookbook_path     [ "/tmp/packer-chef-client/cookbooks" ]
+node_name         "packer-ami-build"
+environment       "curr"

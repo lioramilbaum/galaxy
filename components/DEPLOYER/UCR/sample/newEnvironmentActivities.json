@@ -1,0 +1,7 @@
+{
+		"name": "QA-1 Database Upgrade",
+		"description": "",
+		"startDate": "1432721700000",
+		"endDate": "1432728900000",
+		"environments": [ "00000000-0000-0000-0000-000000000020" ]
+}

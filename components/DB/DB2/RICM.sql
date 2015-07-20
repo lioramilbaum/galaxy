@@ -1,0 +1,11 @@
+create database RICM using codeset UTF-8 territory en;
+connect to RICM;
+update db cfg for RICM using LOCKTIMEOUT 240;
+update db cfg for RICM using APPLHEAPSZ 1024;
+connect reset;
+connect to RICM;
+create bufferpool BP32K pagesize 32K;
+create bufferpool BP4K pagesize 4K;
+create system temporary tablespace STT32K pagesize 32K managed by system using ('STT32K') bufferpool BP32K;
+create user temporary tablespace UTT4K pagesize 4K managed by system using ('UTT4K') bufferpool BP4K;
+create regular tablespace RUT4K pagesize 4K managed by system using ('RUT4K') bufferpool BP4K;

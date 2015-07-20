@@ -1,0 +1,10 @@
+name             'UCD'
+maintainer       'Liora Milbaum'
+maintainer_email 'liora@lmb.co.il'
+license          'MIT'
+description      'UCD'
+long_description 'UCD'
+version          '0.0.1'
+
+depends			'libarchive'
+depends			'awscli'

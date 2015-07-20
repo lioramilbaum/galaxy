@@ -1,0 +1,7 @@
+name             'DB2'
+maintainer       'Liora Milbaum'
+maintainer_email 'liora@lmb.co.il'
+license          'MIT'
+description      'base cookbook to install DB2'
+long_description 'DB2 Installation'
+version          '0.0.1'

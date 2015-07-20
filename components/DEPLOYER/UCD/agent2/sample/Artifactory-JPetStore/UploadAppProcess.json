@@ -1,0 +1,130 @@
+{
+    "application": "Artifactory-JPetStore-Upload",
+    "name": "Upload",
+	"description": "",
+	"inventoryManagementType": "AUTOMATIC",
+	"offlineAgentHandling": "PRE_EXECUTION_CHECK",
+	"rootActivity": {
+		"edges": [
+			{
+				"to": "Upload DB",
+				"type": "ALWAYS",
+				"value": ""
+			},
+			{
+				"to": "Finish",
+				"from": "Upload DB",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "Upload WEB",
+				"type": "ALWAYS",
+				"value": ""
+			},
+			{
+				"to": "Finish",
+				"from": "Upload WEB",
+				"type": "SUCCESS",
+				"value": ""
+			}
+		],
+		"offsets": [
+			{
+				"name": "Upload DB",
+				"x": -232.5,
+				"y": 160,
+				"h": 60,
+				"w": 300
+			},
+			{
+				"name": "Upload WEB",
+				"x": 167.5,
+				"y": 160,
+				"h": 60,
+				"w": 310
+			},
+			{
+				"name": "Finish",
+				"x": -5,
+				"y": 420,
+				"h": 50,
+				"w": 90
+			}
+		],
+		"type": "graph",
+		"children": [
+			{
+				"type": "finish",
+				"name": "Finish",
+				"children": []
+			},
+			{
+				"componentName": "Artifactory-JPetStore-DB",
+				"properties": [
+					{
+						"name": "failFast",
+						"value": "false"
+					},
+					{
+						"name": "runOnlyOnFirst",
+						"value": "false"
+					},
+					{
+						"name": "maxIteration",
+						"value": "-1"
+					}
+				],
+				"type": "componentEnvironmentIterator",
+				"name": "Upload DB",
+				"children": [{
+                    "name": "e98561a1f029a4045e0791005999ad",
+					"componentName": "Artifactory-JPetStore-DB",
+					"type": "allVersionsIterator",
+					"children": [{
+						"componentProcessName": "Upload Artifacts",
+						"componentName": "Artifactory-JPetStore-DB",
+						"allowFailure": false,
+						"properties": {},
+						"type": "componentProcess",
+						"name": "Upload-DB",
+						"children": []
+					}]
+				}]
+			},
+			{
+				"componentName": "Artifactory-JPetStore-WEB",
+				"properties": [
+					{
+						"name": "failFast",
+						"value": "false"
+					},
+					{
+						"name": "runOnlyOnFirst",
+						"value": "false"
+					},
+					{
+						"name": "maxIteration",
+						"value": "-1"
+					}
+				],
+				"type": "componentEnvironmentIterator",
+				"name": "Upload WEB",
+				"children": [{
+                    "name": "3941a1b52c95d59d456f59dbbc077e",
+					"componentName": "Artifactory-JPetStore-WEB",
+					"type": "allVersionsIterator",
+					"children": [{
+						"componentProcessName": "Upload Artifacts",
+						"componentName": "Artifactory-JPetStore-WEB",
+						"allowFailure": false,
+						"properties": {},
+						"type": "componentProcess",
+						"name": "Upload-WEB",
+						"children": []
+					}]
+				}]
+			}
+		]
+	}
+}

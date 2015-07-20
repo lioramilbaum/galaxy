@@ -1,0 +1,5 @@
+<%= render "/tmp/UCD/ibm-ucd-install/install-server.sh", :local => true %>
+
+nonInteractive=true
+server.initial.password=<%= @initial_password %>
+install.server.web.host=<%= @server_hostname %>

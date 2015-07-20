@@ -1,0 +1,177 @@
+{
+	"name": "Deploy web component",
+	"component": "Artifactory-JPetStore-WEB",
+	"description": "",
+	"defaultWorkingDir": "${p:resource\/work.dir}\/${p:component.name}",
+	"takesVersion": true,
+	"inventoryActionType": "ADD",
+	"status": "Active",
+	"configActionType": "ADD",
+	"active": true,
+	"path": "",
+	"propDefs": [],
+	"rootActivity": {
+		"edges": [
+			{
+				"to": "Remove old content",
+				"from": "Download Artifacts",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "Download Artifacts",
+				"from": "Clean working directory",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "Deploy new content",
+				"from": "Remove old content",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "c21d0569271e5c3f02e56b0c1f2af3",
+				"from": "Deploy new content",
+				"type": "SUCCESS",
+				"value": ""
+			},
+			{
+				"to": "Clean working directory",
+				"type": "ALWAYS",
+				"value": ""
+			}
+		],
+		"offsets": [
+			{
+				"name": "Remove old content",
+				"x": -90,
+				"y": 280,
+				"h": 60,
+				"w": 260
+			},
+			{
+				"name": "c21d0569271e5c3f02e56b0c1f2af3",
+				"x": 0,
+				"y": 445,
+				"h": 50,
+				"w": 80
+			},
+			{
+				"name": "Download Artifacts",
+				"x": -65,
+				"y": 189,
+				"h": 60,
+				"w": 210
+			},
+			{
+				"name": "Deploy new content",
+				"x": -55,
+				"y": 360,
+				"h": 60,
+				"w": 190
+			},
+			{
+				"name": "Clean working directory",
+				"x": -90,
+				"y": 100,
+				"h": 60,
+				"w": 260
+			}
+		],
+		"type": "graph",
+		"name": "cacc751f-2a78-443b-9c1b-18908fd0b75f",
+		"children": [
+			{
+				"type": "finish",
+				"name": "c21d0569271e5c3f02e56b0c1f2af3",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Delete Files and Directories",
+				"pluginName": "File Utils",
+				"pluginVersion": null,
+				"properties": {
+					"baseDir": ".",
+					"includes": "*",
+					"excludes": "",
+					"followSymlinks": "false",
+					"caseSensitive": "true"
+				},
+				"type": "plugin",
+				"name": "Clean working directory",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Download Artifacts",
+				"pluginName": "IBM UrbanCode Deploy Versioned File Storage",
+				"pluginVersion": null,
+				"properties": {
+					"directoryOffset": ".",
+					"artifactSetBaseDir": "",
+					"fileIncludePatterns": "**\/*",
+					"fileExcludePatterns": "",
+					"syncMode": "true",
+					"fullVerification": "true",
+					"setFileExecuteBits": "false",
+					"verifyFileIntegrity": "false",
+					"versionId": "${p:version.id}",
+					"serverUrl": "${p:server.url}",
+					"compId": "${p:component.id}",
+					"resId": "${p:resource.id}",
+					"charset": ""
+				},
+				"type": "plugin",
+				"name": "Download Artifacts",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"workingDir": "${p:environment\/tomcat.home}",
+				"commandName": "Delete Files and Directories",
+				"pluginName": "File Utils",
+				"pluginVersion": null,
+				"properties": {
+					"baseDir": "webapps\/JPetStore",
+					"includes": "images",
+					"excludes": "",
+					"followSymlinks": "false",
+					"caseSensitive": "true"
+				},
+				"type": "plugin",
+				"name": "Remove old content",
+				"children": []
+			},
+			{
+				"allowFailure": false,
+				"useImpersonation": false,
+				"showHidden": false,
+				"impersonationUseSudo": false,
+				"commandName": "Move Directory",
+				"pluginName": "File Utils",
+				"pluginVersion": null,
+				"properties": {
+					"sourceDir": ".",
+					"destDir": "${p:environment\/tomcat.home}\/webapps\/JPetStore\/",
+					"includes": "images\/*",
+					"excludes": "",
+					"mapperRules": ""
+				},
+				"type": "plugin",
+				"name": "Deploy new content",
+				"children": []
+			}
+		]
+	}
+}

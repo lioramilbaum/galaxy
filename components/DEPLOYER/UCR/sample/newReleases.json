@@ -1,0 +1,62 @@
+[
+	{
+		"name": "Pets University 1.1.x",
+		"description": "April Release",
+		"team": {
+			"name": "Core1 Release Team"
+		},
+		"lifecycleModel": {
+			"name": "Default Lifecycle"
+		}
+	},
+	{
+		"name": "Pets Supply Chain 1.1.x",
+		"description": "April Release",
+		"team": {
+			"name": "Core1 Release Team"
+		},
+		"lifecycleModel": {
+			"name": "Default Lifecycle"
+		}
+	},
+	{
+		"name": "Pets Rescue Foundation 1.1.x",
+		"description": "April Release",
+		"team": {
+			"name": "Core1 Release Team"
+		},
+		"lifecycleModel": {
+			"name": "Default Lifecycle"
+		}
+	},
+	{
+		"name": "Pets Online 1.1.x",
+		"description": "April Release",
+		"team": {
+			"name": "Core1 Release Team"
+		},
+		"lifecycleModel": {
+			"name": "Default Lifecycle"
+		}
+	},
+	{
+		"name": "Pets Financials 1.1.x",
+		"description": "April Release",
+		"team": {
+			"name": "Core1 Release Team"
+		},
+		"lifecycleModel": {
+			"name": "Default Lifecycle"
+		}
+	},
+	{
+		"name": "Pets Back Office 1.1.x",
+		"description": "April Release",
+		"team": {
+			"name": "Core1 Release Team"
+		},
+		"lifecycleModel": {
+			"name": "Default Lifecycle"
+		}
+	}
+]

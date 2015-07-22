@@ -18,7 +18,7 @@ end
 remote_file "Download CLM" do
     path "/tmp/#{node['CLM']['zip']}"
 	source "https://lmbgalaxy.s3.amazonaws.com/IBM/CLM/#{node['CLM']['zip']}"
-	action :create_if_missing
+	action :create
 	notifies :extract, 'libarchive_file[unzip CLM zip]', :immediately
 end
 
@@ -33,26 +33,68 @@ execute 'CLM Installation' do
   user 'root'
   command "/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:packages]} -repositories /tmp/CLM/repository.config -acceptLicense"
   action :nothing
-  notifies :run, 'execute[starting JTS Server]', :immediately
 end
 
 directory "/opt/IBM/JazzTeamServer/server/patch" do
-  only_if { node['CLM']['fix'] != 'nil' }
+  not_if { node['CLM']['fix'].nil? }
   action :create
   notifies :create, 'remote_file[Download CLM Fix]', :immediately
 end
 
 remote_file "Download CLM Fix" do
-    path "/opt/IBM/JazzTeamServer/server/patch/#{node['CLM']['fix']}"
+    path "/tmp/#{node['CLM']['fix']}"
 	source "https://lmbgalaxy.s3.amazonaws.com/IBM/CLM/#{node['CLM']['fix']}"
-	action :nothing
+	action :create
+    notifies :extract, 'libarchive_file[unzip CLM fix zip]', :immediately
+end
+
+libarchive_file "unzip CLM fix zip" do
+  path "/tmp/#{node['CLM']['fix']}"
+  extract_to "/tmp/CLM_FIX"
+  action :nothing
+  notifies :create, 'remote_file[Copy CLM fix zip]', :immediately
+end
+
+remote_file "Copy CLM fix zip" do 
+  path "/opt/IBM/JazzTeamServer/server/patch/#{node['CLM']['fix_package']}" 
+  source "file:///tmp/CLM_FIX/#{node['CLM']['fix_package']}"
+end
+
+remote_file "Copy rs.war" do 
+  path "/opt/IBM/JazzTeamServer/server/tomcat/webapps/rs.war" 
+  source "file:///tmp/CLM_FIX/rs.war"
+end
+
+directory "/opt/IBM/JazzTeamServer/server/tomcat/webapps/rs" do
+  action :delete
+  recursive true
+end
+
+remote_file "Copy ldx.war" do 
+  path "/opt/IBM/JazzTeamServer/server/tomcat/webapps/ldx.war" 
+  source "file:///tmp/CLM_FIX/ldx.war"
+end
+
+directory "/opt/IBM/JazzTeamServer/server/tomcat/webapps/ldx" do
+  action :delete
+  recursive true
+end
+
+remote_file "Copy lqe.war" do 
+  path "/opt/IBM/JazzTeamServer/server/tomcat/webapps/lqe.war" 
+  source "file:///tmp/CLM_FIX/lqe.war"
+end
+
+directory "/opt/IBM/JazzTeamServer/server/tomcat/webapps/lqe" do
+  action :delete
+  recursive true
 end
 
 execute 'starting JTS Server' do
   user 'root'
   environment "DISPLAY" => "localhost:1.0"
   command "/opt/IBM/JazzTeamServer/server/server.startup"
-  action :nothing
+  action :run
   notifies :run, 'execute[sleep 3m]', :immediately
 end
 

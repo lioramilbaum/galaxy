@@ -115,7 +115,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		clm.vm.provision :chef_zero do |chef|
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.environments_path = ["./environments/"]
-			chef.environment = 'prev'
+			chef.environment = 'curr'
 			chef.add_recipe "CLM::init"
 		end
 		clm.vm.provision :reload
@@ -498,7 +498,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			
 			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
 			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "github_rsa"   
+			aws.keypair_name		= "id_rsa"   
 
 			aws.region				= "eu-west-1"
     		aws.ami					= "ami-60a10117"
@@ -509,7 +509,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\github_rsa.pem"
+    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
 		
@@ -531,7 +531,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			
 			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
 			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "github_rsa"   
+			aws.keypair_name		= "id_rsa"   
 
 			aws.region				= "eu-west-1"
     		aws.ami					= "ami-c3bd3eb4"
@@ -542,7 +542,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\github_rsa.pem"
+    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
     	
@@ -562,7 +562,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			
 			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
 			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "github_rsa"   
+			aws.keypair_name		= "id_rsa"   
 
 			aws.region				= "eu-west-1"
     		aws.ami					= "ami-60a10117"
@@ -573,7 +573,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\github_rsa.pem"
+    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
     	
@@ -599,7 +599,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			
 			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
 			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "github_rsa"   
+			aws.keypair_name		= "id_rsa"   
 
 			aws.region				= "eu-west-1"
     		aws.ami					= "ami-810d79bb"
@@ -611,7 +611,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\github_rsa.pem"
+    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
     	
@@ -648,7 +648,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			
 			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
 			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "github_rsa"   
+			aws.keypair_name		= "id_rsa"   
 
 			aws.region				= "eu-west-1"
     		aws.ami					= "ami-60a10117"
@@ -659,7 +659,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\github_rsa.pem"
+    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
 		
@@ -684,7 +684,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			
 			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
 			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "github_rsa"   
+			aws.keypair_name		= "id_rsa"   
 
 			aws.region				= "eu-west-1"
     		aws.ami					= "ami-60a10117"
@@ -695,7 +695,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\github_rsa.pem"
+    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
     	

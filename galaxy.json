@@ -31,15 +31,15 @@
 		]
 	}],
   "provisioners": [
-	{ "type": "file", "source": "./nodes", "destination": "{{env `chef_dir`}}" },
-    { "type": "file", "source": "./environments", "destination": "{{env `chef_dir`}}" },
-    { "type": "file", "source": "C:/temp/cookbooks", "destination": "{{env `chef_dir`}}" },
+	{ "type": "file", "source": "./packer/galaxy/nodes", "destination": "{{env `chef_dir`}}" },
+    { "type": "file", "source": "./packer/galaxy//environments", "destination": "{{env `chef_dir`}}" },
+    { "type": "file", "source": "./packer/galaxy/cookbooks", "destination": "{{env `chef_dir`}}" },
     { "type": "shell", "inline": ["ls /tmp/packer-chef-client/*"] },
     {
       "type": "chef-client",
       "chef_environment": "{{user `chef_env`}}",
       "server_url": "http://localhost:8889",
-      "config_template": "templates/client.rb.template",
+      "config_template": "packer/galaxy/templates/client.rb.template",
       "skip_clean_node": true,
       "skip_clean_client": true,
       "run_list": [ "CLM::default" ]

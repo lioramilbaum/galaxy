@@ -344,6 +344,7 @@
 	
 	<target name="packer-push">
 		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
+			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
 			<arg line="/c packer push -name liora/galaxy galaxy.json" />
 		</exec>
 	</target>

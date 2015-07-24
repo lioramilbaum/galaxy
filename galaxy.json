@@ -31,9 +31,9 @@
 		]
 	}],
   "provisioners": [
-	{ "type": "file", "source": "./packer/galaxy/nodes", "destination": "{{env `chef_dir`}}" },
-    { "type": "file", "source": "./packer/galaxy/environments", "destination": "{{env `chef_dir`}}" },
-    { "type": "file", "source": "./packer/galaxy/cookbooks", "destination": "{{env `chef_dir`}}" },
+	{ "type": "file", "source": "/packer/galaxy/nodes", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "/packer/galaxy/environments", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "/packer/galaxy/cookbooks", "destination": "{{user `chef_dir`}}" },
     { "type": "shell", "inline": ["ls /tmp/packer-chef-client/*"] },
     {
       "type": "chef-client",

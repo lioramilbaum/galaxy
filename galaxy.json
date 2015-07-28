@@ -2,7 +2,7 @@
 	"variables": {
 		"aws_access_key": "{{env `aws_access_key`}}",
 		"aws_secret_key": "{{env `aws_secret_key`}}",
-		"chef_dir": "{{env `chef_dir`}}",
+		"chef_dir": "/tmp/packer-chef-client",
 		"conf_dir": "/etc/chef/"
 	},
 	"builders": [{
@@ -31,15 +31,14 @@
 		]
 	}],
   "provisioners": [
-	{ "type": "file", "source": "/packer/galaxy/nodes", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "/packer/galaxy/environments", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "/packer/galaxy/cookbooks", "destination": "{{user `chef_dir`}}" },
-    { "type": "shell", "inline": ["ls /tmp/packer-chef-client/*"] },
+ 	{ "type": "file", "source": "/packer/nodes", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "/packer/environments", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "/packer/cookbooks", "destination": "{{user `chef_dir`}}" },
     {
       "type": "chef-client",
       "chef_environment": "{{user `chef_env`}}",
       "server_url": "http://localhost:8889",
-      "config_template": "packer/galaxy/templates/client.rb.template",
+      "config_template": "/packer/templates/client.rb.template",
       "skip_clean_node": true,
       "skip_clean_client": true,
       "run_list": [ "CLM::default" ]

@@ -33,14 +33,15 @@
 		}
 	],
 	"provisioners": [
-  	{
-  		"type": "shell-local",
-  		"command": "vault -version"
-  	},
-	{ "type": "file", "source": "/packer/nodes", "destination": "{{user `chef_dir`}}" },
+  	{ "type": "file", "source": "/packer/nodes", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "/packer/environments", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "/packer/cookbooks", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "/packer/Berksfile", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "/packer/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
+    { "type": "file", "source": "/packer/scripts", "destination": "{{user `chef_dir`}}" },
+    {
+    	"type": "shell",
+    	"script": "script/install_berks.sh"
+    }, 
     {
     	"type": "shell",
     	"inline": ["berks vendor -b /tmp/packer-chef-client/Berksfile /tmp/chef-cookbooks"]

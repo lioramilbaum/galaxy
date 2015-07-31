@@ -40,7 +40,7 @@
     { "type": "file", "source": "/packer/scripts", "destination": "{{user `chef_dir`}}" },
     {
     	"type": "shell",
-    	"script": "script/install_berks.sh"
+    	"script": "scripts/install_berks.sh"
     }, 
     {
     	"type": "shell",

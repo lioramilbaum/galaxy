@@ -3,7 +3,8 @@
 		"aws_access_key": "{{env `aws_access_key`}}",
 		"aws_secret_key": "{{env `aws_secret_key`}}",
 		"chef_dir": "/tmp/packer-chef-client",
-		"conf_dir": "/etc/chef/"
+		"conf_dir": "/etc/chef/",
+		"galaxy_dir": "{{env `galaxy_dir`}}"
 	},
 	"builders": [
 		{
@@ -33,11 +34,11 @@
 		}
 	],
 	"provisioners": [
-  	{ "type": "file", "source": "/packer/nodes", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "/packer/environments", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "/packer/cookbooks", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "/packer/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
-    { "type": "file", "source": "/packer/scripts", "destination": "." },
+  	{ "type": "file", "source": "{{user `galaxy_dir`}}/nodes", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/environments", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/scripts", "destination": "." },
     {
     	"type": "shell",
     	"script": "./scripts/install_berks.sh"
@@ -50,7 +51,7 @@
       "type": "chef-client",
       "chef_environment": "{{user `chef_env`}}",
       "server_url": "http://localhost:8889",
-      "config_template": "/packer/templates/client.rb.template",
+      "config_template": "{{user `galaxy_dir`}}/templates/client.rb.template",
       "skip_clean_node": true,
       "skip_clean_client": true,
       "run_list": [ "CLM::default" ]

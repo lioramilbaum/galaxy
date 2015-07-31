@@ -331,7 +331,14 @@
 	<target name="packer-push">
 		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line="/c packer push -name liora/galaxy template.json" />
+			<arg line="/c packer push -name liora/galaxy  -var 'galaxy_dir=/packer' template.json" />
+		</exec>
+	</target>
+	
+	<target name="packer-local">
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
+			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
+			<arg line="/c packer build -debug -var 'galaxy_dir=.' template.json" />
 		</exec>
 	</target>
 	

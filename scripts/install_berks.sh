@@ -1,5 +1,6 @@
 #!/bin/sh
 
+echo "XXXXXX"
 sudo apt-get -y install python-software-properties
 sudo apt-add-repository -y ppa:brightbox/ruby-ng
 sudo apt-get update

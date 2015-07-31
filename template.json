@@ -37,10 +37,10 @@
     { "type": "file", "source": "/packer/environments", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "/packer/cookbooks", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "/packer/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
-    { "type": "file", "source": "/packer/scripts", "destination": "." },
+    { "type": "file", "source": "/packer/scripts", "destination": "/tmp" },
     {
     	"type": "shell",
-    	"script": "scripts/install_berks.sh"
+    	"script": "/tmp/scripts/install_berks.sh"
     }, 
     {
     	"type": "shell",

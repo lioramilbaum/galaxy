@@ -9,8 +9,3 @@ limits_config 'system-wide limits' do
   ]
   use_system true
 end
-
-reboot "now" do
-  action :reboot_now
-  reason "Cannot continue Chef run without a reboot."
-end

@@ -117,12 +117,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'
 			chef.add_recipe "CLM::init"
-		end
-		clm.vm.provision :reload
-		clm.vm.provision :chef_zero do |chef|
-			chef.cookbooks_path = ["./cookbooks/"]
-			chef.environments_path = ["./environments/"]
-			chef.environment = 'curr'
 			chef.add_recipe "CLM::default"
 		end
 	end

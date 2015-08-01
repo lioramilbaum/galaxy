@@ -61,7 +61,7 @@
       "config_template": "{{user `galaxy_dir`}}/templates/client.rb.template",
       "skip_clean_node": true,
       "skip_clean_client": true,
-      "run_list": [ "CLM::default" ]
+      "run_list": [ "CLM::init", "CLM::default" ]
     }
   ],
   "push": {

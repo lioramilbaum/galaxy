@@ -11,6 +11,7 @@ package 'unzip' do
   action :install
 end
 
+=begin
 directory "/root/.ssh" do
   owner 'root'
   group 'root'
@@ -33,6 +34,8 @@ remote_file "/root/.ssh/authorized_keys" do
   mode '0600'
   action :create
 end
+
+=end
 
 
 

@@ -38,6 +38,7 @@
     { "type": "file", "source": "{{user `galaxy_dir`}}/environments", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "{{user `galaxy_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "{{user `galaxy_dir`}}/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/metadata.rb", "destination": "{{user `chef_dir`}}/metadata.rb" },
     { "type": "file", "source": "{{user `galaxy_dir`}}/scripts", "destination": "." },
     {
     	"type": "shell",

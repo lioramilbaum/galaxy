@@ -711,6 +711,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	end	
 	config.push.define "atlas" do |push|
 		push.app = "liora/galaxy"
+		push.vcs = true
 	end
 	
 end

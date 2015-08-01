@@ -2,6 +2,7 @@ include_recipe "base::ubuntu" if node.key?("ec2")
 include_recipe "apt::default"
 include_recipe "libarchive::default"
 include_recipe "IM::default"
+include recipe "CLM::init"
 include_recipe "CLM::rdm"
 
 package 'xvfb' do
@@ -102,8 +103,9 @@ end
 execute 'CLM Setup' do
   user 'root'
   cwd "/opt/IBM/JazzTeamServer/server"
-  command "./repotools-jts.sh -setup includeLifecycleProjectStep=true parametersfile=#{node['CLM'][:parametersfile]}"
+  command "./repotools-jts.sh -setup includeLifecycleProjectStep=true parametersfile=#{node['CLM'][:parametersfile]} logFile=/tmp/setup.log"
   action :nothing
+  ignore_failure false
   notifies :run, 'execute[Assign build license]', :immediately
 end
 
@@ -112,5 +114,6 @@ execute 'Assign build license' do
   cwd "/opt/IBM/JazzTeamServer/server"
   command "./repotools-jts.sh -createUser adminUserId=liora adminPassword=liora userId=build licenseId='com.ibm.team.rtc.buildsystem'"
   action :nothing
+  ignore_failure false
   returns [0,22]
 end

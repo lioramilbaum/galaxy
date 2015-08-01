@@ -13,10 +13,16 @@
 			"secret_key": "{{user `aws_secret_key`}}",
 			"region": "eu-west-1",
 			"source_ami": "ami-60a10117",
-			"security_group_id": "sg-e5861e93",
 			"ssh_username": "ubuntu",
 			"instance_type": "m3.xlarge",
 			"ami_name": "clm {{timestamp}}",
+			"associate_public_ip_address": true,
+			"ami_virtualization_type": "hvm",
+			"ssh_timeout": "5m",
+			"vpc_id": "vpc-7dd90818", 
+			"subnet_id": "subnet-7cf03b25",
+			"security_group_id": "sg-66dc4703",
+			"ssh_private_ip": false,
 			"ami_block_device_mappings": [
     			{
     				"device_name": "/dev/sda1",

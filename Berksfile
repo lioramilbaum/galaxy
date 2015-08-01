@@ -5,7 +5,7 @@ metadata
 cookbook 'java7',		path: "./cookbooks/java7"
 cookbook 'base',		path: "./cookbooks/base"
 cookbook 'IM',			path: "./cookbooks/IM"
-cookbook 'UCR',			path: "./cookbooks/ucr"
+cookbook 'UCR',			path: "./cookbooks/UCR"
 cookbook 'rlks',		path: "./cookbooks/rlks"
 cookbook 'jira6.4',		path: "./cookbooks/jira6.4"
 cookbook 'CLM',			path: "./cookbooks/CLM"

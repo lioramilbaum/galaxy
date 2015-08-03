@@ -102,7 +102,7 @@ end
 execute 'CLM Setup' do
   user 'root'
   cwd "/opt/IBM/JazzTeamServer/server"
-  command "./repotools-jts.sh -setup includeLifecycleProjectStep=true parametersfile=#{node['CLM'][:parametersfile]} logFile=/tmp/setup.log"
+  command "./repotools-jts.sh -setup includeLifecycleProjectStep=true parametersfile=#{node['CLM'][:parametersfile]}"
   action :nothing
   ignore_failure false
   notifies :run, 'execute[Assign build license]', :immediately

@@ -4,7 +4,8 @@
 		"aws_access_key": "{{env `aws_access_key`}}",
 		"aws_secret_key": "{{env `aws_secret_key`}}",
 		"chef_dir": "/tmp/packer-chef-client",
-		"conf_dir": "/etc/chef/"
+		"conf_dir": "/etc/chef/",
+		"atlas_token": "{{env `ATLAS_TOKEN`}}"
 	},
 	"builders": [
 		{
@@ -12,7 +13,7 @@
 			"access_key": "{{user `aws_access_key`}}",
 			"secret_key": "{{user `aws_secret_key`}}",
 			"region": "eu-west-1",
-			"source_ami": "ami-60a10117",
+			"source_ami": "ami-6a2c7a1d",
 			"ssh_username": "ubuntu",
 			"instance_type": "m3.xlarge",
 			"ami_name": "clm {{timestamp}}",
@@ -61,7 +62,7 @@
       "config_template": "{{user `galaxy_dir`}}/templates/client.rb.template",
       "skip_clean_node": true,
       "skip_clean_client": true,
-      "run_list": [ "CLM::init", "CLM::default" ]
+      "run_list": [ "CLM::default" ]
     }
   ],
   "push": {
@@ -70,7 +71,8 @@
   "post-processors": [
     {
       "type": "atlas",
-      "artifact": "ATLAS_USERNAME/liora",
+      "token": "{{user `atlas_token`}}",
+      "artifact": "liora/galaxy",
       "artifact_type": "amazon.ami"
     }
   ]

@@ -1,3 +1,5 @@
 .vagrant/
 Berksfile.lock
 *.pem
+output-virtualbox-iso/*
+packer_cache/*

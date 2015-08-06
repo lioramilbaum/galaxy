@@ -173,15 +173,24 @@
 		</if>
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
-			<then>
+			<then>				
+				<property environment="env"/>
+				<property name="ATLAS_TOKE" value="${env.ATLAS_TOKE}"/>
+				
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true">
+					<arg line="/c vagrant login --token ${ATLAS_TOKEN}" />
+				</exec>
 				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="/c vagrant up clm --provider=${VAGRANT_PROVIDER} --no-parallel" />
+					<arg line="/c vagrant up clmatlas --provider=${VAGRANT_PROVIDER} --no-parallel" />
 				</exec>
 				<fail>
 					<condition>
 						<isfailure code="${return.code}"/>
 					</condition>
 				</fail>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true">
+					<arg line="/c vagrant login --logout --token ${ATLAS_TOKEN}" />
+				</exec>
 			</then>	
 		</if>
 
@@ -331,7 +340,7 @@
 	<target name="packer-push">
 		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line='/c packer push -name liora/galaxy -var "galaxy_dir=/packer" clm.json' />
+			<arg line='/c packer push -name liora/clm -var "galaxy_dir=/packer" clm.json' />
 		</exec>
 	</target>
 	

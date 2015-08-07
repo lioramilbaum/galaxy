@@ -697,10 +697,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	end
 	
 	config.vm.define "clmatlas" do |clmatlas|
-	
-		clmatlas.berkshelf.enabled = false
-		clmatlas.vm.synced_folder '.', '/vagrant', :disabled => true
-		
+			
 		clmatlas.vm.provider "aws" do |aws, override|
 			override.vm.box		= "liora/CLM"
 			aws.region			= "eu-west-1"
@@ -716,6 +713,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		override.ssh.insert_key = "true"
     		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
 		end	
+		
+		clmatlas.vm.provision :chef_zero do |chef|
+			chef.cookbooks_path = ["./cookbooks/"]
+			chef.environments_path = ["./environments/"]
+			chef.environment = 'curr'
+			chef.add_recipe "CLM::setup"
+		end
 	end
 	
 	config.push.define "atlas" do |push|

@@ -1,11 +1,14 @@
 {
 	"variables": {
+        "atlas_username": "liora",
+        "atlas_name": "clm",
 		"galaxy_dir": "/packer",
 		"aws_access_key": "{{env `aws_access_key`}}",
 		"aws_secret_key": "{{env `aws_secret_key`}}",
 		"chef_dir": "/tmp/packer-chef-client",
 		"conf_dir": "/etc/chef/",
-		"atlas_token": "{{env `ATLAS_TOKEN`}}"
+		"atlas_token": "{{env `ATLAS_TOKEN`}}",
+		"hostname": "lmb-clm-server"
 	},
 	"builders": [
 		{
@@ -39,7 +42,7 @@
 				}
 			]
 		}
-	],
+	],			
 	"provisioners": [
   	{ "type": "file", "source": "{{user `galaxy_dir`}}/nodes", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "{{user `galaxy_dir`}}/environments", "destination": "{{user `chef_dir`}}" },
@@ -66,14 +69,26 @@
     }
   ],
   "push": {
-    "name": "ATLAS_USERNAME/liora"
+    "name": "liora/clm",
+	"token": "{{user `atlas_token`}}",
+    "vcs": true
   },
-  "post-processors": [
-    {
-      "type": "atlas",
-      "token": "{{user `atlas_token`}}",
-      "artifact": "liora/galaxy",
-      "artifact_type": "amazon.ami"
-    }
-  ]
+	"post-processors": [
+		[{
+			"type": "vagrant",
+			"output": "clm-ubuntu12.04.box",
+			"keep_input_artifact": false
+		},
+		{
+			"type": "atlas",
+            "only": ["amazon-ebs"],
+			"token": "{{user `atlas_token`}}",
+			"artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+			"artifact_type": "vagrant.box",
+			"metadata": {
+				"provider": "aws",
+				"version": "0.0.3"
+			}
+		}]
+	]
 }

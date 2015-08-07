@@ -75,12 +75,26 @@ remote_file "Copy lqe.war" do
   source "file:///tmp/CLM_FIX/lqe.war"
 end
 
+=begin
 execute 'starting JTS Server' do
   user 'root'
   environment "DISPLAY" => "localhost:1.0"
   command "/opt/IBM/JazzTeamServer/server/server.startup"
   action :run
-  notifies :run, 'execute[sleep 3m]', :immediately
+end
+=end
+
+template "Setup JTS.conf" do
+  path "/etc/init/JTS.conf"
+  source 'JTS.conf.erb'
+  action :create
+end
+
+service 'JTS' do
+	provider Chef::Provider::Service::Upstart
+	supports :start => true, :stop => true
+	action [ :enable, :start ]
+	notifies :run, 'execute[sleep 3m]', :immediately
 end
 
 execute 'sleep 3m' do

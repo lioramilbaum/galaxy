@@ -511,7 +511,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		git.vm.provision "shell", path: "components/SCM/git/deploy-sample-git-repo.sh"
 	end
 	
-		config.vm.define "github" do |github|
+	config.vm.define "github" do |github|
 		github.vm.hostname = configs["GITHUB_HOSTNAME"]
 		
 		github.vm.provider "virtualbox" do |vb|
@@ -539,8 +539,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
+    end
     	
-    		config.vm.define "jira" do |jira|
+    config.vm.define "jira" do |jira|
   		jira.vm.hostname = configs["JIRA_HOSTNAME"]
   		jira.vm.network "private_network", ip: configs["JIRA_IP"]
 
@@ -577,7 +578,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		end
 	end
 	
-		config.vm.define "rrdi"  do |rrdi|
+	config.vm.define "rrdi"  do |rrdi|
   		rrdi.vm.hostname = configs["RRDI_HOSTNAME"]
   		rrdi.vm.network "private_network", ip: configs["RRDI_IP"] 
 		
@@ -624,7 +625,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		rrdi.vm.provision "shell", path: "components/REPORTING/deploy-rrdi.sh"
 	end
 	
-		config.vm.define "stash" do |stash|
+	config.vm.define "stash" do |stash|
 		stash.vm.hostname = configs["STASH_HOSTNAME"]
 		stash.vm.network "private_network", ip: configs["STASH_IP"]
 		
@@ -662,7 +663,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		stash.vm.provision "shell", path: "components/SCM/Stash/deploy-stash.sh"
 	end	
 	
-		config.vm.define "ucr" do |ucr|
+	config.vm.define "ucr" do |ucr|
   		ucr.vm.hostname = configs["UCR_HOSTNAME"]
   		ucr.vm.network "private_network", ip: configs["UCR_IP"]
 
@@ -692,19 +693,33 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
-    	
-		ucr.vm.provision :chef_zero do |chef|
-			chef.cookbooks_path = ["./cookbooks/"]
-			chef.add_recipe "ucr::default"
-		end
-		ucr.vm.provision "shell", path: "components/DEPLOYER/UCR/deploy-ucr.sh"
-		ucr.vm.provision "shell", path: "components/DEPLOYER/UCR/sample/deploy-ucr-sample.sh"
-		
-	end
 
-	end	
+	end
+	
+	config.vm.define "clmatlas" do |clmatlas|
+	
+		clmatlas.berkshelf.enabled = false
+		clmatlas.vm.synced_folder '.', '/vagrant', :disabled => true
+		
+		clmatlas.vm.provider "aws" do |aws, override|
+			override.vm.box		= "liora/CLM"
+			aws.region			= "eu-west-1"
+			aws.ami				= "ami-c40353b3"			
+			aws.keypair_name	= "id_rsa"
+   			aws.instance_type	= "m3.xlarge"
+    		aws.security_groups	= [ 'sg-66dc4703' ]
+    		aws.subnet_id		= "subnet-7cf03b25"
+    		aws.elastic_ip		= "true"
+    		aws.block_device_mapping	= [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 100 }]
+
+    		override.ssh.username	= "ubuntu"
+    		override.ssh.insert_key = "true"
+    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+		end	
+	end
+	
 	config.push.define "atlas" do |push|
-		push.app = "liora/galaxy"
+		push.app = "liora/clm"
 		push.vcs = true
 	end
 	

@@ -38,7 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.hostmanager.enabled = true
 	config.hostmanager.manage_host = true
 	config.omnibus.chef_version = :latest
-#	config.cache.scope = :box
+	config.cache.scope = :box
 	config.vm.synced_folder '.', '/vagrant', :disabled => false
 	
 	config.vm.define "ubuntu" do |ubuntu|	
@@ -697,11 +697,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	end
 	
 	config.vm.define "clmatlas" do |clmatlas|
+	
+		clmatlas.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: [".*/", "packer_cache/"]
 			
 		clmatlas.vm.provider "aws" do |aws, override|
-			override.vm.box		= "liora/CLM"
+			override.vm.box		= "liora/clm"
 			aws.region			= "eu-west-1"
-			aws.ami				= "ami-c40353b3"			
+			aws.ami				= "ami-b6aefec1"			
 			aws.keypair_name	= "id_rsa"
    			aws.instance_type	= "m3.xlarge"
     		aws.security_groups	= [ 'sg-66dc4703' ]
@@ -718,6 +720,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'
+			chef.add_recipe "base::ec2"
 			chef.add_recipe "CLM::setup"
 		end
 	end

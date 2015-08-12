@@ -100,6 +100,7 @@
 			eol="lf"/>
 		
 		<loadproperties srcfile="${GALAXY_HOME}/conf/nodes.properties" />
+		
 	</target>
 	
 	<target name="destroy" depends="">
@@ -180,6 +181,9 @@
 				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true">
 					<arg line="/c vagrant login --token ${ATLAS_TOKEN}" />
 				</exec>
+				<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">			
+					<arg line="/c vagrant box update --box liora/clm" />
+				</exec>	
 				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
 					<arg line="/c vagrant up clmatlas --provider=${VAGRANT_PROVIDER} --no-parallel" />
 				</exec>

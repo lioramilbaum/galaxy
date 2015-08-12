@@ -9,5 +9,4 @@ version          '0.0.1'
 depends         'limits'
 depends			'libarchive'
 depends			'IM'
-depends			'base'
 

@@ -5,8 +5,8 @@ override_attributes ({
     'CLM' => {
         'version' => '6.0',
         'zip' => 'JTS-CCM-QM-RM-JRS-RELM-repo-6.0.zip',
-        'fix' => 'CLM_600_iFix001.zip',
-        'fix_package' =>  'CLM_server_patch_6.0.0.0-CALM60M-I20150624-2017.zip,
+        'fix' => 'CLM_600_iFix002.zip',
+        'fix_package' =>  'CLM_server_patch_6.0.0.0-CALM60M-I20150730-2020.zip,
         'build_zip' => 'RTC-BuildSystem-Toolkit-repo-6.0.zip',
         'build_packages' => 'com.ibm.team.install.rtc.buildsystem_6.0.0.RTC-I20150519-1214-r60',
         'rdm_zip' => 'Rhapsody-DM-Servers-6.0.zip',

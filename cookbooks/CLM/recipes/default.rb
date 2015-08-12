@@ -1,4 +1,3 @@
-include_recipe "base::ubuntu" if node.key?("ec2")
 include_recipe "apt::default"
 include_recipe "libarchive::default"
 include_recipe "IM::default"

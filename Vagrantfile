@@ -703,7 +703,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		clmatlas.vm.provider "aws" do |aws, override|
 			override.vm.box		= "liora/clm"
 			aws.region			= "eu-west-1"
-			aws.ami				= "ami-b6aefec1"			
+			aws.ami				= "ami-f096cb87"			
 			aws.keypair_name	= "id_rsa"
    			aws.instance_type	= "m3.xlarge"
     		aws.security_groups	= [ 'sg-66dc4703' ]
@@ -720,7 +720,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'
-			chef.add_recipe "base::ec2"
 			chef.add_recipe "CLM::setup"
 		end
 	end

@@ -51,6 +51,14 @@
     { "type": "file", "source": "{{user `galaxy_dir`}}/metadata.rb", "destination": "{{user `chef_dir`}}/metadata.rb" },
     { "type": "file", "source": "{{user `galaxy_dir`}}/scripts", "destination": "." },
     {
+    	"type": "shell",
+    	"script": "./scripts/install_berks.sh"
+    }, 
+    {
+    	"type": "shell",
+    	"inline": ["berks vendor -b /tmp/packer-chef-client/Berksfile /tmp/chef-cookbooks"]
+    }, 
+    {
       "type": "chef-client",
       "chef_environment": "{{user `chef_env`}}",
       "server_url": "http://localhost:8889",

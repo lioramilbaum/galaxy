@@ -6,7 +6,9 @@ description      'CLM'
 long_description 'CLM'
 version          '0.0.1'
 
-depends         'limits'
-depends			'libarchive'
-depends			'IM'
+%w{ limits libarchive IM }.each do |cookbook|
+  depends cookbook
+end
+
+supports 'ubuntu'
 

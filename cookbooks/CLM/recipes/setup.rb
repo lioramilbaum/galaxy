@@ -1,12 +1,16 @@
 template "Setup Properties File" do
-  path "#{node['CLM'][:parametersfile]}"
-  source 'CLM.properties.erb'
-  variables ({
-     :use_rdm => node['CLM']['use_rdm'],
-     :server_hostname => node['CLM']['server_hostname']
-  })
-  action :create
-  notifies :run, 'execute[CLM Setup]', :immediately
+	path "#{node['CLM'][:parametersfile]}"
+	source 'CLM.properties.erb'
+	variables (
+  		lazy {
+  			{
+  				:use_rdm => node['CLM']['use_rdm'],
+				:server_hostname => lazy node['ec2']['public_hostname']
+			}
+		}
+	)
+	action :create
+	notifies :run, 'execute[CLM Setup]', :immediately
 end
 
 execute 'CLM Setup' do

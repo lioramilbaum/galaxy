@@ -10,4 +10,3 @@ default['CLM']['rdm_packages'] = nil
 default['CLM']['use_rdm'] = false
 default['CLM']['parametersfile'] = "/tmp/CLM.properties"
 default['CLM']['activation_key'] = 'dabbad00-8872-36d4-b246-ca785dd63fde'
-default['CLM']['server_hostname'] = node['ec2']['public_hostname']

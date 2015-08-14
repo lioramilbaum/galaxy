@@ -5,7 +5,7 @@ template "Setup Properties File" do
   		lazy {
   			{
   				:use_rdm => node['CLM']['use_rdm'],
-				:server_hostname => lazy node['ec2']['public_hostname']
+				:server_hostname => node['ec2']['public_hostname']
 			}
 		}
 	)

@@ -1,4 +1,3 @@
-
 template "Setup JTS.conf" do
   path "/etc/init/JTS.conf"
   source 'JTS.conf.erb'
@@ -23,10 +22,8 @@ template "Setup Properties File" do
 		}
 	)
 	action :create
-#	notifies :run, 'execute[CLM Setup]', :immediately
+	notifies :run, 'execute[CLM Setup]', :immediately
 end
-
-=begin
 
 execute 'CLM Setup' do
   user 'root'
@@ -45,5 +42,3 @@ execute 'Assign build license' do
   ignore_failure false
   returns [0,22]
 end
-
-=end

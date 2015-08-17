@@ -1,3 +1,16 @@
+
+template "Setup JTS.conf" do
+  path "/etc/init/JTS.conf"
+  source 'JTS.conf.erb'
+  action :create
+end
+
+service 'JTS' do
+	provider Chef::Provider::Service::Upstart
+	supports :start => true, :stop => true
+	action [ :enable, :start ]
+end
+
 template "Setup Properties File" do
 	path "#{node['CLM'][:parametersfile]}"
 	source 'CLM.properties.erb'
@@ -10,8 +23,10 @@ template "Setup Properties File" do
 		}
 	)
 	action :create
-	notifies :run, 'execute[CLM Setup]', :immediately
+#	notifies :run, 'execute[CLM Setup]', :immediately
 end
+
+=begin
 
 execute 'CLM Setup' do
   user 'root'
@@ -30,3 +45,5 @@ execute 'Assign build license' do
   ignore_failure false
   returns [0,22]
 end
+
+=end

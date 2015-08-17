@@ -73,15 +73,3 @@ remote_file "Copy lqe.war" do
   path "/opt/IBM/JazzTeamServer/server/tomcat/webapps/lqe.war" 
   source "file:///tmp/CLM_FIX/lqe.war"
 end
-
-template "Setup JTS.conf" do
-  path "/etc/init/JTS.conf"
-  source 'JTS.conf.erb'
-  action :create
-end
-
-service 'JTS' do
-	provider Chef::Provider::Service::Upstart
-	supports :start => true, :stop => true
-	action [ :enable, :start ]
-end

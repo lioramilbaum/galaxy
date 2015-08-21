@@ -11,6 +11,10 @@ package 'unzip' do
   action :install
 end
 
+package 'zip' do
+  action :install
+end
+
 =begin
 directory "/root/.ssh" do
   owner 'root'

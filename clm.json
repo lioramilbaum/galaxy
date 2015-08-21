@@ -52,7 +52,7 @@
     { "type": "file", "source": "{{user `galaxy_dir`}}/scripts", "destination": "{{user `chef_dir`}}" },
     {
     	"type": "shell",
-    	"inline": ["{{user `galaxy_dir`}}/scripts/install_bersk.sh"]
+    	"inline": ["/bin/sh {{user `chef_dir`}}/scripts/install_berks.sh"]
     },     
     {
     	"type": "shell",

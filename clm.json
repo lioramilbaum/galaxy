@@ -49,6 +49,11 @@
     { "type": "file", "source": "{{user `galaxy_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
     { "type": "file", "source": "{{user `galaxy_dir`}}/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
     { "type": "file", "source": "{{user `galaxy_dir`}}/metadata.rb", "destination": "{{user `chef_dir`}}/metadata.rb" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/scripts", "destination": "{{user `chef_dir`}}" },
+    {
+    	"type": "shell",
+    	"inline": ["{{user `galaxy_dir`}}/scripts/install_bersk.sh"]
+    },     
     {
     	"type": "shell",
     	"inline": ["berks vendor -b /tmp/packer-chef-client/Berksfile /tmp/chef-cookbooks"]

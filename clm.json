@@ -16,7 +16,7 @@
 			"access_key": "{{user `aws_access_key`}}",
 			"secret_key": "{{user `aws_secret_key`}}",
 			"region": "eu-west-1",
-			"source_ami": "ami-6a2c7a1d",
+			"source_ami": "ami-2a207e5d",
 			"ssh_username": "ubuntu",
 			"instance_type": "m3.xlarge",
 			"ami_name": "clm {{timestamp}}",
@@ -82,7 +82,7 @@
 			"artifact_type": "vagrant.box",
 			"metadata": {
 				"provider": "aws",
-				"version": "0.0.5"
+				"version": "0.0.6"
 			}
 		}]
 	]

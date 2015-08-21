@@ -720,6 +720,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'
+			chef.add_recipe "base::ubuntu"
+			chef.add_recipe "CLM::init"
+		end
+		clmatlas.vm.provision :reload
+		clmatlas.vm.provision :chef_zero do |chef|
+			chef.cookbooks_path = ["./cookbooks/"]
+			chef.environments_path = ["./environments/"]
+			chef.environment = 'curr'
 			chef.add_recipe "CLM::setup"
 		end
 	end

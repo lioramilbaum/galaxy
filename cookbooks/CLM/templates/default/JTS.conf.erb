@@ -2,5 +2,11 @@ description "JTS"
 
 start on startup
 start on runlevel [2345]
+stop on runlevel [!2345]
 
-exec /opt/IBM/JazzTeamServer/server/server.startup
+post-start script
+  exec /opt/IBM/JazzTeamServer/server/server.startup
+  sleep 3m
+end script
+
+post-stop exec /opt/IBM/JazzTeamServer/server/server.shutdown

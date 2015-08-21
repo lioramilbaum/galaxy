@@ -1,24 +1,3 @@
-package 'zip' do
-  action :install
-end
-
-template "Setup JTS.conf" do
-  path "/etc/init/JTS.conf"
-  source 'JTS.conf.erb'
-  action :create
-end
-
-service 'JTS' do
-	provider Chef::Provider::Service::Upstart
-	supports :start => true, :stop => true
-	action [ :enable, :start ]
-end
-
-execute 'sleep' do
-  command "sleep 3m"
-  action :run
-end
-
 template "Setup Properties File" do
 	path "#{node['CLM'][:parametersfile]}"
 	source 'CLM.properties.erb'

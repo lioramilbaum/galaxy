@@ -61,66 +61,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	    end
 	end
 	
-	config.vm.define "clm"  do |clm|
-	
-		clm.vm.provider "virtualbox" do |vb, override|
-  			override.vm.hostname = configs["CLM_HOSTNAME"]
-  			override.vm.network "private_network", ip: configs["CLM_IP"]
-			vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-			vb.memory = 8192
-		end
-		
-		clm.vm.provider "aws" do |aws, override|
-			override.vm.box		= "dummy"
-			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-			override.vm.synced_folder "keys", "/vagrant/keys", type: "rsync"
-			
-			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
-			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "id_rsa"   
-
-			aws.region				= "eu-west-1"
-    		aws.ami					= "ami-60a10117"
-   			aws.instance_type		= "m3.xlarge"
-    		aws.security_groups		= [ 'sg-66dc4703' ]
-    		aws.subnet_id			= "subnet-7cf03b25"
-    		aws.elastic_ip			= "true"
-    		aws.block_device_mapping	= [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 100 }]
-
-    		override.ssh.username	= "ubuntu"
-    		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
-    		
-    	end
-    	
-    	clm.vm.provider :vsphere do |vsphere, override|
-
-			override.vm.box = 'vsphere'
-			override.vm.box_url = 'https://vagrantcloud.com/ssx/boxes/vsphere-dummy/versions/0.0.1/providers/vsphere.box'
-			override.vm.synced_folder "keys", "/vagrant/keys", type: "rsync"
-
-			vsphere.host = 'vcenterlan.redbend.com'                           
-			vsphere.compute_resource_name = 'ilvmdr.redbend.com'           
-			vsphere.resource_pool_name = 'linux'                       
-			vsphere.template_name = 'ubuntu'     
-			vsphere.name = 'rb-alm-server'                                       
-			vsphere.user = 'root'                                   
-			vsphere.password = 'scrjze12#'                           
-			vsphere.insecure = true 
-			vsphere.memory_mb = 8192
-			vsphere.cpu_count = 4
-			
-    	end
-    	
-		clm.vm.provision :chef_zero do |chef|
-			chef.cookbooks_path = ["./cookbooks/"]
-			chef.environments_path = ["./environments/"]
-			chef.environment = 'curr'
-			chef.add_recipe "CLM::init"
-			chef.add_recipe "CLM::default"
-		end
-	end
-	
 	config.vm.define "db"  do |db|
 	
 		
@@ -696,11 +636,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 	end
 	
-	config.vm.define "clmatlas" do |clmatlas|
+	config.vm.define "clm" do |clm|
 	
-		clmatlas.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: [".*/", "packer_cache/"]
+		clm.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: [".*/", "packer_cache/"]
 			
-		clmatlas.vm.provider "aws" do |aws, override|
+		clm.vm.provider "aws" do |aws, override|
 			override.vm.box		= "liora/clm"
 			aws.region			= "eu-west-1"
 			aws.ami				= "ami-dea8f1a9"			
@@ -716,7 +656,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
 		end	
 		
-		clmatlas.vm.provision :chef_zero do |chef|
+		clm.vm.provision :chef_zero do |chef|
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'

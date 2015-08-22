@@ -8,12 +8,6 @@ package 'xvfb' do
   notifies :run, 'execute[xvfb]', :immediately
 end
 
-execute 'xvfb' do
-  user 'root'
-  command "Xvfb :1 -screen 0 800x600x24&"
-  action :nothing
-end
-
 remote_file "Download CLM" do
     path "/tmp/#{node['CLM']['zip']}"
 	source "https://lmbgalaxy.s3.amazonaws.com/IBM/CLM/#{node['CLM']['zip']}"

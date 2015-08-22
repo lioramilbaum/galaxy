@@ -5,7 +5,6 @@ include_recipe "CLM::rdm"
 
 package 'xvfb' do
   action :install
-  notifies :run, 'execute[xvfb]', :immediately
 end
 
 remote_file "Download CLM" do

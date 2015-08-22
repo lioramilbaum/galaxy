@@ -8,7 +8,7 @@ env DISPLAY=localhost:1.0
 export DISPLAY
 
 post-start script
-  exec Xvfb :1 -screen 0 800x600x24
+  exec Xvfb :1 -screen 0 800x600x24&
   exec su root -c "ulimit -n 65536;ulimit -u 10000;cd /opt/IBM/JazzTeamServer/server;./server.startup"
 end script
 

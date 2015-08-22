@@ -5,8 +5,10 @@ start on runlevel [2345]
 stop on runlevel [!2345]
 
 post-start script
-  exec /opt/IBM/JazzTeamServer/server/server.startup
-  sleep 3m
+  exec su root -c "ulimit -n 65536;ulimit -u 10000;cd /opt/IBM/JazzTeamServer/server;./server.startup"
 end script
 
-post-stop exec /opt/IBM/JazzTeamServer/server/server.shutdown
+post-stop script
+  cd /opt/IBM/JazzTeamServer/server
+  exec  ./server.shutdown
+end script

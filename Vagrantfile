@@ -41,28 +41,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.cache.scope = :box
 	config.vm.synced_folder '.', '/vagrant', :disabled => false
 	
-	config.vm.define "ubuntu" do |ubuntu|	
-		ubuntu.vm.provision :chef_zero do |chef|
-			chef.cookbooks_path = ["./cookbooks/"]
-			chef.data_bags_path = ["./data_bags/"]
-			chef.add_recipe "base::ubuntu"
-			chef.log_level = 'debug'
-			chef.arguments = '-L /vagrant/chef.log'
-	    end
-	end
-	
-	config.vm.define "centos" do |centos|	
-		centos.vm.provision :chef_zero do |chef|
-			chef.cookbooks_path = ["./cookbooks/"]
-			chef.data_bags_path = ["./data_bags/"]
-			chef.add_recipe "base::centos"
-			chef.log_level = 'debug'
-			chef.arguments = '-L /vagrant/chef.log'
-	    end
 	end
 	
 	config.vm.define "db"  do |db|
-	
 		
 		db.vm.provider "virtualbox" do |vb, override|
   			override.vm.hostname = configs["DB_HOSTNAME"]
@@ -607,7 +588,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'
-			chef.add_recipe "base::ubuntu"
 			chef.add_recipe "CLM::setup"
 		end
 	end

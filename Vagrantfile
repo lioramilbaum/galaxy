@@ -182,7 +182,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			}
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.add_recipe "UCD::agent"
-			chef.add_recipe "UCD::petStore"
+			chef.add_recipe "UCD::sample"
 		end
 		
 	end
@@ -226,7 +226,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			}
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.add_recipe "UCD::agent"
-			chef.add_recipe "UCD::petStore"
+			chef.add_recipe "UCD::sample"
 		end
 		
  		agent2.vm.provision "shell", path: "components/DEPLOYER/UCD/agent2/sample/Artifactory-JPetStore/deploy-JPetStore-sample.sh"

@@ -27,9 +27,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	if ARGV[1]=='ubuntu'
 		config.vm.box = "Opscode ubuntu-12.04"
 		config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-12.04_chef-provisionerless.box"
-	elsif ARGV[1]=='centos'
-		config.vm.box = "CentOS-6.6-x86_64-v20150426"
-		config.vm.box_url = "https://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.6-x86_64-v20150426.box"
 	else
 		config.vm.box = "Opscode-ubuntu-12.04-Galaxy"
 	end
@@ -41,9 +38,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.cache.scope = :box
 	config.vm.synced_folder '.', '/vagrant', :disabled => false
 	
-	end
-	
 	config.vm.define "db"  do |db|
+	
 		
 		db.vm.provider "virtualbox" do |vb, override|
   			override.vm.hostname = configs["DB_HOSTNAME"]
@@ -189,7 +185,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.add_recipe "UCD::petStore"
 		end
 		
- 		agent1.vm.provision "shell", path: "components/DEPLOYER/UCD/agent1/sample/JPetStore/deploy-JPetStore-sample.sh"
 	end
 	
 	config.vm.define "agent2" do |agent2|

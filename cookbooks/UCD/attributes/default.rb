@@ -1,4 +1,5 @@
-#set['UCD']['fix'] =
-#set['UCD']['server_hostname'] =
-set['UCD']['initial_password'] = "admin"
-#set['UCD']['plugins_dir'] =
+default['UCD']['zip'] = nil
+default['UCD']['fix'] = nil
+default['UCD']['server_hostname'] = nil
+default['UCD']['initial_password'] = "admin"
+default['UCD']['plugins_dir'] = nil

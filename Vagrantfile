@@ -131,13 +131,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			vb.memory = 2048
 		end
 		
-		
 		ucd.vm.synced_folder ".", "/vagrant", type: "rsync"
 			
 		ucd.vm.provider "aws" do |aws, override|
 			override.vm.box		= "dummy"
 			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-			override.vm.synced_folder "keys", "/vagrant/keys", type: "rsync"
 			
 			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
 			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
@@ -157,68 +155,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     	end
     	
 		ucd.vm.provision :chef_zero do |chef|    
-		
-			chef.json = {
-				'UCD' => {
-					'server_hostname' => configs["UCD_HOSTNAME"]
-				}
-			}
 			chef.environments_path = ["./environments/"]
-			chef.environment = 'next'
+			chef.environment = 'curr'
 			chef.cookbooks_path = ["./cookbooks/"]
-			chef.add_recipe "UCD::default"
-		end
-		
-#		ucd.vm.provision "shell", path: "components/DEPLOYER/UCD/server/sample/AWS/deploy-AWS-sample.sh", args: configs["UCD_HOSTNAME"]
-#		ucd.vm.provision "shell", path: "components/DEPLOYER/UCD/server/sample/helloWorld/deploy-helloWorld-sample.sh"
-		ucd.vm.provision "shell", path: "components/DEPLOYER/UCD/server/sample/Pet/deploy-Pet-sample.sh"
-	end
-	
-	config.vm.define "ucdwp" do |ucdwp|
-	
- 		config.vbguest.auto_update = false
-
-		ucdwp.vm.provider "virtualbox" do |vb, override|			
-			override.vm.hostname = configs["UCDwP_HOSTNAME"]
-  			override.vm.network "private_network", ip: configs["UCDwP_IP"]
-  			override.vm.box = "CentOS-6.6-x86_64-v20150426-Galaxy"
-			vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-			vb.memory = 2048
-		end
-		
-		ucdwp.vm.provider "aws" do |aws, override|
-			override.vm.box		= "dummy"
-			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-			override.vm.synced_folder "keys", "/vagrant/keys", type: "rsync"
-			
-			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
-			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "id_rsa"   
-
-			aws.region				= "eu-west-1"
-    		aws.ami					= "ami-60a10117"
-   			aws.instance_type		= "t2.small"
-    		aws.security_groups		= [ 'sg-66dc4703' ]
-    		aws.subnet_id			= "subnet-7cf03b25"
-    		aws.elastic_ip			= "true"
-
-    		override.ssh.username	= "ubuntu"
-    		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
-    		
-    	end
-    	
-		ucdwp.vm.provision :chef_zero do |chef|
-			chef.cookbooks_path = ["./cookbooks/"]
-			chef.add_recipe "UCD::default"
-			chef.add_recipe "UCDwP::default"
-		end
-		
-		ucdwp.vm.provision "shell", inline: "cd /tmp/IBM_URBANCODE_DEPLOY_WITH_PATTERN/ibm-ucd-patterns-install/engine-install/;sudo ./install.sh -l -a http://lmb-ucdwp-server:5000/v2.0 -i lmb-ucdwp-server -b 0.0.0.0"
-		ucdwp.vm.provision "shell", inline: "cd /tmp/ibm-ucd-patterns-install-6114/ibm-ucd-patterns-install/engine-install/;sudo ./install.sh -l -a http://lmb-ucdwp-server:5000/v2.0 -i lmb-ucdwp-server -b 0.0.0.0"
-		ucdwp.vm.provision "shell", inline: "cd /tmp/IBM_URBANCODE_DEPLOY_WITH_PATTERN/ibm-ucd-patterns-install/web-install/;sudo ./install.sh -l -i lmb-ucdwp-server -o https://lmb-ucdwp-server:8443 -t ABCDE12345 -e http://lmb-ucdwp-server:7575 -d derby -r 27000@lmb-ucdwp-server"
-		ucdwp.vm.provision "shell", inline: "cd /tmp/ibm-ucd-patterns-install-6114/ibm-ucd-patterns-install/web-install/;sudo ./install.sh -l -i lmb-ucdwp-server -o https://lmb-ucdwp-server:8443 -t ABCDE12345 -e http://lmb-ucdwp-server:7575 -d derby -r 27000@lmb-ucdwp-server"
-
+			chef.add_recipe "UCD::server"
+		end	
 	end
 	
 	config.vm.define "agent1" do |agent1|

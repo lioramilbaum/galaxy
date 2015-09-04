@@ -1,73 +1,33 @@
 include_recipe "libarchive::default"
-include_recipe "awscli::default"
+include_recipe "java7::default"
+include_recipe "base::ec2"
 
-remote_file "/tmp/IBM_URBANCODE_DEPLOY_V6.1.1_MP_ML.zip" do
-	source "https://lmbgalaxy.s3.amazonaws.com/IBM/UCD/IBM_URBANCODE_DEPLOY_V6.1.1_MP_ML.zip"
+remote_file "/tmp/#{node['UCD']['zip']}" do
+	source "https://lmbgalaxy.s3.amazonaws.com/IBM/UCD/#{node['UCD']['zip']}"
 	action :create
-	notifies :extract, 'libarchive_file[IBM_URBANCODE_DEPLOY_V6.1.1_MP_ML.zip]', :immediately
+	notifies :extract, 'libarchive_file[Extracting UCD zip]', :immediately
 end
 
-libarchive_file "IBM_URBANCODE_DEPLOY_V6.1.1_MP_ML.zip" do
-  path "/tmp/IBM_URBANCODE_DEPLOY_V6.1.1_MP_ML.zip"
+libarchive_file "Extracting UCD zip" do
+  path "/tmp/#{node['UCD']['zip']}"
   extract_to "/tmp/UCD"
   action :nothing
 end
 
-remote_file "/tmp/#{node['UCD']['fix']}" do
-	source "https://lmbgalaxy.s3.amazonaws.com/IBM/UCD/#{node['UCD']['fix']}"
-	action :create
-	notifies :extract, 'libarchive_file[Extracting UCD Fix]', :immediately
-end
-
-libarchive_file "Extracting UCD Fix" do
-  path "/tmp/#{node['UCD']['fix']}"
-  extract_to "/tmp/UCD_FIX"
-  action :nothing
-end
-
-remote_file "/tmp/aws-java-sdk-1.3.7.jar" do
-	source "https://lmbgalaxy.s3.amazonaws.com/AWS/aws-java-sdk-1.3.7.jar"
-	action :create_if_missing
-end
-
 template "/tmp/UCD/ibm-ucd-install/install.properties" do
-  source "server.install.properties.erb"
-  variables ({
-     :server_hostname => node['UCD']['server_hostname'],
-     :initial_password => node['UCD']['initial_password']
-  })
-  action :create
-end
-
-directory "/root/.aws" do
-  action :create
-end
-
-cookbook_file "config" do
-  path "/root/.aws/config"
-  action :create
-end
-
-cookbook_file "credentials" do
-  path "/root/.aws/credentials"
-  action :create
+	source "server.install.properties.erb"
+  	variables (
+		lazy {
+			{
+				:server_hostname => node['ec2']['public_hostname'],
+				:initial_password => node['UCD']['initial_password']
+			}
+		}
+	)
+	action :create
 end
 
 execute '/tmp/UCD/ibm-ucd-install/install-server.sh' do
-  user 'root'
-  action :run
-end
-
-template "/tmp/UCD_FIX/ibm-ucd-install/install.properties" do
-  source "server.fix.install.properties.erb"
-  variables ({
-     :server_hostname => node['UCD']['server_hostname'],
-     :initial_password => node['UCD']['initial_password']
-  })
-  action :create
-end
-
-execute '/tmp/UCD_FIX/ibm-ucd-install/install-server.sh' do
   user 'root'
   action :run
 end

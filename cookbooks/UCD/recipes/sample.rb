@@ -1,9 +1,5 @@
 include_recipe "libarchive::default"
 
-package 'unzip' do
-  action :install
-end
-
 remote_file "/tmp/artifacts.zip" do
 	source "https://lmbgalaxy.s3.amazonaws.com/samples/artifacts.zip"
 	action :create
@@ -32,11 +28,10 @@ sudo service tomcat7 restart
 result=`curl -s -X GET -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/agentCLI/info?agent=#{node['ec2']['public_hostname']} --insecure`
 AGENT_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
-AGENT_RESOURCE="Server Agent"
+curl -s -X PUT -u admin:admin  -d @/tmp/topLevelresource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+curl -s -X PUT -u admin:admin -d @/tmp/agentResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
 
-/bin/echo -e "{\n\t"name": "$AGENT_RESOURCE"\n}" > /tmp/resource.json
-curl -s -X PUT -u admin:admin  -d @/tmp/resource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
-curl -s -X PUT -u admin:admin -d @/tmp/agentresource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+AGENT_RESOURCE="Server Agent"
 
 sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConfig.json /tmp
 sudo sed -i "s/COMP_NAME/JPetStore-APP/g" /tmp/compVersionConfig.json

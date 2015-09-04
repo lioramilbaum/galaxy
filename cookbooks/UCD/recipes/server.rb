@@ -118,7 +118,7 @@ template "/tmp/agent.json" do
   	variables (
 		lazy {
 			{
-				:server_hostname => node['ec2']['public_hostname']
+				:agent_hostname => node['ec2']['public_hostname']
 			}
 		}
 	)

@@ -22,15 +22,15 @@ sudo service tomcat7 restart
 
 unzip /tmp/artifacts.zip -d /tmp/artifacts > /dev/null
 
-result=`curl -s -X GET -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/agentCLI/info?agent=$AGENT1_HOSTNAME --insecure`
+result=`curl -s -X GET -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/agentCLI/info?agent=#{node['ec2']['public_hostname']} --insecure`
 AGENT_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
-AGENT_RESOURCE="Agent1 Agent"
+AGENT_RESOURCE="Server Agent"
 
 /bin/echo -e "{\n\t"name": "$AGENT_RESOURCE"\n}" > /tmp/resource.json
 curl -s -X PUT -u admin:admin  -d @/tmp/resource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
 
-/bin/echo -e "{\n\t"agent": "$AGENT1_HOSTNAME",\n\t"parent": \"\/$AGENT_RESOURCE\"\n}" > /tmp/agentresource.json
+/bin/echo -e "{\n\t"agent": "#{node['ec2']['public_hostname']}",\n\t"parent": \"\/$AGENT_RESOURCE\"\n}" > /tmp/agentresource.json
 curl -s -X PUT -u admin:admin  -d @/tmp/agentresource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
 
 sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConfig.json /tmp

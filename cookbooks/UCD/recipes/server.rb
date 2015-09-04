@@ -157,3 +157,10 @@ template "/tmp/agentResource.json" do
 	)
 	action :create
 end
+
+bash 'create Resources' do
+  code <<-EOH
+curl -s -X PUT -u admin:admin -d @/tmp/topLevelResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+curl -s -X PUT -u admin:admin -d @/tmp/agentResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+  EOH
+end

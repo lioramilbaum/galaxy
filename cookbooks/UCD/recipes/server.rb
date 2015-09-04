@@ -136,3 +136,16 @@ execute 'Configure1 Agent' do
   command "curl -s -X PUT -u admin:admin https://#{node['UCD']['server_hostname']}:8443/cli/teamsecurity/tokens?user=admin&expireDate=12-31-2020-00:24"
   action :run
 end
+
+template "/tmp/agentResource.json" do
+	source "agentResource.json.erb" 
+  	variables (
+		lazy {
+			{
+				:agent_hostname => node['ec2']['public_hostname'],
+				:topLevel_group => "/Server Agent"
+			}
+		}
+	)
+	action :create
+end

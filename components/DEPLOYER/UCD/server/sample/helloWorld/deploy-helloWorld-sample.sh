@@ -1,7 +1,5 @@
 #!/bin/sh
 
-. /vagrant/conf/Galaxy.cfg
-
 echo "==> ${projectName}: Add the agent as a resource"
 /bin/echo -e "{\n\t"name": "helloWorldTutorial"\n}" > /tmp/resource.json
 curl -s -X PUT -u admin:admin  -d @/tmp/resource.json https://$UCD_HOSTNAME:8443/cli/resource/create --insecure

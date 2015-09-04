@@ -1,0 +1,30 @@
+{
+	"name": "next",
+	"description": "next",
+    "cookbook_versions": {
+    },
+    "json_class": "Chef::Environment",
+    "chef_type": "environment",
+    "default_attributes": {
+    },
+	"override_attributes": {
+		"CLM": {
+			"version": "6.0.1M3",
+			"zip": "JTS-CCM-QM-RM-JRS-RELM-repo-6.0.1M3.zip",
+			"fix": "",
+			"fix_package":  "",
+			"build_zip": "",
+			"build_packages": "",
+			"rdm_zip": "",
+			"rdm_packages": "",
+			"packages": ""
+		},
+		"UCD": {
+			"zip": "ibm-ucd-6.1.3.0.695062.zip",
+			"plugins_dir": "/opt/ibm-ucd/server/appdata/var/plugins"
+		},
+		"UCR": {
+			"zip": "IBM_URBANCODE_RELEASE_6.1.1.9_update.zip"
+		}
+	}
+}

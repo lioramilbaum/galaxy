@@ -161,7 +161,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.environment = 'curr'
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.add_recipe "UCD::server"
+			chef.add_recipe "UCD::petStore"
 		end	
+				
 	end
 	
 	config.vm.define "agent1" do |agent1|
@@ -598,6 +600,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		override.ssh.insert_key = "true"
     		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
 		end	
+		
+		config.vm.provision :shell, :path => "scripts/bootstrap.sh"
 		
 		clm.vm.provision :chef_zero do |chef|
 			chef.cookbooks_path = ["./cookbooks/"]

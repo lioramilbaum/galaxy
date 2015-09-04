@@ -3,7 +3,7 @@ description "next"
 
 override_attributes ({
     'CLM' => {
-        'version' => '6.0RC1',
+        'version' => '6.0.1M3',
         'zip' => 'JTS-CCM-QM-RM-JRS-RELM-repo-6.0.1M3.zip',
         'fix' => 'nil',
         'build_zip' => '',

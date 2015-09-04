@@ -81,10 +81,14 @@ libarchive_file "ibm-ucd-agent.zip" do
 end
 
 template "/tmp/agent.properties" do
-  source "agent.properties.erb"
-  variables ({
-     :server_hostname => node['UCD']['server_hostname']
-  })
+	source "agent.properties.erb" 
+  	variables (
+		lazy {
+			{
+				:server_hostname => node['ec2']['public_hostname']
+			}
+		}
+	)
   action :create
 end
 
@@ -105,21 +109,25 @@ execute 'sleep' do
 end
 
 execute 'Dismiss Alret' do
-  command "curl -s -X POST -u admin:admin https://#{node['UCD']['server_hostname']}:8443/rest/security/userPreferences/dismissAlert/dismissed_dw --insecure"
+  command "curl -s -X POST -u admin:admin https://#{node['ec2']['public_hostname']}:8443/rest/security/userPreferences/dismissAlert/dismissed_dw --insecure"
   action :run
 end
 
 template "/tmp/agent.json" do
-  source "agent.json.erb"
-  variables ({
-     :server_hostname => node['UCD']['server_hostname']
-  })
-  action :create
-  notifies :run, 'execute[Configure Agent]', :immediately
+	source "agent.json.erb" 
+  	variables (
+		lazy {
+			{
+				:server_hostname => node['ec2']['public_hostname']
+			}
+		}
+	)
+	action :create
+	notifies :run, 'execute[Configure Agent]', :immediately
 end
 
 execute 'Configure Agent' do
-  command "curl -s -X PUT -u admin:admin  -d @/tmp/agent.json https://#{node['UCD']['server_hostname']}:8443/cli/systemConfiguration --insecure"
+  command "curl -s -X PUT -u admin:admin  -d @/tmp/agent.json https://#{node['ec2']['public_hostname']}:8443/cli/systemConfiguration --insecure"
   action :nothing
 end
 

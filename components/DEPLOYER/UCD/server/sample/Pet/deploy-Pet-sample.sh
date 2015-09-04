@@ -1,9 +1,5 @@
 #!/bin/sh
 
-. /vagrant/conf/Galaxy.cfg
-
-$DEPLOY_UCD || exit 0
-
 echo "==> ${projectName}: Create Application"
 APP="Pet Grooming Reservations"
 sudo cp /vagrant/components/DEPLOYER/UCD/server/sample/Pet/app.json /tmp

@@ -123,7 +123,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	end
 	
 	config.vm.define "ucd" do |ucd|
-
+	
 		ucd.vm.provider "virtualbox" do |vb , override|
 			override.vm.hostname = configs["UCD_HOSTNAME"]
   			override.vm.network "private_network", ip: configs["UCD_IP"]
@@ -147,14 +147,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		aws.security_groups		= [ 'sg-66dc4703' ]
     		aws.subnet_id			= "subnet-7cf03b25"
     		aws.elastic_ip			= "true"
-
+ 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
     		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
+    	   	
+		config.vm.provision :shell, :path => "scripts/bootstrap.sh"
     	
-		ucd.vm.provision :chef_zero do |chef|    
+ 		ucd.vm.provision :chef_zero do |chef|    
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'
 			chef.cookbooks_path = ["./cookbooks/"]

@@ -5,8 +5,6 @@ end
 
 bash 'deploy' do
   code <<-EOH
-COOKIES=/tmp/cookies.txt
-
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 sudo apt-get -y install mysql-server
@@ -35,7 +33,7 @@ sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConf
 sudo sed -i "s/COMP_NAME/JPetStore-APP/g" /tmp/compVersionConfig.json
 sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
 sudo sed -i "s/COMP_BASE/app/g" /tmp/compVersionConfig.json
-result=`curl -s -X PUT -b $COOKIES -c $COOKIES -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
+result=`curl -s -X PUT -b $#{node['UCD']['cookies']} -c $#{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 echo $COMP_ID
 
@@ -48,7 +46,7 @@ sudo sed -i "s/COMP_NAME/JPetStore-DB/g" /tmp/compVersionConfig.json
 sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
 sudo sed -i "s/COMP_BASE/db/g" /tmp/compVersionConfig.json
 
-result=`curl -s -X PUT -b $COOKIES -c $COOKIES -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
+result=`curl -s -X PUT -b $#{node['UCD']['cookies']} -c $#{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
 sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json /tmp
@@ -61,7 +59,7 @@ sudo sed -i "s/COMP_NAME/JPetStore-WEB/g" /tmp/compVersionConfig.json
 sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
 sudo sed -i "s/COMP_BASE/web/g" /tmp/compVersionConfig.json
 
-result=`curl -s -X PUT -b $COOKIES -c $COOKIES -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
+result=`curl -s -X PUT -b $#{node['UCD']['cookies']} -c $#{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
 sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json /tmp

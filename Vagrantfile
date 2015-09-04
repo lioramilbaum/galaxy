@@ -161,7 +161,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.environment = 'curr'
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.add_recipe "UCD::server"
-			chef.add_recipe "UCD::petStore"
+			chef.add_recipe "UCD::sample"
 		end	
 				
 	end

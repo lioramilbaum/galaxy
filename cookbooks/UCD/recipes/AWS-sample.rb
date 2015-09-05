@@ -1,7 +1,5 @@
-#!/bin/sh
-
-. /vagrant/conf/Galaxy.cfg
-
+bash 'create Resources' do
+	code <<-EOH
 UCD_HOSTNAME=$1
 
 echo "==> ${projectName}: Create a Component"
@@ -30,5 +28,5 @@ curl -s -X PUT -u admin:admin  -d @/tmp/compResource.json https://$UCD_HOSTNAME:
 
 echo "==> ${projectName}: Add the resource group to the environment"
 curl -s -X PUT -u admin:admin  "https://$UCD_HOSTNAME:8443/cli/environment/addBaseResource?application=AWS&environment=DEV&resource=/EC2" --insecure
-
-exit 0
+	EOH
+end

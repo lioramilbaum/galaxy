@@ -61,7 +61,7 @@ sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConf
 sudo sed -i "s/COMP_NAME/JPetStore-APP/g" /tmp/compVersionConfig.json
 sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
 sudo sed -i "s/COMP_BASE/app/g" /tmp/compVersionConfig.json
-result=`curl -s -X PUT -b $#{node['UCD']['cookies']} -c $#{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
+result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 echo $COMP_ID
 
@@ -74,7 +74,7 @@ sudo sed -i "s/COMP_NAME/JPetStore-DB/g" /tmp/compVersionConfig.json
 sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
 sudo sed -i "s/COMP_BASE/db/g" /tmp/compVersionConfig.json
 
-result=`curl -s -X PUT -b $#{node['UCD']['cookies']} -c $#{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
+result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
 sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json /tmp
@@ -87,7 +87,7 @@ sudo sed -i "s/COMP_NAME/JPetStore-WEB/g" /tmp/compVersionConfig.json
 sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
 sudo sed -i "s/COMP_BASE/web/g" /tmp/compVersionConfig.json
 
-result=`curl -s -X PUT -b $#{node['UCD']['cookies']} -c $#{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
+result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
 sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json /tmp
@@ -116,7 +116,7 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/propValue?application=JPetStore&environment=DEV-1&name=tomcat.manager.url&value=http://localhost:8080/manager/text" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/propValue?application=JPetStore&environment=DEV-1&name=tomcat.start&value=/usr/share/tomcat7/bin/startup.sh" --insecure
 
-curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/addBaseResource?application=JPetStore&environment=DEV-1&resource=/Agent1+Agent" --insecure
+curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/addBaseResource?application=JPetStore&environment=DEV-1&resource=/Server+Agent" --insecure
 	action :nothing
 	EOH
 end
@@ -219,7 +219,7 @@ bash 'deploy' do
 APP="Pet Transport"	
 sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
-APP="Pet%20Transport"	
+APP="Pet+Transport"	
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=CERT-1&color=#DD731C" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=QA-1&color=#FFCF01" --insecure
@@ -239,7 +239,7 @@ bash 'deploy' do
 APP="Pet Breeder Site"	
 sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
-APP="Pet%20Breeder%20Site"	
+APP="Pet+Breeder+Site"	
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=CERT-1&color=#DD731C" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=QA-1&color=#FFCF01" --insecure
@@ -259,7 +259,7 @@ bash 'deploy' do
 APP="Pet Sourcing"	
 sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
-APP="Pet%20Sourcing"	
+APP="Pet+Sourcing"	
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=CERT-1&color=#DD731C" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=QA-1&color=#FFCF01" --insecure

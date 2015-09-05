@@ -138,9 +138,9 @@ execute 'Configure1 Agent' do
 end
 
 template "/tmp/topLevelResource.json" do
-	source "agentResource.json.erb" 
+	source "topLevelResource.json.erb" 
 	variables ({
-		:topLevel_group => "/Server Agent"
+		:name => "/Server Agent"
 	})
 	action :create
 end

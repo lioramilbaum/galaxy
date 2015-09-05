@@ -16,7 +16,15 @@ bash 'mysql' do
 	code <<-EOH
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
-sudo apt-get -y install mysql-server
+	EOH
+end
+
+package 'mysql-server' do
+	action :install
+end
+
+bash 'mysql' do
+	code <<-EOH
 mysql -uroot -proot -e "create database jpetstore;"
 mysql -uroot -proot -e "create user 'jpetstore'@'localhost' identified by 'jppwd';"
 mysql -uroot -proot -e "grant all privileges on jpetstore.* to 'jpetstore'@'localhost';"
@@ -29,7 +37,7 @@ package ['tomcat7', 'tomcat7-admin'] do
 end
 
 cookbook_file "tomcat-users.xml" do
-	path "/var/lib/tomcat7/conf"
+	path "/var/lib/tomcat7/conf/tomcat-users.xml"
 	action :nothing	
 	notifies :restart, 'service[tomcat7]', :immediately
 end

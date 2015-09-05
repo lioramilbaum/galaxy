@@ -108,6 +108,9 @@ end
 
 bash 'petStore1' do
 	code <<-EOH
+	
+AGENT_RESOURCE="Server+Agent"
+
 curl -s -X PUT -u admin:admin  -d @/tmp/app.json https://#{node['ec2']['public_hostname']}:8443/cli/application/create --insecure
 
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/application/addComponentToApp?component=JPetStore-APP&application=JPetStore" --insecure

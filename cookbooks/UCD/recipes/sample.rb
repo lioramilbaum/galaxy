@@ -1,34 +1,25 @@
 include_recipe "libarchive::default"
 
-remote_file "/tmp/artifacts.zip" do
-	source "https://lmbgalaxy.s3.amazonaws.com/samples/artifacts.zip"
-	action :create
-	notifies :extract, 'libarchive_file[Extracting artifacts zip]', :immediately
-end
-
-libarchive_file "Extracting artifacts zip" do
-  path "/tmp/artifacts.zip"
-  extract_to "/tmp/artifacts"
-  action :nothing
-end
-
 bash 'mysql' do
 	code <<-EOH
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 	EOH
+	notifies :install, 'package[mysql-server]', :immediately
 end
 
 package 'mysql-server' do
-	action :install
+	action :nothing
+	notifies :run, 'bash[jpetstore-mysql]', :immediately
 end
 
-bash 'mysql' do
+bash 'jpetstore-mysql' do
 	code <<-EOH
 mysql -uroot -proot -e "create database jpetstore;"
 mysql -uroot -proot -e "create user 'jpetstore'@'localhost' identified by 'jppwd';"
 mysql -uroot -proot -e "grant all privileges on jpetstore.* to 'jpetstore'@'localhost';"
 	EOH
+	action :nothing
 end
 
 package ['tomcat7', 'tomcat7-admin'] do
@@ -46,8 +37,21 @@ service 'tomcat7' do
 	action :nothing
 end
 
+remote_file "/tmp/artifacts.zip" do
+	source "https://lmbgalaxy.s3.amazonaws.com/samples/artifacts.zip"
+	action :create
+	notifies :extract, 'libarchive_file[Extracting artifacts zip]', :immediately
+end
+
+libarchive_file "Extracting artifacts zip" do
+  path "/tmp/artifacts.zip"
+  extract_to "/tmp/artifacts"
+  action :nothing
+  notifies :run, 'bash[petStore]', :immediately
+end
+
 bash 'petStore' do
-  code <<-EOH
+	code <<-EOH
 result=`curl -s -X GET -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/agentCLI/info?agent=#{node['ec2']['public_hostname']} --insecure`
 AGENT_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
@@ -113,23 +117,66 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/propValue?application=JPetStore&environment=DEV-1&name=tomcat.start&value=/usr/share/tomcat7/bin/startup.sh" --insecure
 
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/addBaseResource?application=JPetStore&environment=DEV-1&resource=/Agent1+Agent" --insecure
+	action :nothing
+	EOH
+end
 
-sudo cp /vagrant/components/DEPLOYER/UCD/compResource.json /tmp
-sudo sed -i "s/COMP_NAME/JPetStore-APP/g" /tmp/compResource.json
-sudo sed -i "s/AGENT_HOSTNAME/$AGENT1_HOSTNAME/g" /tmp/compResource.json
-sudo sed -i "s/PARENT_RESOURCE/$AGENT_RESOURCE/g" /tmp/compResource.json
+template "/tmp/compResource.json" do
+	source "compResource.json.erb"
+  	variables (
+		lazy {
+			{
+				:comp_name => "JPetStore-APP",
+				:agent_hostname => #{node['ec2']['public_hostname']},
+				:parent_resource => "Server Agent"
+			}
+		}
+	)
+	action :create
+end
+
+bash 'compResource JPetStore-APP' do
+  code <<-EOH
 curl -s -X PUT -u admin:admin  -d @/tmp/compResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+  EOH
+end
 
-sudo cp /vagrant/components/DEPLOYER/UCD/compResource.json /tmp
-sudo sed -i "s/COMP_NAME/JPetStore-DB/g" /tmp/compResource.json
-sudo sed -i "s/AGENT_HOSTNAME/$AGENT1_HOSTNAME/g" /tmp/compResource.json
-sudo sed -i "s/PARENT_RESOURCE/$AGENT_RESOURCE/g" /tmp/compResource.json
+template "/tmp/compResource.json" do
+	source "compResource.json.erb"
+  	variables (
+		lazy {
+			{
+				:comp_name => "JPetStore-DB",
+				:agent_hostname => #{node['ec2']['public_hostname']},
+				:parent_resource => "Server Agent"
+			}
+		}
+	)
+	action :create
+end
+
+bash 'compResource JPetStore-DB' do
+  code <<-EOH
 curl -s -X PUT -u admin:admin  -d @/tmp/compResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+  EOH
+end
 
-sudo cp /vagrant/components/DEPLOYER/UCD/compResource.json /tmp
-sudo sed -i "s/COMP_NAME/JPetStore-WEB/g" /tmp/compResource.json
-sudo sed -i "s/AGENT_HOSTNAME/$AGENT1_HOSTNAME/g" /tmp/compResource.json
-sudo sed -i "s/PARENT_RESOURCE/$AGENT_RESOURCE/g" /tmp/compResource.json
+template "/tmp/compResource.json" do
+	source "compResource.json.erb"
+  	variables (
+		lazy {
+			{
+				:comp_name => "JPetStore-WEB",
+				:agent_hostname => #{node['ec2']['public_hostname']},
+				:parent_resource => "Server Agent"
+			}
+		}
+	)
+	action :create
+end
+
+bash 'compResource JPetStore-WEB' do
+  code <<-EOH
 curl -s -X PUT -u admin:admin  -d @/tmp/compResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
 
 curl -s -X PUT -u admin:admin  -d @/vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/applicationProcess.json https://#{node['ec2']['public_hostname']}:8443/cli/applicationProcess/create --insecure

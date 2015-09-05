@@ -63,7 +63,6 @@ sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
 sudo sed -i "s/COMP_BASE/app/g" /tmp/compVersionConfig.json
 result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
-echo $COMP_ID
 
 sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json /tmp
 sudo sed -i "s/COMP_NAME/JPetStore-APP/g" /tmp/compVersion.json
@@ -116,7 +115,7 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/propValue?application=JPetStore&environment=DEV-1&name=tomcat.manager.url&value=http://localhost:8080/manager/text" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/propValue?application=JPetStore&environment=DEV-1&name=tomcat.start&value=/usr/share/tomcat7/bin/startup.sh" --insecure
 
-curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/addBaseResource?application=JPetStore&environment=DEV-1&resource=/Server+Agent" --insecure
+curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/addBaseResource?application=JPetStore&environment=DEV-1&resource=/$AGENT_RESOURCE" --insecure
 	action :nothing
 	EOH
 end

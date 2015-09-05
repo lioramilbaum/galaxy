@@ -1,3 +1,11 @@
+template "/tmp/app.json" do
+	source "app.json.erb"  	
+	variables ({
+		:app_name => "AWS"
+	})
+	action :create
+end
+
 bash 'create Resources' do
 	code <<-EOH
 UCD_HOSTNAME=$1
@@ -7,7 +15,7 @@ curl -s -X PUT -u admin:admin  -d @/vagrant/components/DEPLOYER/UCD/server/sampl
 echo "==> ${projectName}: Create Component Process"
 curl -s -X PUT -u admin:admin  -d @/vagrant/components/DEPLOYER/UCD/server/sample/AWS/compProcess.json https://$UCD_HOSTNAME:8443/cli/componentProcess/create --insecure
 echo "==> ${projectName}: Create Application"
-curl -s -X PUT -u admin:admin  -d @/vagrant/components/DEPLOYER/UCD/server/sample/AWS/app.json https://$UCD_HOSTNAME:8443/cli/application/create --insecure
+curl -s -X PUT -u admin:admin  -d @/tmp/app.json https://$UCD_HOSTNAME:8443/cli/application/create --insecure
 echo "==> ${projectName}: Add component to the application"
 curl -s -X PUT -u admin:admin  "https://$UCD_HOSTNAME:8443/cli/application/addComponentToApp?component=EC2-Ubuntu-AMI&application=AWS" --insecure
 echo "==> ${projectName}: Create Application Environment"

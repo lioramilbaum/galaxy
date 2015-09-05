@@ -47,7 +47,6 @@ libarchive_file "Extracting artifacts zip" do
   path "/tmp/artifacts.zip"
   extract_to "/tmp/artifacts"
   action :nothing
-  notifies :run, 'bash[petStore]', :immediately
 end
 
 bash 'petStore' do
@@ -96,8 +95,20 @@ result=`curl -s -X PUT -u admin:admin  -d @/tmp/compVersion.json https://#{node[
 curl -s -X PUT -u admin:admin -d @/vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/JPetStore-APP-Process.json https://#{node['ec2']['public_hostname']}:8443/cli/componentProcess/create --insecure
 curl -s -X PUT -u admin:admin -d @/vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/JPetStore-DB-Process.json  https://#{node['ec2']['public_hostname']}:8443/cli/componentProcess/create --insecure
 curl -s -X PUT -u admin:admin -d @/vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/JPetStore-WEB-Process.json https://#{node['ec2']['public_hostname']}:8443/cli/componentProcess/create --insecure
+	EOH
+end
 
-curl -s -X PUT -u admin:admin  -d @/vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/JPetStore_app.json https://#{node['ec2']['public_hostname']}:8443/cli/application/create --insecure
+template "/tmp/app.json" do
+	source "app.json.erb"  	
+	variables ({
+		:app_name => "JPetStore"
+	})
+	action :create
+end
+
+bash 'petStore1' do
+	code <<-EOH
+curl -s -X PUT -u admin:admin  -d @/tmp/app.json https://#{node['ec2']['public_hostname']}:8443/cli/application/create --insecure
 
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/application/addComponentToApp?component=JPetStore-APP&application=JPetStore" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/application/addComponentToApp?component=JPetStore-DB&application=JPetStore" --insecure
@@ -116,7 +127,6 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/propValue?application=JPetStore&environment=DEV-1&name=tomcat.start&value=/usr/share/tomcat7/bin/startup.sh" --insecure
 
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/addBaseResource?application=JPetStore&environment=DEV-1&resource=/$AGENT_RESOURCE" --insecure
-	action :nothing
 	EOH
 end
 
@@ -188,15 +198,16 @@ curl -s -X GET -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
   EOH
 end
 
-cookbook_file "app.json" do
-  path "/tmp/app.json"
-  action :create
+template "/tmp/app.json" do
+	source "app.json.erb"  	
+	variables ({
+		:app_name => "Pet Grooming Reservations"
+	})
+	action :create
 end
 
 bash 'deploy' do
   code <<-EOH
-APP="Pet Grooming Reservations"
-sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
 APP="Pet%20Grooming%20Reservations"
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
@@ -208,15 +219,16 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
   EOH
 end
 
-cookbook_file "app.json" do
-  path "/tmp/app.json"
-  action :create
+template "/tmp/app.json" do
+	source "app.json.erb"  	
+	variables ({
+		:app_name => "Pet Transport"
+	})
+	action :create
 end
 
 bash 'deploy' do
   code <<-EOH
-APP="Pet Transport"	
-sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
 APP="Pet+Transport"	
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
@@ -228,15 +240,16 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
   EOH
 end
 	
-cookbook_file "app.json" do
-  path "/tmp/app.json"
-  action :create
+template "/tmp/app.json" do
+	source "app.json.erb"  	
+	variables ({
+		:app_name => "Pet Breeder Site"
+	})
+	action :create
 end
 
 bash 'deploy' do
   code <<-EOH
-APP="Pet Breeder Site"	
-sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
 APP="Pet+Breeder+Site"	
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
@@ -248,15 +261,16 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
   EOH
 end
 
-cookbook_file "app.json" do
-  path "/tmp/app.json"
-  action :create
+template "/tmp/app.json" do
+	source "app.json.erb"  	
+	variables ({
+		:app_name => "Pet Sourcing"
+	})
+	action :create
 end
 
 bash 'deploy' do
   code <<-EOH	
-APP="Pet Sourcing"	
-sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
 APP="Pet+Sourcing"	
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure

@@ -12,19 +12,27 @@ libarchive_file "Extracting artifacts zip" do
   action :nothing
 end
 
-bash 'deploy' do
-  code <<-EOH
+bash 'mysql' do
+	code <<-EOH
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 sudo apt-get -y install mysql-server
 mysql -uroot -proot -e "create database jpetstore;"
 mysql -uroot -proot -e "create user 'jpetstore'@'localhost' identified by 'jppwd';"
 mysql -uroot -proot -e "grant all privileges on jpetstore.* to 'jpetstore'@'localhost';"
+	EOH
+end
 
+bash 'tomcat' do
+	code <<-EOH
 sudo apt-get install -y tomcat7 tomcat7-admin
 sudo cp -f /vagrant/components/DEPLOYER/UCD/tomcat-users.xml /var/lib/tomcat7/conf
 sudo service tomcat7 restart
+	EOH
+end
 
+bash 'petStore' do
+  code <<-EOH
 result=`curl -s -X GET -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/agentCLI/info?agent=#{node['ec2']['public_hostname']} --insecure`
 AGENT_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
@@ -147,7 +155,6 @@ end
 bash 'deploy' do
   code <<-EOH
 APP="Pet Transport"	
-sudo cp /vagrant/components/DEPLOYER/UCD/server/sample/Pet/app.json /tmp
 sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
 APP="Pet%20Transport"	
@@ -168,7 +175,6 @@ end
 bash 'deploy' do
   code <<-EOH
 APP="Pet Breeder Site"	
-sudo cp /vagrant/components/DEPLOYER/UCD/server/sample/Pet/app.json /tmp
 sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
 APP="Pet%20Breeder%20Site"	
@@ -189,7 +195,6 @@ end
 bash 'deploy' do
   code <<-EOH	
 APP="Pet Sourcing"	
-sudo cp /vagrant/components/DEPLOYER/UCD/server/sample/Pet/app.json /tmp
 sudo sed -i "s/APP/$APP/g" /tmp/app.json
 curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
 APP="Pet%20Sourcing"	

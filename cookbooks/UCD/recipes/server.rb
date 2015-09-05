@@ -140,7 +140,7 @@ end
 template "/tmp/topLevelResource.json" do
 	source "topLevelResource.json.erb" 
 	variables ({
-		:name => "/Server Agent"
+		:topLevel_group => "Server Agent"
 	})
 	action :create
 end
@@ -151,7 +151,7 @@ template "/tmp/agentResource.json" do
 		lazy {
 			{
 				:agent_hostname => node['ec2']['public_hostname'],
-				:topLevel_group => "/Server Agent"
+				:topLevel_group => "Server Agent"
 			}
 		}
 	)

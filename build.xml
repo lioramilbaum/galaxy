@@ -227,24 +227,10 @@
 		</if>
 		
 		<if>
-			<equals arg1="${PROVISION_UCD}" arg2="true" />
+			<equals arg1="${PROVISION_UCD_SERVER}" arg2="true" />
 			<then>
 				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="/c vagrant up ucd --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		
-		<if>
-			<equals arg1="${PROVISION_UCDwP}" arg2="true" />
-			<then>
-				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="/c vagrant up ucdwp --provider=${VAGRANT_PROVIDER} --no-parallel" />
+					<arg line="/c vagrant up ucd_server --provider=${VAGRANT_PROVIDER} --no-parallel" />
 				</exec>
 				<fail>
 					<condition>

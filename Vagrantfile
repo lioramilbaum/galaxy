@@ -99,18 +99,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		
 	end
 	
-	config.vm.define "ucd" do |ucd|
+	config.vm.define "ucd_server" do |ucd_server|
 	
-		ucd.vm.provider "virtualbox" do |vb , override|
+		ucd_server.vm.provider "virtualbox" do |vb , override|
 			override.vm.hostname = configs["UCD_HOSTNAME"]
   			override.vm.network "private_network", ip: configs["UCD_IP"]
 			vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 			vb.memory = 2048
 		end
 		
-		ucd.vm.synced_folder ".", "/vagrant", type: "rsync"
+		ucd_server.vm.synced_folder ".", "/vagrant", type: "rsync"
 			
-		ucd.vm.provider "aws" do |aws, override|
+		ucd_server.vm.provider "aws" do |aws, override|
 			override.vm.box		= "dummy"
 			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 			
@@ -133,29 +133,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     	   	
 		config.vm.provision :shell, :path => "scripts/bootstrap.sh"
     	
- 		ucd.vm.provision :chef_zero do |chef|    
+ 		ucd_server.vm.provision :chef_zero do |chef|    
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.add_recipe "UCD::server"
-			chef.add_recipe "UCD::sample"
 		end	
 				
 	end
 	
-	config.vm.define "agent1" do |agent1|
+	config.vm.define "ucd_agent1" do |ucd_agent1|
 
-		agent1.vm.provider "virtualbox" do |vb, override|
+		ucd_agent1.vm.provider "virtualbox" do |vb, override|
   			override.vm.hostname = configs["AGENT1_HOSTNAME"]
   			override.vm.network "private_network", ip: configs["AGENT1_IP"]
 			vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 			vb.memory = 1024
 		end
 		
-		agent1.vm.provider "aws" do |aws, override|
+		ucd_agent1.vm.provider "aws" do |aws, override|
 			override.vm.box		= "dummy"
 			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-			override.vm.synced_folder "keys", "/vagrant/keys", type: "rsync"
 			
 			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
 			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
@@ -174,7 +172,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		
     	end
     	
-    	agent1.vm.provision :chef_zero do |chef|
+    	ucd_agent1.vm.provision :chef_zero do |chef|
     		chef.json = {
 				'UCD' => {
 					'server_hostname' => configs["UCD_HOSTNAME"]
@@ -182,24 +180,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			}
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.add_recipe "UCD::agent"
-			chef.add_recipe "UCD::sample"
+			chef.add_recipe "UCD::JPetStore"
 		end
 		
 	end
 	
-	config.vm.define "agent2" do |agent2|
+	config.vm.define "ucd_agent2" do |ucd_agent2|
 
-		agent2.vm.provider "virtualbox" do |vb, override|
+		ucd_agent2.vm.provider "virtualbox" do |vb, override|
   			override.vm.hostname = configs["AGENT2_HOSTNAME"]
   			override.vm.network "private_network", ip: configs["AGENT2_IP"]
 			vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
 			vb.memory = 1024
 		end
 		
-		agent2.vm.provider "aws" do |aws, override|
+		ucd_agent2.vm.provider "aws" do |aws, override|
 			override.vm.box		= "dummy"
 			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-			override.vm.synced_folder "keys", "/vagrant/keys", type: "rsync"
 			
 			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
 			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
@@ -226,10 +223,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			}
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.add_recipe "UCD::agent"
-			chef.add_recipe "UCD::sample"
 		end
 		
- 		agent2.vm.provision "shell", path: "components/DEPLOYER/UCD/agent2/sample/Artifactory-JPetStore/deploy-JPetStore-sample.sh"
+ 		ucd_agent2.vm.provision "shell", path: "components/DEPLOYER/UCD/agent2/sample/Artifactory-JPetStore/deploy-JPetStore-sample.sh"
 	end
 		
 	config.vm.define "rlia" do |rlia|

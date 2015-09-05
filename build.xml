@@ -255,10 +255,10 @@
 		</if>
 		
 		<if>
-			<equals arg1="${PROVISION_AGENT1}" arg2="true" />
+			<equals arg1="${PROVISION_UCD_AGENT1}" arg2="true" />
 			<then>
 				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="/c vagrant up agent1 --provider=${VAGRANT_PROVIDER} --no-parallel" />
+					<arg line="/c vagrant up ucd_agent1 --provider=${VAGRANT_PROVIDER} --no-parallel" />
 				</exec>
 				<fail>
 					<condition>
@@ -268,10 +268,10 @@
 			</then>	
 		</if>
 		<if>
-			<equals arg1="${PROVISION_AGENT2}" arg2="true" />
+			<equals arg1="${PROVISION_UCD_AGENT2}" arg2="true" />
 			<then>
 				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="/c vagrant up agent2 --provider=${VAGRANT_PROVIDER} --no-parallel" />
+					<arg line="/c vagrant up ucd_agent2 --provider=${VAGRANT_PROVIDER} --no-parallel" />
 				</exec>
 				<fail>
 					<condition>

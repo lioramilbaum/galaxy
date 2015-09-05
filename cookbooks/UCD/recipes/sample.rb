@@ -127,7 +127,7 @@ template "/tmp/compResource.json" do
 		lazy {
 			{
 				:comp_name => "JPetStore-APP",
-				:agent_hostname => #{node['ec2']['public_hostname']},
+				:agent_hostname => node['ec2']['public_hostname'],
 				:parent_resource => "Server Agent"
 			}
 		}
@@ -147,7 +147,7 @@ template "/tmp/compResource.json" do
 		lazy {
 			{
 				:comp_name => "JPetStore-DB",
-				:agent_hostname => #{node['ec2']['public_hostname']},
+				:agent_hostname => node['ec2']['public_hostname'],
 				:parent_resource => "Server Agent"
 			}
 		}
@@ -167,7 +167,7 @@ template "/tmp/compResource.json" do
 		lazy {
 			{
 				:comp_name => "JPetStore-WEB",
-				:agent_hostname => #{node['ec2']['public_hostname']},
+				:agent_hostname => node['ec2']['public_hostname'],
 				:parent_resource => "Server Agent"
 			}
 		}

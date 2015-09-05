@@ -23,12 +23,19 @@ mysql -uroot -proot -e "grant all privileges on jpetstore.* to 'jpetstore'@'loca
 	EOH
 end
 
-bash 'tomcat' do
-	code <<-EOH
-sudo apt-get install -y tomcat7 tomcat7-admin
-sudo cp -f /vagrant/components/DEPLOYER/UCD/tomcat-users.xml /var/lib/tomcat7/conf
-sudo service tomcat7 restart
-	EOH
+package ['tomcat7', 'tomcat7-admin'] do
+	action :install
+	notifies :create, 'cookbook_file[tomcat-users.xml]', :immediately
+end
+
+cookbook_file "tomcat-users.xml" do
+	path "/var/lib/tomcat7/conf"
+	action :nothing	
+	notifies :restart, 'service[tomcat7]', :immediately
+end
+
+service 'tomcat7' do
+	action :nothing
 end
 
 bash 'petStore' do

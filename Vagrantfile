@@ -172,6 +172,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		
     	end
     	
+    	config.vm.provision :shell, :path => "scripts/bootstrap.sh"
+    	
     	ucd_agent1.vm.provision :chef_zero do |chef|
     		chef.json = {
 				'UCD' => {
@@ -214,6 +216,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
     		
     	end
+    	
+    	config.vm.provision :shell, :path => "scripts/bootstrap.sh"
     	
     	ucd_agent2.vm.provision :chef_zero do |chef|    		
     	chef.json = {

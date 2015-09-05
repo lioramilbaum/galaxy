@@ -215,7 +215,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		
     	end
     	
-    	agent2.vm.provision :chef_zero do |chef|    		
+    	ucd_agent2.vm.provision :chef_zero do |chef|    		
     	chef.json = {
 			'UCD' => {
 					'server_hostname' => configs["UCD_HOSTNAME"]

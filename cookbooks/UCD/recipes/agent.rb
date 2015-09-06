@@ -2,7 +2,7 @@ include_recipe "libarchive::default"
 
 execute 'download ibm-ucd-agent.zip' do
   user 'root'
-  command "scp -o StrictHostKeyChecking=no #{node['UCD']['server_hostname']}:/opt/ibm-ucd/server/opt/tomcat/webapps/ROOT/tools/ibm-ucd-agent.zip /tmp"
+  command "scp -o StrictHostKeyChecking=no #{node['UCD']['server_private_ip']}:/opt/ibm-ucd/server/opt/tomcat/webapps/ROOT/tools/ibm-ucd-agent.zip /tmp"
   action :run
 end
 

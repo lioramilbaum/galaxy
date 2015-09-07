@@ -1,0 +1,1 @@
+vagrant ssh ucd_server -c "ec2metadata" > C:\Users\Liora\git\Galaxy\ucd_server.txt

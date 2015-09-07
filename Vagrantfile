@@ -6,7 +6,7 @@ current_dir    = File.dirname(File.expand_path(__FILE__))
 configs        = YAML.load_file("#{current_dir}/conf/Galaxy.yaml")
 
 # Check for missing plugins
-required_plugins = %w( vagrant-aws vagrant-berkshelf vagrant-hostmanager vagrant-omnibus vagrant-reload vagrant-share vagrant-vbguest)
+required_plugins = %w( vagrant-aws vagrant-berkshelf vagrant-hostmanager vagrant-omnibus vagrant-reload vagrant-share vagrant-vbguest vagrant-host-shell)
 plugin_installed = false
 required_plugins.each do |plugin|
   unless Vagrant.has_plugin?(plugin)
@@ -99,7 +99,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	end
 	
 	config.vm.define "ucd_server" do |ucd_server|
-	
+			
 		ucd_server.vm.provider "virtualbox" do |vb , override|
 			override.vm.hostname = configs["UCD_HOSTNAME"]
   			override.vm.network "private_network", ip: configs["UCD_IP"]
@@ -123,7 +123,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		aws.security_groups		= [ 'sg-66dc4703' ]
     		aws.subnet_id			= "subnet-7cf03b25"
     		aws.elastic_ip			= "true"
- 
+     		
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
     		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"   		
@@ -132,7 +132,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		}
     		
     	end
-    	   	
+		
 		config.vm.provision :shell, :path => "scripts/bootstrap.sh"
     	
  		ucd_server.vm.provision :chef_zero do |chef|    
@@ -140,8 +140,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.environment = 'curr'
 			chef.cookbooks_path = ["./cookbooks/"]
 			chef.add_recipe "UCD::server"
-		end	
-						
+			chef.add_recipe "UCD::JPetStore"
+		end
+		
 	end
 	
 	config.vm.define "ucd_agent1" do |ucd_agent1|
@@ -177,14 +178,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		}
     	end
     	
+		config.vm.provision :host_shell do |host_shell|
+			host_shell.inline = "cmd /c metadata.bat" 
+		end
+		
+		config.vm.provision "file", source: "ucd_server.txt", destination: "/vagrant/ucd_server.txt"
+		config.vm.provision "file", source: "C:\\Users\\Liora\\.ssh\\id_rsa.pem", destination: "/home/ubuntu/.ssh/id_rsa.pem"
+		
     	config.vm.provision :shell, :path => "scripts/bootstrap.sh"
     	
-    	ucd_agent1.vm.provision :chef_zero do |chef|  	
-			chef.json = {
-				'CLM' => {
-					'server_private_ip' => "`wget http://s3.amazonaws.com/ec2metadata/ec2-metadata>/dev/null 2>&1;ec2metadata --local-ipv4`"
-				}
-			}
+		ucd_agent1.vm.provision :chef_zero do |chef|  	
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'
 			chef.cookbooks_path = ["./cookbooks/"]
@@ -235,7 +238,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			chef.add_recipe "UCD::agent"
 		end
 		
- 		ucd_agent2.vm.provision "shell", path: "components/DEPLOYER/UCD/agent2/sample/Artifactory-JPetStore/deploy-JPetStore-sample.sh"
 	end
 		
 	config.vm.define "rlia" do |rlia|

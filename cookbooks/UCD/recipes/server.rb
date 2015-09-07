@@ -1,6 +1,11 @@
 include_recipe "libarchive::default"
 include_recipe "java7::default"
 
+remote_file "ec2-metadata" do
+	source "http://s3.amazonaws.com/ec2metadata/ec2-metadata"
+	action :create
+end
+
 remote_file "/tmp/#{node['UCD']['zip']}" do
 	source "https://lmbgalaxy.s3.amazonaws.com/IBM/UCD/#{node['UCD']['zip']}"
 	action :create

@@ -3,3 +3,4 @@ Berksfile.lock
 *.pem
 output-virtualbox-iso/*
 packer_cache/*
+ucd_server.txt

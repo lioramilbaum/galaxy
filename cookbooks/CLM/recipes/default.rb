@@ -3,7 +3,7 @@ include_recipe "libarchive::default"
 include_recipe "IM::default"
 include_recipe "CLM::rdm"
 
-package 'xvfb' do
+package ['xvfb','xfonts-100dpi','xfonts-75dpi','xfonts-scalable','xfonts-cyrillic'] do
   action :install
 end
 
@@ -65,16 +65,4 @@ end
 remote_file "Copy lqe.war" do 
   path "/opt/IBM/JazzTeamServer/server/tomcat/webapps/lqe.war" 
   source "file:///tmp/CLM_FIX/lqe.war"
-end
-
-template "Setup JTS.conf" do
-  path "/etc/init/JTS.conf"
-  source 'JTS.conf.erb'
-  action :create
-end
-
-service 'JTS' do
-	provider Chef::Provider::Service::Upstart
-	supports :start => true, :stop => true
-	action [ :enable, :start ]
 end

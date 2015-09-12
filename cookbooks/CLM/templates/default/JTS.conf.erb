@@ -5,14 +5,19 @@ start on runlevel [2345]
 stop on runlevel [!2345]
 
 env DISPLAY=localhost:1.0
-export DISPLAY
 
 post-start script
-  exec Xvfb :1 -screen 0 800x600x24&
-  exec su root -c "ulimit -n 65536;ulimit -u 10000;cd /opt/IBM/JazzTeamServer/server;./server.startup"
+	set -x
+	Xvfb :1 -screen 0 800x600x24&
+	exec su root -c "ulimit -n 65536;ulimit -u 10000;cd /opt/IBM/JazzTeamServer/server;./server.startup"
 end script
 
 post-stop script
-  cd /opt/IBM/JazzTeamServer/server
-  exec  ./server.shutdown
+	set -x
+	cd /opt/IBM/JazzTeamServer/server
+	./server.shutdown
+	pid=$(pidof /usr/bin/Xvfb)
+	if [ -n "$pid" ]; then
+		kill -9 $pid
+	fi
 end script

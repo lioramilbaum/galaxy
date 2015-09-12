@@ -14,6 +14,10 @@ end
 
 =end
 
+package 'gtk+-2.0' do
+	action :install
+end
+
 execute 'xvfb' do
 	user 'root'
 	command "Xvfb :1 -screen 0 800x600x24&"

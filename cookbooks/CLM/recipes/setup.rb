@@ -1,4 +1,4 @@
-
+=begin
 
 template "Setup JTS.conf" do
   path "/etc/init/JTS.conf"
@@ -10,6 +10,28 @@ service 'JTS' do
 	provider Chef::Provider::Service::Upstart
 	supports :start => true, :stop => true
 	action [ :enable, :start ]
+end
+
+=end
+
+execute 'xvfb' do
+	user 'root'
+	command "Xvfb :1 -screen 0 800x600x24&"
+	action :run
+    notifies :run, 'execute[starting JTS Server]', :immediately
+end
+
+execute 'starting JTS Server' do
+  user 'root'
+  environment "DISPLAY" => "localhost:1.0"
+  command "/opt/IBM/JazzTeamServer/server/server.startup"
+  action :nothing
+  notifies :run, 'execute[sleep 3m]', :immediately
+end
+
+execute 'sleep 3m' do
+  command "sleep 3m"
+  action :nothing
 end
 
 template "Setup Properties File" do

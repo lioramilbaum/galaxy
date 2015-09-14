@@ -3,7 +3,7 @@ include_recipe "libarchive::default"
 include_recipe "IM::default"
 include_recipe "CLM::rdm"
 
-package ['xvfb','xfonts-100dpi','xfonts-75dpi','xfonts-scalable','xfonts-cyrillic','libgtk2.0-0'] do
+package ['xvfb','xfonts-100dpi','xfonts-75dpi','xfonts-scalable','xfonts-cyrillic','libgtk2.0-0', 'libstdc++5', 'libswt-gtk-3-jni', 'libswt-gtk-3-java'] do
   action :install
 end
 

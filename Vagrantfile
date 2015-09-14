@@ -572,7 +572,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		clm.vm.provider "aws" do |aws, override|
 			override.vm.box		= "liora/clm"
 			aws.region			= "eu-west-1"
-			aws.ami				= "ami-8bd7f5fc"			
+			aws.ami				= "ami-abdffddc"			
 			aws.keypair_name	= "id_rsa"
    			aws.instance_type	= "m3.xlarge"
     		aws.security_groups	= [ 'sg-66dc4703' ]

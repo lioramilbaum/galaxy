@@ -6,7 +6,7 @@ description      'CLM'
 long_description 'CLM'
 version          '0.0.1'
 
-%w{ limits libarchive IM }.each do |cookbook|
+%w{ libarchive IM }.each do |cookbook|
   depends cookbook
 end
 

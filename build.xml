@@ -348,6 +348,13 @@
 		</exec>
 	</target>
 	
+	<target name="packer clm">
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
+			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
+			<arg line='/c packer build -debug -var "galaxy_dir=." clm.json' />
+		</exec>
+	</target>
+	
 	<target name="packer-push sync">
 		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
@@ -355,10 +362,10 @@
 		</exec>
 	</target>
 	
-	<target name="packer-local">
+	<target name="packer sync">
 		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line='/c packer build -debug -var "galaxy_dir=." clm.json' />
+			<arg line='/c packer build -var "galaxy_dir=." sync.json' />
 		</exec>
 	</target>
 	

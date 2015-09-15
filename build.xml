@@ -365,6 +365,7 @@
 	<target name="packer sync">
 		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
+			<env key="PACKER_LOG" value="1"/>
 			<arg line='/c packer build -var "galaxy_dir=." sync.json' />
 		</exec>
 	</target>

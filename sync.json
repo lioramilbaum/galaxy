@@ -24,7 +24,7 @@
 			"vpc_id": "vpc-7dd90818", 
 			"subnet_id": "subnet-7cf03b25",
 			"security_group_id": "sg-e2f63086",
-			"user_data_file": "{{user `galaxy_dir`}}/scripts/setup_winrm.txt",
+			"user_data_file": "scripts/setup_winrm.txt",
 			"associate_public_ip_address":true,
 			"winrm_username": "vagrant",
 			"winrm_password": "vagrant",

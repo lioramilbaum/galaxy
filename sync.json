@@ -27,7 +27,7 @@
 			"user_data_file": "scripts/setup_winrm.txt",
 			"associate_public_ip_address":true,
 			"winrm_username": "vagrant",
-			"winrm_password": "vagrant",
+			"winrm_password": "FooBar@123",
 			"winrm_port":5985,
 			"communicator": "winrm"
 		}

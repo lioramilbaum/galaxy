@@ -17,16 +17,16 @@
 			"secret_key": "{{user `aws_secret_key`}}",
 			"region": "eu-west-1",
 			"source_ami": "ami-1a92cf6d",
-			"ssh_username": "ubuntu",
 			"instance_type": "t2.micro",
 			"ami_name": "sync {{timestamp}}",
 			"associate_public_ip_address": true,
 			"ami_virtualization_type": "hvm",
-			"ssh_timeout": "5m",
 			"vpc_id": "vpc-7dd90818", 
 			"subnet_id": "subnet-7cf03b25",
 			"security_group_id": "sg-66dc4703",
-			"ssh_private_ip": false
+			"user_data_file": "scripts/setup_winrm.txt",
+			"communicator": "winrm",
+			"winrm_username": "Administrator"
 		}
 	],			
 	"provisioners": [

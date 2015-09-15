@@ -133,6 +133,20 @@
 		</if>
 		
 		<if>
+			<equals arg1="${PROVISION_SYNC}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up sync --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		
+		<if>
 			<equals arg1="${PROVISION_STASH}" arg2="true" />
 			<then>
 				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
@@ -327,10 +341,17 @@
 		</exec>
 	</target>
 	
-	<target name="packer-push">
+	<target name="packer-push clm">
 		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
 			<arg line='/c packer push -name liora/clm -var "galaxy_dir=/packer" clm.json' />
+		</exec>
+	</target>
+	
+	<target name="packer-push sync">
+		<exec executable="cmd" dir="${GALAXY_HOME}" failonerror="true">
+			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
+			<arg line='/c packer push -name liora/sync -var "galaxy_dir=/packer" sync.json' />
 		</exec>
 	</target>
 	

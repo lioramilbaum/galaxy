@@ -1,0 +1,80 @@
+{
+	"variables": {
+        "atlas_username": "liora",
+        "atlas_name": "sync",
+		"galaxy_dir": "/packer",
+		"aws_access_key": "{{env `aws_access_key`}}",
+		"aws_secret_key": "{{env `aws_secret_key`}}",
+		"chef_dir": "C:\\tmp\\packer-chef-client",
+		"conf_dir": "C:\\etc\\chef\\",
+		"atlas_token": "{{env `ATLAS_TOKEN`}}",
+		"hostname": "lmb-sync-server"
+	},
+	"builders": [
+		{
+			"type": "amazon-ebs",
+			"access_key": "{{user `aws_access_key`}}",
+			"secret_key": "{{user `aws_secret_key`}}",
+			"region": "eu-west-1",
+			"source_ami": "ami-1a92cf6d",
+			"ssh_username": "ubuntu",
+			"instance_type": "t2.micro",
+			"ami_name": "sync {{timestamp}}",
+			"associate_public_ip_address": true,
+			"ami_virtualization_type": "hvm",
+			"ssh_timeout": "5m",
+			"vpc_id": "vpc-7dd90818", 
+			"subnet_id": "subnet-7cf03b25",
+			"security_group_id": "sg-66dc4703",
+			"ssh_private_ip": false
+		}
+	],			
+	"provisioners": [
+  	{ "type": "file", "source": "{{user `galaxy_dir`}}/nodes", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/environments", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/metadata.rb", "destination": "{{user `chef_dir`}}/metadata.rb" },
+    { "type": "file", "source": "{{user `galaxy_dir`}}/scripts", "destination": "{{user `chef_dir`}}" },
+    {
+    	"type": "shell",
+    	"inline": ["/bin/sh {{user `chef_dir`}}/scripts/install_berks.sh"]
+    },     
+    {
+    	"type": "shell",
+    	"inline": ["berks vendor -b /tmp/packer-chef-client/Berksfile /tmp/chef-cookbooks"]
+    }, 
+    {
+      "type": "chef-client",
+      "chef_environment": "{{user `chef_env`}}",
+      "server_url": "http://localhost:8889",
+      "config_template": "{{user `galaxy_dir`}}/templates/client.rb.template",
+      "skip_clean_node": true,
+      "skip_clean_client": true,
+      "run_list": [ "SYNC::default" ]
+    }
+  ],
+  "push": {
+    "name": "liora/sync",
+	"token": "{{user `atlas_token`}}",
+    "vcs": true
+  },
+	"post-processors": [
+		[{
+			"type": "vagrant",
+			"output": "sync-windows2012.box",
+			"keep_input_artifact": false
+		},
+		{
+			"type": "atlas",
+            "only": ["amazon-ebs"],
+			"token": "{{user `atlas_token`}}",
+			"artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+			"artifact_type": "vagrant.box",
+			"metadata": {
+				"provider": "aws",
+				"version": "0.0.1"
+			}
+		}]
+	]
+}

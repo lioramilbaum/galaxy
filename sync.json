@@ -41,11 +41,11 @@
     { "type": "file", "source": "{{user `galaxy_dir`}}/scripts", "destination": "{{user `chef_dir`}}" },
     {
     	"type": "shell",
-    	"inline": ["/bin/sh {{user `chef_dir`}}/scripts/install_berks.sh"]
+    	"inline": ["/bin/sh {{user `chef_dir`}}/scripts/install_berks.bat"]
     },     
     {
     	"type": "shell",
-    	"inline": ["berks vendor -b /tmp/packer-chef-client/Berksfile /tmp/chef-cookbooks"]
+    	"inline": ["berks vendor -b {{user `chef_dir`}}/Berksfile c:\\tmp\\chef-cookbooks"]
     }, 
     {
       "type": "chef-client",

@@ -331,7 +331,20 @@
 					</condition>
 				</fail>
 			</then>	
-		</if>							
+		</if>			
+		<if>
+			<equals arg1="${PROVISION_CHEF}" arg2="true" />
+			<then>
+				<exec executable="cmd"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="/c vagrant up chef_server --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>						
 	</target>
 	
 	<target name="vagrant-push">

@@ -23,6 +23,11 @@ end
 #end
 
 execute 'install knife-ec2' do
-  command "chef gem install knife-ec2"
-  action :run
+	command "chef gem install knife-ec2"
+	action :run
+end
+
+execute 'get AWS credentials' do
+	command "curl http://169.254.169.254/latest/meta-data/iam/security-credentials/galaxy-bootstrap-instance"
+	action :run
 end

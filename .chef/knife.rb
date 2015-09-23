@@ -13,10 +13,11 @@ cookbook_path            ["#{current_dir}/../cookbooks"]
 knife[:aws_access_key_id] = ENV['AWS_ACCESS_KEY']
 knife[:aws_secret_access_key] = ENV['AWS_SECRET_KEY']
 knife[:aws_ssh_key_id] = "id_rsa"
-knife[:flavor] = 't2.micro'
-knife[:image] = 'ami-60a10117'
+knife[:flavor] = 'm3.xlarge'
+knife[:image] = 'ami-2da5875a'
 knife[:ssh_user] = 'ubuntu'
-knife[:run_list] = [ 'cookbook[chef_workstation]' ]
+knife[:run_list] = [ 'recipe[CLM::setup]' ]
 knife[:region] = 'eu-west-1'
-#knife[:environment] = 'curr'
+knife[:environment] = 'curr'
 #knife[:subnet] = 'subnet-7cf03b25'
+knife[:associate_public_ip] = 'true'

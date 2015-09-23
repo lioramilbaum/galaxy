@@ -613,6 +613,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     		aws.security_groups		= [ 'sg-677ab803' ]
     		aws.subnet_id			= "subnet-7cf03b25"
     		aws.elastic_ip			= "true"
+    		aws.iam_instance_profile_name = "galaxy-bootstrap-instance"
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"

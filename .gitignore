@@ -5,3 +5,4 @@ output-virtualbox-iso/*
 packer_cache/*
 ucd_server.txt
 .chef/syntaxcache/
+remember.txt

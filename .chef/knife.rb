@@ -13,10 +13,10 @@ cookbook_path            ["#{current_dir}/../cookbooks"]
 knife[:aws_access_key_id] = ENV['AWS_ACCESS_KEY']
 knife[:aws_secret_access_key] = ENV['AWS_SECRET_KEY']
 knife[:aws_ssh_key_id] = "id_rsa"
-knife[:flavor] = 't2.small'
+knife[:flavor] = 't2.micro'
 knife[:image] = 'ami-60a10117'
 knife[:ssh_user] = 'ubuntu'
-knife[:run_list] = [ 'role[phpapp]' ]
+knife[:run_list] = [ 'cookbook[chef_workstation]' ]
 knife[:region] = 'eu-west-1'
 #knife[:environment] = 'curr'
-knife[:subnet] = 'subnet-7cf03b25'
+#knife[:subnet] = 'subnet-7cf03b25'

@@ -31,7 +31,7 @@ template "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install.propert
 	action :create
 end
 
-execute '#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install-server.sh' do
+execute "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install-server.sh" do
   user 'root'
   action :run
 end

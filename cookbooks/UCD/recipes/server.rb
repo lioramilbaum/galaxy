@@ -6,19 +6,19 @@ remote_file "ec2-metadata" do
 	action :create
 end
 
-remote_file "/tmp/#{node['UCD']['zip']}" do
+remote_file "#{Chef::Config['file_cache_path']}/#{node['UCD']['zip']}" do
 	source "https://lmbgalaxy.s3.amazonaws.com/IBM/UCD/#{node['UCD']['zip']}"
 	action :create
 	notifies :extract, 'libarchive_file[Extracting UCD zip]', :immediately
 end
 
 libarchive_file "Extracting UCD zip" do
-  path "/tmp/#{node['UCD']['zip']}"
-  extract_to "/tmp/UCD"
+  path "#{Chef::Config['file_cache_path']}/#{node['UCD']['zip']}"
+  extract_to "#{Chef::Config['file_cache_path']}/UCD"
   action :nothing
 end
 
-template "/tmp/UCD/ibm-ucd-install/install.properties" do
+template "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install.properties" do
 	source "server.install.properties.erb"
   	variables (
 		lazy {
@@ -31,7 +31,7 @@ template "/tmp/UCD/ibm-ucd-install/install.properties" do
 	action :create
 end
 
-execute '/tmp/UCD/ibm-ucd-install/install-server.sh' do
+execute '#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install-server.sh' do
   user 'root'
   action :run
 end
@@ -81,11 +81,11 @@ end
 
 libarchive_file "ibm-ucd-agent.zip" do
   path "/opt/ibm-ucd/server/opt/tomcat/webapps/ROOT/tools/ibm-ucd-agent.zip"
-  extract_to "/tmp/UCD_AGENT"
+  extract_to "#{Chef::Config['file_cache_path']}/UCD_AGENT"
   action :extract
 end
 
-template "/tmp/agent.properties" do
+template "#{Chef::Config['file_cache_path']}/agent.properties" do
 	source "agent.properties.erb" 
   	variables (
 		lazy {
@@ -99,7 +99,7 @@ template "/tmp/agent.properties" do
 end
 
 execute 'install-agent-from-file.sh' do
-  command "/tmp/UCD_AGENT/ibm-ucd-agent-install/install-agent-from-file.sh /tmp/agent.properties"
+  command "#{Chef::Config['file_cache_path']}/UCD_AGENT/ibm-ucd-agent-install/install-agent-from-file.sh #{Chef::Config['file_cache_path']}/agent.properties"
   action :run
 end
 
@@ -119,7 +119,7 @@ execute 'Dismiss Alret' do
   action :run
 end
 
-template "/tmp/agent.json" do
+template "#{Chef::Config['file_cache_path']}/agent.json" do
 	source "agent.json.erb" 
   	variables (
 		lazy {
@@ -133,7 +133,7 @@ template "/tmp/agent.json" do
 end
 
 execute 'Configure Agent' do
-  command "curl -s -X PUT -u admin:admin  -d @/tmp/agent.json https://#{node['ec2']['public_hostname']}:8443/cli/systemConfiguration --insecure"
+  command "curl -s -X PUT -u admin:admin  -d @#{Chef::Config['file_cache_path']}/agent.json https://#{node['ec2']['public_hostname']}:8443/cli/systemConfiguration --insecure"
   action :nothing
 end
 
@@ -142,7 +142,7 @@ execute 'Configure1 Agent' do
   action :run
 end
 
-template "/tmp/topLevelResource.json" do
+template "#{Chef::Config['file_cache_path']}/topLevelResource.json" do
 	source "topLevelResource.json.erb" 
 	variables ({
 		:topLevel_group => "Server Agent"
@@ -150,7 +150,7 @@ template "/tmp/topLevelResource.json" do
 	action :create
 end
 
-template "/tmp/agentResource.json" do
+template "#{Chef::Config['file_cache_path']}/agentResource.json" do
 	source "agentResource.json.erb" 
   	variables (
 		lazy {
@@ -165,7 +165,7 @@ end
 
 bash 'create Resources' do
   code <<-EOH
-curl -s -X PUT -u admin:admin -d @/tmp/topLevelResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
-curl -s -X PUT -u admin:admin -d @/tmp/agentResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+curl -s -X PUT -u admin:admin -d @#{Chef::Config['file_cache_path']}/topLevelResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+curl -s -X PUT -u admin:admin -d @#{Chef::Config['file_cache_path']}/agentResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
   EOH
 end

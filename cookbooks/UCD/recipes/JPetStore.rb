@@ -37,15 +37,15 @@ service 'tomcat7' do
 	action :nothing
 end
 
-remote_file "/tmp/artifacts.zip" do
+remote_file "#{Chef::Config['file_cache_path']}/artifacts.zip" do
 	source "https://lmbgalaxy.s3.amazonaws.com/samples/artifacts.zip"
 	action :create
 	notifies :extract, 'libarchive_file[Extracting artifacts zip]', :immediately
 end
 
 libarchive_file "Extracting artifacts zip" do
-  path "/tmp/artifacts.zip"
-  extract_to "/tmp/artifacts"
+  path "#{Chef::Config['file_cache_path']}/artifacts.zip"
+  extract_to "#{Chef::Config['file_cache_path']}/artifacts"
   action :nothing
 end
 
@@ -56,49 +56,49 @@ AGENT_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);pri
 
 AGENT_RESOURCE="Server Agent"
 
-sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConfig.json /tmp
-sudo sed -i "s/COMP_NAME/JPetStore-APP/g" /tmp/compVersionConfig.json
-sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
-sudo sed -i "s/COMP_BASE/app/g" /tmp/compVersionConfig.json
-result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
+sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConfig.json #{Chef::Config['file_cache_path']}
+sudo sed -i "s/COMP_NAME/JPetStore-APP/g" #{Chef::Config['file_cache_path']}/compVersionConfig.json
+sudo sed -i "s/AGENT_ID/$AGENT_ID/g" #{Chef::Config['file_cache_path']}/compVersionConfig.json
+sudo sed -i "s/COMP_BASE/app/g" #{Chef::Config['file_cache_path']}/compVersionConfig.json
+result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @#{Chef::Config['file_cache_path']}/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
-sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json /tmp
-sudo sed -i "s/COMP_NAME/JPetStore-APP/g" /tmp/compVersion.json
-result=`curl -s -X PUT -u admin:admin  -d @/tmp/compVersion.json https://#{node['ec2']['public_hostname']}:8443/cli/component/integrate --insecure`
+sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json #{Chef::Config['file_cache_path']}
+sudo sed -i "s/COMP_NAME/JPetStore-APP/g" #{Chef::Config['file_cache_path']}/compVersion.json
+result=`curl -s -X PUT -u admin:admin  -d @#{Chef::Config['file_cache_path']}/compVersion.json https://#{node['ec2']['public_hostname']}:8443/cli/component/integrate --insecure`
 
-sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConfig.json /tmp
-sudo sed -i "s/COMP_NAME/JPetStore-DB/g" /tmp/compVersionConfig.json
-sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
-sudo sed -i "s/COMP_BASE/db/g" /tmp/compVersionConfig.json
+sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConfig.json #{Chef::Config['file_cache_path']}
+sudo sed -i "s/COMP_NAME/JPetStore-DB/g" #{Chef::Config['file_cache_path']}/compVersionConfig.json
+sudo sed -i "s/AGENT_ID/$AGENT_ID/g" #{Chef::Config['file_cache_path']}/compVersionConfig.json
+sudo sed -i "s/COMP_BASE/db/g" #{Chef::Config['file_cache_path']}/compVersionConfig.json
 
-result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
+result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @#{Chef::Config['file_cache_path']}/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
-sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json /tmp
-sudo sed -i "s/COMP_NAME/JPetStore-DB/g" /tmp/compVersion.json
+sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json #{Chef::Config['file_cache_path']}
+sudo sed -i "s/COMP_NAME/JPetStore-DB/g" #{Chef::Config['file_cache_path']}/compVersion.json
 
-result=`curl -s -X PUT -u admin:admin  -d @/tmp/compVersion.json https://#{node['ec2']['public_hostname']}:8443/cli/component/integrate --insecure`
+result=`curl -s -X PUT -u admin:admin  -d @#{Chef::Config['file_cache_path']}/compVersion.json https://#{node['ec2']['public_hostname']}:8443/cli/component/integrate --insecure`
 
-sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConfig.json /tmp
-sudo sed -i "s/COMP_NAME/JPetStore-WEB/g" /tmp/compVersionConfig.json
-sudo sed -i "s/AGENT_ID/$AGENT_ID/g" /tmp/compVersionConfig.json
-sudo sed -i "s/COMP_BASE/web/g" /tmp/compVersionConfig.json
+sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersionConfig.json #{Chef::Config['file_cache_path']}
+sudo sed -i "s/COMP_NAME/JPetStore-WEB/g" #{Chef::Config['file_cache_path']}/compVersionConfig.json
+sudo sed -i "s/AGENT_ID/$AGENT_ID/g" #{Chef::Config['file_cache_path']}/compVersionConfig.json
+sudo sed -i "s/COMP_BASE/web/g" #{Chef::Config['file_cache_path']}/compVersionConfig.json
 
-result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @/tmp/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
+result=`curl -s -X PUT -b #{node['UCD']['cookies']} -c #{node['UCD']['cookies']} -u admin:admin -d @#{Chef::Config['file_cache_path']}/compVersionConfig.json https://#{node['ec2']['public_hostname']}:8443/rest/deploy/component --insecure`
 COMP_ID=`echo $result | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["id"];'`
 
-sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json /tmp
-sudo sed -i "s/COMP_NAME/JPetStore-WEB/g" /tmp/compVersion.json
+sudo cp /vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/compVersion.json #{Chef::Config['file_cache_path']}
+sudo sed -i "s/COMP_NAME/JPetStore-WEB/g" #{Chef::Config['file_cache_path']}/compVersion.json
 
-result=`curl -s -X PUT -u admin:admin  -d @/tmp/compVersion.json https://#{node['ec2']['public_hostname']}:8443/cli/component/integrate --insecure`
+result=`curl -s -X PUT -u admin:admin  -d @#{Chef::Config['file_cache_path']}/compVersion.json https://#{node['ec2']['public_hostname']}:8443/cli/component/integrate --insecure`
 curl -s -X PUT -u admin:admin -d @/vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/JPetStore-APP-Process.json https://#{node['ec2']['public_hostname']}:8443/cli/componentProcess/create --insecure
 curl -s -X PUT -u admin:admin -d @/vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/JPetStore-DB-Process.json  https://#{node['ec2']['public_hostname']}:8443/cli/componentProcess/create --insecure
 curl -s -X PUT -u admin:admin -d @/vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/JPetStore-WEB-Process.json https://#{node['ec2']['public_hostname']}:8443/cli/componentProcess/create --insecure
 	EOH
 end
 
-template "/tmp/app.json" do
+template "#{Chef::Config['file_cache_path']}/app.json" do
 	source "app.json.erb"  	
 	variables ({
 		:app_name => "JPetStore"
@@ -111,7 +111,7 @@ bash 'petStore1' do
 	
 AGENT_RESOURCE="Server+Agent"
 
-curl -s -X PUT -u admin:admin  -d @/tmp/app.json https://#{node['ec2']['public_hostname']}:8443/cli/application/create --insecure
+curl -s -X PUT -u admin:admin  -d @#{Chef::Config['file_cache_path']}/app.json https://#{node['ec2']['public_hostname']}:8443/cli/application/create --insecure
 
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/application/addComponentToApp?component=JPetStore-APP&application=JPetStore" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/application/addComponentToApp?component=JPetStore-DB&application=JPetStore" --insecure
@@ -133,7 +133,7 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
 	EOH
 end
 
-template "/tmp/compResource.json" do
+template "#{Chef::Config['file_cache_path']}/compResource.json" do
 	source "compResource.json.erb"
   	variables (
 		lazy {
@@ -149,11 +149,11 @@ end
 
 bash 'compResource JPetStore-APP' do
   code <<-EOH
-curl -s -X PUT -u admin:admin  -d @/tmp/compResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+curl -s -X PUT -u admin:admin  -d @#{Chef::Config['file_cache_path']}/compResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
   EOH
 end
 
-template "/tmp/compResource.json" do
+template "#{Chef::Config['file_cache_path']}/compResource.json" do
 	source "compResource.json.erb"
   	variables (
 		lazy {
@@ -169,11 +169,11 @@ end
 
 bash 'compResource JPetStore-DB' do
   code <<-EOH
-curl -s -X PUT -u admin:admin  -d @/tmp/compResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+curl -s -X PUT -u admin:admin  -d @#{Chef::Config['file_cache_path']}/compResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
   EOH
 end
 
-template "/tmp/compResource.json" do
+template "#{Chef::Config['file_cache_path']}/compResource.json" do
 	source "compResource.json.erb"
   	variables (
 		lazy {
@@ -189,7 +189,7 @@ end
 
 bash 'compResource JPetStore-WEB' do
   code <<-EOH
-curl -s -X PUT -u admin:admin  -d @/tmp/compResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
+curl -s -X PUT -u admin:admin  -d @#{Chef::Config['file_cache_path']}/compResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
 
 curl -s -X PUT -u admin:admin  -d @/vagrant/components/DEPLOYER/UCD/agent1/sample/JPetStore/applicationProcess.json https://#{node['ec2']['public_hostname']}:8443/cli/applicationProcess/create --insecure
 
@@ -201,7 +201,7 @@ curl -s -X GET -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
   EOH
 end
 
-template "/tmp/app.json" do
+template "#{Chef::Config['file_cache_path']}/app.json" do
 	source "app.json.erb"  	
 	variables ({
 		:app_name => "Pet Grooming Reservations"
@@ -211,7 +211,7 @@ end
 
 bash 'deploy' do
   code <<-EOH
-curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
+curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @#{Chef::Config['file_cache_path']}/app.json --insecure
 APP="Pet%20Grooming%20Reservations"
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=CERT-1&color=#DD731C" --insecure
@@ -222,7 +222,7 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
   EOH
 end
 
-template "/tmp/app.json" do
+template "#{Chef::Config['file_cache_path']}/app.json" do
 	source "app.json.erb"  	
 	variables ({
 		:app_name => "Pet Transport"
@@ -232,7 +232,7 @@ end
 
 bash 'deploy' do
   code <<-EOH
-curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
+curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @#{Chef::Config['file_cache_path']}/app.json --insecure
 APP="Pet+Transport"	
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=CERT-1&color=#DD731C" --insecure
@@ -243,7 +243,7 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
   EOH
 end
 	
-template "/tmp/app.json" do
+template "#{Chef::Config['file_cache_path']}/app.json" do
 	source "app.json.erb"  	
 	variables ({
 		:app_name => "Pet Breeder Site"
@@ -253,7 +253,7 @@ end
 
 bash 'deploy' do
   code <<-EOH
-curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
+curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @#{Chef::Config['file_cache_path']}/app.json --insecure
 APP="Pet+Breeder+Site"	
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=CERT-1&color=#DD731C" --insecure
@@ -264,7 +264,7 @@ curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/c
   EOH
 end
 
-template "/tmp/app.json" do
+template "#{Chef::Config['file_cache_path']}/app.json" do
 	source "app.json.erb"  	
 	variables ({
 		:app_name => "Pet Sourcing"
@@ -274,7 +274,7 @@ end
 
 bash 'deploy' do
   code <<-EOH	
-curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @/tmp/app.json --insecure
+curl -s -X PUT -u admin:admin https://#{node['ec2']['public_hostname']}:8443/cli/application/create -d @#{Chef::Config['file_cache_path']}/app.json --insecure
 APP="Pet+Sourcing"	
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=DEV-1&color=#D9182D" --insecure
 curl -s -X PUT -u admin:admin  "https://#{node['ec2']['public_hostname']}:8443/cli/environment/createEnvironment?application=$APP&name=CERT-1&color=#DD731C" --insecure

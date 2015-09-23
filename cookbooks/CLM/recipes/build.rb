@@ -2,7 +2,7 @@ include_recipe "libarchive::default"
 include_recipe "IM::default"
 
 remote_file "download build toolkit zip" do
-    path "/tmp/#{node['CLM']['build_zip']}"
+    path "#{Chef::Config['file_cache_path']}/#{node['CLM']['build_zip']}"
 	source "https://lmbgalaxy.s3.amazonaws.com/IBM/CLM/#{node['CLM']['build_zip']}"
 	action :create
 	notifies :extract, 'libarchive_file[unzip build toolkit zip]', :immediately
@@ -10,15 +10,15 @@ remote_file "download build toolkit zip" do
 end
 
 libarchive_file "unzip build toolkit zip" do
-  path "/tmp/#{node['CLM']['build_zip']}"
-  extract_to "/tmp/BUILD"
+  path "#{Chef::Config['file_cache_path']}/#{node['CLM']['build_zip']}"
+  extract_to "#{Chef::Config['file_cache_path']}/BUILD"
   action :nothing
   notifies :run, 'execute[build toolkit installation]', :immediately
 end
 
 execute 'build toolkit installation' do
   user 'root'
-  command "/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:build_packages]} -repositories /tmp/BUILD/im/repo/rtc-buildsystem-offering/offering-repo/repository.config -acceptLicense"
+  command "/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:build_packages]} -repositories #{Chef::Config['file_cache_path']}/BUILD/im/repo/rtc-buildsystem-offering/offering-repo/repository.config -acceptLicense"
   action :nothing
 end
 

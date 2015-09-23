@@ -1,6 +1,6 @@
 include_recipe "awscli::default"
 
-remote_file "/tmp/aws-java-sdk-1.3.7.jar" do
+remote_file "#{Chef::Config['file_cache_path']}/aws-java-sdk-1.3.7.jar" do
 	source "https://lmbgalaxy.s3.amazonaws.com/AWS/aws-java-sdk-1.3.7.jar"
 	action :create_if_missing
 end

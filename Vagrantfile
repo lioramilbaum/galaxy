@@ -595,36 +595,38 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		end
 	end
 	
+	config.vm.define "chef_workstation" do |chef_workstation|
+		
+		chef_workstation.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: [".git", ".vagrant"]
 	
-	
-	config.vm.define "chef_server" do |chef_server|
-	
-		chef_server.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: [".*/", "packer_cache/"]
-			
-		chef_server.vm.provider "aws" do |aws, override|
+		chef_workstation.vm.provider "aws" do |aws, override|
 			override.vm.box		= "dummy"
 			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-	
-			aws.region			= "eu-west-1"
-			aws.ami				= "ami-60a10117"			
-			aws.keypair_name	= "id_rsa"
-   			aws.instance_type	= "t2.small"
-    		aws.security_groups	= [ 'sg-66dc4703' ]
-    		aws.subnet_id		= "subnet-7cf03b25"
-    		aws.elastic_ip		= "true"
-    		aws.block_device_mapping	= [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 100 }]
+			
+			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
+			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
+			aws.keypair_name		= "id_rsa"   
+
+			aws.region				= "eu-west-1"
+    		aws.ami					= "ami-60a10117"
+   			aws.instance_type		= "t2.micro"
+    		aws.security_groups		= [ 'sg-677ab803' ]
+    		aws.subnet_id			= "subnet-7cf03b25"
+    		aws.elastic_ip			= "true"
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
     		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
-		end	
-				
-#		chef_server.vm.provision :chef_zero do |chef|
-#			chef.cookbooks_path = ["./cookbooks/"]
-#			chef.environments_path = ["./environments/"]
-#			chef.environment = 'curr'
-#			chef.add_recipe "chef::default"
-#		end
+    		
+    	end
+    	
+    	chef_workstation.vm.provision :chef_zero do |chef|
+			chef.cookbooks_path = ["./cookbooks/"]
+			chef.environments_path = ["./environments/"]
+			chef.environment = 'curr'
+			chef.add_recipe "chef_workstation::default"
+		end
+
 	end
 	
 	config.push.define "atlas" do |push|

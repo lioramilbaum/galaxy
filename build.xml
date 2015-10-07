@@ -382,6 +382,24 @@
 		</exec>
 	</target>
 	
+	<target name="knife server create">
+		
+		<if>
+			<equals arg1="${PROVISION_CLM}" arg2="true" />
+			<then>				
+				<exec executable="C:\opscode\chefdk\bin\knife.bat"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="ec2 server create --node-name clm --security-group-ids sg-66dc4703 --subnet subnet-7cf03b25" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+		
+	</target>
+	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 	  <classpath>
 	    <pathelement location="ant-contrib-0.6-bin/lib/ant-contrib-0.6.jar"/>

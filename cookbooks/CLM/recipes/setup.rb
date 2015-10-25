@@ -1,5 +1,5 @@
 template "Setup Properties File" do
-	path "#{node['CLM'][:parametersfile]}"
+	path "#{Chef::Config['file_cache_path']}/#{node['CLM'][:parametersfile]}"
 	source 'CLM.properties.erb'
 	variables (
   		lazy {
@@ -16,7 +16,7 @@ end
 execute 'CLM Setup' do
   user 'root'
   cwd "/opt/IBM/JazzTeamServer/server"
-  command "./repotools-jts.sh -setup includeLifecycleProjectStep=true parametersfile=#{node['CLM'][:parametersfile]}"
+  command "./repotools-jts.sh -setup includeLifecycleProjectStep=true parametersfile=#{Chef::Config['file_cache_path']}/#{node['CLM'][:parametersfile]}"
   action :nothing
   ignore_failure false
   notifies :run, 'execute[Assign build license]', :immediately

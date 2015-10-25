@@ -1,4 +1,4 @@
-<%= render "/tmp/UCD/ibm-ucd-install/install.properties", :local => true %>
+<%= render "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install.properties", :local => true %>
 
 nonInteractive=true
 server.initial.password=<%= @initial_password %>

@@ -1,11 +1,19 @@
 include_recipe "libarchive::default"
 include_recipe "java7::default"
 
+=begin
 bash 'download ibm-ucd-agent.zip' do
 	code <<-EOH
 SERVER_PRIVATE_IP=`grep local-ipv4 /vagrant/ucd_server.txt | cut -d: -f2`
 SERVER_PRIVATE_IP=`echo $SERVER_PRIVATE_IP`
 scp -i "/home/ubuntu/.ssh/id_rsa.pem" ubuntu@$SERVER_PRIVATE_IP:/opt/ibm-ucd/server/opt/tomcat/webapps/ROOT/tools/ibm-ucd-agent.zip #{Chef::Config['file_cache_path']}
+	EOH
+end
+=end
+
+bash 'download ibm-ucd-agent.zip' do
+	code <<-EOH
+cp /opt/ibm-ucd/server/opt/tomcat/webapps/ROOT/tools/ibm-ucd-agent.zip #{Chef::Config['file_cache_path']}
 	EOH
 end
 

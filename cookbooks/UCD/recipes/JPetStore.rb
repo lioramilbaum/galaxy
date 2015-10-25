@@ -37,15 +37,15 @@ service 'tomcat7' do
 	action :nothing
 end
 
-remote_file "#{Chef::Config['file_cache_path']}/artifacts.zip" do
+remote_file "/tmp/artifacts.zip" do
 	source "https://lmbgalaxy.s3.amazonaws.com/samples/artifacts.zip"
 	action :create
 	notifies :extract, 'libarchive_file[Extracting artifacts zip]', :immediately
 end
 
 libarchive_file "Extracting artifacts zip" do
-  path "#{Chef::Config['file_cache_path']}/artifacts.zip"
-  extract_to "#{Chef::Config['file_cache_path']}/artifacts"
+  path "/tmp/artifacts.zip"
+  extract_to "/tmp/artifacts"
   action :nothing
 end
 

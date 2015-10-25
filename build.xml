@@ -384,15 +384,15 @@
 	
 	<target name="knife server create">
 		
-		<exec executable="C:\opscode\chefdk\bin\knife.bat"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
 			<arg line="cookbook upload -a --force" />
 		</exec>	
 		
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
 			<then>				
-				<exec executable="C:\opscode\chefdk\bin\knife.bat"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="ec2 server create --node-name clm --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name clm --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
 				</exec>
 				<!--
 				<exec executable="C:\opscode\chefdk\bin\knife.bat"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
@@ -411,13 +411,13 @@
 	
 	<target name="knife cleanup">
 		
-		<exec executable="C:\opscode\chefdk\bin\knife.bat"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
 			<arg line="ec2 server list" />
 		</exec>		
-		<exec executable="C:\opscode\chefdk\bin\knife.bat"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
 			<arg line="client delete clm -y" />
 		</exec>
-		<exec executable="C:\opscode\chefdk\bin\knife.bat"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
 			<arg line="node delete clm -y" />
 		</exec>
 		

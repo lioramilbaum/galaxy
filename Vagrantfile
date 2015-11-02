@@ -67,7 +67,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
 	
@@ -126,7 +126,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      		
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"   		
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"   		
     		aws.tags = {
     		    	'Name' => 'ucd_server'
     		}
@@ -171,7 +171,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     		aws.tags = {
     		    	'Name' => 'ucd_agent1'
@@ -183,7 +183,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		end
 		
 		config.vm.provision "file", source: "ucd_server.txt", destination: "/vagrant/ucd_server.txt"
-		config.vm.provision "file", source: "C:\\Users\\Liora\\.ssh\\id_rsa.pem", destination: "/home/ubuntu/.ssh/id_rsa.pem"
+		config.vm.provision "file", source: "/Users/liora/.ssh/id_rsa.pem", destination: "/home/ubuntu/.ssh/id_rsa.pem"
 		
     	config.vm.provision :shell, :path => "scripts/bootstrap.sh"
     	
@@ -223,7 +223,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		aws.tags = {
     		    	'Name' => 'ucd_agent2'
     		}
@@ -267,7 +267,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
     	
@@ -318,7 +318,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
     	
@@ -372,7 +372,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
 		
@@ -405,7 +405,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
     end
@@ -437,7 +437,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
     	
@@ -475,7 +475,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
     	
@@ -523,7 +523,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
 		
@@ -559,7 +559,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
 
@@ -582,7 +582,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
 		end	
 		
 		config.vm.provision :shell, :path => "scripts/bootstrap.sh"
@@ -617,7 +617,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     		override.ssh.username	= "ubuntu"
     		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "C:\\Users\\Liora\\.ssh\\id_rsa.pem"
+    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     	end
     	

@@ -25,6 +25,13 @@ hosts = [
 		instance_type: "t2.small",
 		aws_tag: "ucd_server",
 		chef_role: "ucd_server"
+	},
+	{
+		name: "ucd_agent",
+		ami: "ami-60a10117",
+		instance_type: "t2.micro",
+		aws_tag: "ucd_agent",
+		chef_role: "ucd_agent"
 	}
 ]
 
@@ -79,9 +86,9 @@ Vagrant.configure("2") do |config|
 		
 	end
 	
-	config.vm.define "ucd_agent1" do |ucd_agent1|
+	config.vm.define "ucd_agent" do |ucd_agent|
 		
-		ucd_agent1.vm.provider "aws" do |aws, override|
+		ucd_agent.vm.provider "aws" do |aws, override|
 			override.vm.box		= "dummy"
 			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 			
@@ -114,48 +121,12 @@ Vagrant.configure("2") do |config|
 		
     	config.vm.provision :shell, :path => "scripts/bootstrap.sh"
     	
-		ucd_agent1.vm.provision :chef_zero do |chef|  	
+		ucd_agent.vm.provision :chef_zero do |chef|  	
 			chef.environments_path = ["./environments/"]
 			chef.environment = 'curr'
 			chef.cookbooks_path = ["./cookbooks/"]
-			chef.add_recipe "UCD::agent"
-			chef.add_recipe "UCD::JPetStore"
-		end
-		
-	end
-	
-	config.vm.define "ucd_agent2" do |ucd_agent2|
-
-		ucd_agent2.vm.provider "aws" do |aws, override|
-			override.vm.box		= "dummy"
-			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-			
-			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
-			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "id_rsa"   
-
-			aws.region				= "eu-west-1"
-    		aws.ami					= "ami-60a10117"
-   			aws.instance_type		= "t2.micro"
-    		aws.security_groups		= [ 'sg-66dc4703' ]
-    		aws.subnet_id			= "subnet-7cf03b25"
-    		aws.elastic_ip			= "true"
-
-    		override.ssh.username	= "ubuntu"
-    		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
-    		aws.tags = {
-    		    	'Name' => 'ucd_agent2'
-    		}
-    	end
-    	
-    	config.vm.provision :shell, :path => "scripts/bootstrap.sh"
-    	
-    	ucd_agent2.vm.provision :chef_zero do |chef|    
-			chef.environments_path = ["./environments/"]
-			chef.environment = 'curr'
-			chef.cookbooks_path = ["./cookbooks/"]
-			chef.add_recipe "UCD::agent"
+			chef.roles_path = ["./roles/"]
+			chef.add_role "ucd_agent"
 		end
 		
 	end

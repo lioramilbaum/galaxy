@@ -1,6 +1,7 @@
 <project name="Galaxy" default="up">
 	
 	<loadproperties srcFile="conf/Galaxy.properties"/>
+	<property environment="env"/>
 	
 	<target name="base">
 		<exec executable="/usr/local/bin/vagrant" dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
@@ -189,8 +190,7 @@
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
 			<then>				
-				<property environment="env"/>
-				<property name="ATLAS_TOKE" value="${env.ATLAS_TOKE}"/>
+				<property name="ATLAS_TOKEN" value="${env.ATLAS_TOKEN}"/>
 				
 				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true">
 					<arg line="login --token ${ATLAS_TOKEN}" />
@@ -386,40 +386,52 @@
 		
 		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
 			<arg line="cookbook upload -a --force" />
+		</exec>
+		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+			<arg line="upload roles" />
 		</exec>	
 		
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
-			<then>				
+			<then>
+				<property name="GALAXY_ROLE" value="clm"/>
+				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
+					<arg line="client delete ${GALAXY_ROLE} -y" />
+				</exec>
+				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
+					<arg line="node delete ${GALAXY_ROLE} -y" />
+				</exec>
 				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name clm --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+					<env key="GALAXY_FLAVOR" value="m3.xlarge"/>
+					<env key="GALAXY_AMI" value="ami-2da5875a"/>
+					<env key="GALAXY_ROLE" value="${GALAXY_ROLE}"/>
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name ${GALAXY_ROLE} --run-list 'role[${GALAXY_ROLE}]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
 				</exec>
-				<!--
-				<exec executable="C:\opscode\chefdk\bin\knife.bat"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="ec2 server create -node-name clm -security-group-ids sg-66dc4703 -subnet subnet-7cf03b25" />
-				</exec>
-				-->
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
 			</then>	
 		</if>
-		
-	</target>
-	
-	<target name="knife cleanup">
-		
-		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-			<arg line="ec2 server list" />
-		</exec>		
-		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-			<arg line="client delete clm -y" />
-		</exec>
-		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-			<arg line="node delete clm -y" />
-		</exec>
+		<if>
+			<equals arg1="${PROVISION_UCD_SERVER}" arg2="true" />
+		<then>			
+			<property name="GALAXY_ROLE" value="ucd_server"/>				
+			<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
+				<arg line="client delete ${GALAXY_ROLE} -y" />
+			</exec>
+			<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
+				<arg line="node delete ${GALAXY_ROLE} -y" />
+			</exec>
+			<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+				<env key="GALAXY_FLAVOR" value="t2.small"/>
+				<env key="GALAXY_AMI" value="ami-60a10117"/>
+				<env key="GALAXY_ROLE" value="${GALAXY_ROLE}"/>
+				<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name ${GALAXY_ROLE} --run-list 'role[${GALAXY_ROLE}]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+			</exec>
+		</then>	
+		</if>
+		<fail>
+			<condition>
+				<isfailure code="${return.code}"/>
+			</condition>
+		</fail>
 		
 	</target>
 	

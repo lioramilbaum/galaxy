@@ -390,6 +390,9 @@
 		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
 			<arg line="upload roles" />
 		</exec>	
+		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+			<arg line="upload environments" />
+		</exec>	
 		
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />

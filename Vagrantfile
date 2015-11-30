@@ -32,7 +32,14 @@ hosts = [
 		instance_type: "t2.micro",
 		aws_tag: "ucd_agent",
 		chef_role: "ucd_agent"
-	}
+	},
+	{
+		name: "appscan",
+		ami: "ami-60a10117",
+		instance_type: "t2.micro",
+		aws_tag: "AppScan",
+		chef_role: "appscan"
+	},
 ]
 
 Vagrant.configure("2") do |config|

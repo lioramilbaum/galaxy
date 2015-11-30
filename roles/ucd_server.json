@@ -1,3 +1,3 @@
 {
-  "run_list": [ "postgresql::server", "postgresql::client", "UCD::server", "UCD::JPetStore" ]
+  "run_list": [ "UCD::server", "UCD::JPetStore" ]
 }

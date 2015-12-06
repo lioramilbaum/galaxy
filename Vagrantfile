@@ -40,6 +40,13 @@ hosts = [
 		aws_tag: "AppScan",
 		chef_role: "appscan"
 	},
+	{
+		name: "clm",
+		ami: "ami-2a207e5d",
+		instance_type: "m3.xlarge",
+		aws_tag: "CLM",
+		chef_role: "clm-server"
+	}
 ]
 
 Vagrant.configure("2") do |config|
@@ -56,23 +63,29 @@ Vagrant.configure("2") do |config|
 		config.vm.define host[:name] do |node|
 		
 			node.vm.provider "aws" do |aws, override|
-				override.vm.box		= "dummy"
-				override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+				override.vm.box					= "dummy"
+				override.vm.box_url				= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
 			
-				aws.access_key_id		= ENV['AWS_ACCESS_KEY']
-				aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-				aws.keypair_name		= "id_rsa"   
+				aws.access_key_id				= ENV['AWS_ACCESS_KEY']
+				aws.secret_access_key			= ENV['AWS_SECRET_KEY']
+				aws.keypair_name				= "id_rsa"   
 
-				aws.region				= "eu-west-1"
-    			aws.ami					= host[:ami]
-   				aws.instance_type		= host[:instance_type]
-    			aws.security_groups		= [ 'sg-66dc4703' ]
-    			aws.subnet_id			= "subnet-7cf03b25"
-    			aws.elastic_ip			= "true"
-     		
-    			override.ssh.username	= "ubuntu"
-    			override.ssh.insert_key = "true"
-    			override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"   		
+				aws.region						= "eu-west-1"
+    			aws.ami							= host[:ami]
+   				aws.instance_type				= host[:instance_type]
+    			aws.security_groups				= [ 'sg-66dc4703' ]
+    			aws.subnet_id					= "subnet-7cf03b25"
+    			aws.elastic_ip					= "true"
+				aws.block_device_mapping = [
+					{
+						'DeviceName' => '/dev/sda1',
+						'Ebs.VolumeSize' => 100,
+						'Ebs.DeleteOnTermination' => true
+					}
+				]
+    			override.ssh.username			= "ubuntu"
+    			override.ssh.insert_key			= "true"
+    			override.ssh.private_key_path	= "/Users/liora/.ssh/id_rsa.pem"   		
     			aws.tags = {
     		    		'Name' => host[:aws_tag]
     			}

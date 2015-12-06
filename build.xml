@@ -189,26 +189,41 @@
 		</if>
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
-			<then>				
-				<property name="ATLAS_TOKEN" value="${env.ATLAS_TOKEN}"/>
+			<then>
+				<if>
+					<equals arg1="${PACKER}" arg2="true" />
+					<then>
+						<property name="ATLAS_TOKEN" value="${env.ATLAS_TOKEN}"/>
 				
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true">
-					<arg line="login --token ${ATLAS_TOKEN}" />
-				</exec>
-				<exec executable="/usr/local/bin/vagrant" dir="${GALAXY_HOME}" failonerror="true">			
-					<arg line="box update --box liora/clm" />
-				</exec>	
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up clm --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true">
-					<arg line="login --logout --token ${ATLAS_TOKEN}" />
-				</exec>
+						<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true">
+							<arg line="login --token ${ATLAS_TOKEN}" />
+						</exec>
+						<exec executable="/usr/local/bin/vagrant" dir="${GALAXY_HOME}" failonerror="true">			
+							<arg line="box update --box liora/clm" />
+						</exec>	
+						<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+							<arg line="up clm --provider=${VAGRANT_PROVIDER} --no-parallel" />
+						</exec>
+						<fail>
+							<condition>
+								<isfailure code="${return.code}"/>
+							</condition>
+						</fail>
+						<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true">
+							<arg line="login --logout --token ${ATLAS_TOKEN}" />
+						</exec>
+					</then>
+					<else>
+						<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+							<arg line="up clm --provider=${VAGRANT_PROVIDER} --no-parallel" />
+						</exec>
+						<fail>
+							<condition>
+								<isfailure code="${return.code}"/>
+							</condition>
+						</fail>
+					</else>
+				</if>
 			</then>	
 		</if>
 
@@ -355,28 +370,28 @@
 	</target>
 	
 	<target name="packer-push clm">
-		<exec executable="/usr/local/bin/packer" dir="${GALAXY_HOME}" failonerror="true">
+		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
 			<arg line='push -name liora/clm -var "galaxy_dir=/packer" clm.json' />
 		</exec>
 	</target>
 	
 	<target name="packer clm">
-		<exec executable="/usr/local/bin/packer" dir="${GALAXY_HOME}" failonerror="true">
+		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
 			<arg line='build -debug -var "galaxy_dir=." clm.json' />
 		</exec>
 	</target>
 	
 	<target name="packer-push sync">
-		<exec executable="/usr/local/bin/packer" dir="${GALAXY_HOME}" failonerror="true">
+		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
 			<arg line='push -name liora/sync -var "galaxy_dir=/packer" sync.json' />
 		</exec>
 	</target>
 	
 	<target name="packer sync">
-		<exec executable="/usr/local/bin/packer" dir="${GALAXY_HOME}" failonerror="true">
+		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
 			<arg line='build -var "galaxy_dir=." sync.json' />
 		</exec>

@@ -18,6 +18,15 @@ execute 'CLM Setup' do
   cwd "/opt/IBM/JazzTeamServer/server"
   command "./repotools-jts.sh -setup includeLifecycleProjectStep=true parametersfile=#{Chef::Config['file_cache_path']}/#{node['CLM'][:parametersfile]}"
   action :nothing
+  ignore_failure true
+  notifies :run, 'execute[CLM Setup Retry]', :immediately
+end
+
+execute 'CLM Setup Retry' do
+  user 'root'
+  cwd "/opt/IBM/JazzTeamServer/server"
+  command "./repotools-jts.sh -setup adminUserId=liora adminPassword=liora includeLifecycleProjectStep=true parametersfile=#{Chef::Config['file_cache_path']}/#{node['CLM'][:parametersfile]}"
+  action :run
   ignore_failure false
   notifies :run, 'execute[Assign build license]', :immediately
 end

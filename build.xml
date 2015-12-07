@@ -421,7 +421,7 @@
 				</exec>
 				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
 					<env key="GALAXY_FLAVOR" value="m3.xlarge"/>
-					<env key="GALAXY_AMI" value="ami-2da5875a"/>
+					<env key="GALAXY_AMI" value="ami-968829e5"/>
 					<env key="GALAXY_ROLE" value="${GALAXY_ROLE}"/>
 					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name ${GALAXY_ROLE} --run-list 'role[${GALAXY_ROLE}]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
 				</exec>

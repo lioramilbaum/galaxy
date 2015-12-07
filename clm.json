@@ -87,7 +87,7 @@
 			"artifact_type": "vagrant.box",
 			"metadata": {
 				"provider": "aws",
-				"version": "0.0.14"
+				"version": "0.0.18"
 			}
 		}]
 	]

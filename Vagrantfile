@@ -24,28 +24,32 @@ hosts = [
 		ami: "ami-60a10117",
 		instance_type: "t2.small",
 		aws_tag: "ucd_server",
-		chef_role: "ucd_server"
+		chef_role: "ucd_server",
+		environment: "prev"
 	},
 	{
 		name: "ucd_agent",
 		ami: "ami-60a10117",
 		instance_type: "t2.micro",
 		aws_tag: "ucd_agent",
-		chef_role: "ucd_agent"
+		chef_role: "ucd_agent",
+		environment: "curr"
 	},
 	{
 		name: "appscan",
 		ami: "ami-60a10117",
 		instance_type: "t2.micro",
 		aws_tag: "AppScan",
-		chef_role: "appscan"
+		chef_role: "appscan",
+		environment: "curr"
 	},
 	{
 		name: "clm",
 		ami: "ami-2a207e5d",
 		instance_type: "m3.xlarge",
 		aws_tag: "CLM",
-		chef_role: "clm-server"
+		chef_role: "clm-server",
+		environment: "curr"
 	}
 ]
 
@@ -96,7 +100,7 @@ Vagrant.configure("2") do |config|
     	
  			node.vm.provision :chef_zero do |chef|    
 				chef.environments_path = ["./environments/"]
-				chef.environment = 'curr'
+				chef.environment = host[:environment]
 				chef.cookbooks_path = ["./cookbooks/"]
 				chef.roles_path = ["./roles/"]
 				chef.add_role host[:chef_role]
@@ -128,7 +132,7 @@ Vagrant.configure("2") do |config|
     		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
     		
     		aws.tags = {
-    		    	'Name' => 'ucd_agent1'
+    		    	'Name' => 'ucd_agent'
     		}
     	end
     	

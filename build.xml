@@ -270,23 +270,10 @@
 		</if>
 		
 		<if>
-			<equals arg1="${PROVISION_UCD_AGENT1}" arg2="true" />
+			<equals arg1="${PROVISION_UCD_AGENT}" arg2="true" />
 			<then>
 				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up ucd_agent1 --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		<if>
-			<equals arg1="${PROVISION_UCD_AGENT2}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up ucd_agent2 --provider=${VAGRANT_PROVIDER} --no-parallel" />
+					<arg line="up ucd_agent --provider=${VAGRANT_PROVIDER} --no-parallel" />
 				</exec>
 				<fail>
 					<condition>

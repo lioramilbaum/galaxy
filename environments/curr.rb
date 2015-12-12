@@ -15,6 +15,7 @@ override_attributes ({
 	},
 	'UCD' => {
 	    'zip' => 'ibm-ucd-6.2.0.0.708164.zip',
+	    'fix' => 'ibm-ucd-6.2.0.1.716068.zip',
 	    'plugins_dir' => '/opt/ibm-ucd/server/appdata/var/plugins'
 	},
 	'UCR' => {

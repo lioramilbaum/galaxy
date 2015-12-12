@@ -16,9 +16,11 @@ libarchive_file "Extracting UCD zip" do
   path "#{Chef::Config['file_cache_path']}/#{node['UCD']['zip']}"
   extract_to "#{Chef::Config['file_cache_path']}/UCD"
   action :nothing
+  notifies :create, 'template[install.properties]', :immediately
 end
 
-template "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install.properties" do
+template "install.properties" do
+	path "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install.properties"
 	source "server.install.properties.erb"
   	variables (
 		lazy {
@@ -28,13 +30,56 @@ template "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install.propert
 			}
 		}
 	)
-	action :create
+	action :nothing
+	notifies :run, 'execute[install server]', :immediately
 end
 
-execute "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install-server.sh" do
-  user 'root'
-  action :run
+execute "install server" do
+	command "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install-server.sh"
+	user 'root'
+	action :nothing
 end
+
+remote_file "#{Chef::Config['file_cache_path']}/#{node['UCD']['fix']}" do
+	source "https://lmbgalaxy.s3.amazonaws.com/IBM/UCD/#{node['UCD']['fix']}"
+	action :create
+	notifies :extract, 'libarchive_file[Extracting UCD fix]', :immediately
+	only_if { node['UCD']['fix'] }
+end
+
+libarchive_file "Extracting UCD fix" do
+  path "#{Chef::Config['file_cache_path']}/#{node['UCD']['fix']}"
+  extract_to "#{Chef::Config['file_cache_path']}/UCD_FIX"
+  action :nothing
+  notifies :create, 'template[install.properties FIX]', :immediately 
+end
+
+template "install.properties FIX" do
+	path "#{Chef::Config['file_cache_path']}/UCD_FIX/ibm-ucd-install/install.properties"
+	source "server.install.properties.erb"
+  	variables (
+		lazy {
+			{
+				:server_hostname => node['ec2']['public_hostname'],
+				:initial_password => node['UCD']['initial_password']
+			}
+		}
+	)
+	action :nothing
+=begin
+	notifies :run, 'execute[install server FIX]', :immediately
+=end
+end
+
+=begin
+
+execute "install server FIX" do
+	command "#{Chef::Config['file_cache_path']}/UCD_FIX/ibm-ucd-install/install-server.sh"
+	user 'root'
+	action :nothing
+end
+=end
+
 
 ["#{node['UCD']['plugins_dir']}/command/stage","#{node['UCD']['plugins_dir']}/source/stage"].each do |path|
   directory path do
@@ -48,8 +93,8 @@ remote_file "#{node['UCD']['plugins_dir']}/command/stage/DBUpgrader-2.641649.zip
 	action :create
 end
 
-remote_file "#{node['UCD']['plugins_dir']}/command/stage/Tomcat-5.641593.zip" do
-	source "https://lmbgalaxy.s3.amazonaws.com/IBM/UCD-Plugins/Tomcat-5.641593.zip"
+remote_file "#{node['UCD']['plugins_dir']}/command/stage/#{node['UCD']['tomcat_plugin']}" do
+	source "https://lmbgalaxy.s3.amazonaws.com/IBM/UCD-Plugins/#{node['UCD']['tomcat_plugin']}"
 	action :create
 end
 

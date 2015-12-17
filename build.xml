@@ -384,7 +384,7 @@
 		</exec>
 	</target>
 	
-	<target name="knife server create">
+	<target name="knife server create" depends="knife cleanup">
 		
 		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
 			<arg line="cookbook upload -a --force" />
@@ -398,37 +398,40 @@
 		
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
-			<then>
-				<property name="GALAXY_ROLE" value="clm"/>
-				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
-					<arg line="client delete ${GALAXY_ROLE} -y" />
-				</exec>
-				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
-					<arg line="node delete ${GALAXY_ROLE} -y" />
-				</exec>
-				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+		<then>
+			<exec executable="/usr/local/bin/knife"
+				dir="${GALAXY_HOME}"
+				failonerror="true"
+				resultproperty="return.code">
 					<env key="GALAXY_FLAVOR" value="m3.xlarge"/>
 					<env key="GALAXY_AMI" value="ami-968829e5"/>
-					<env key="GALAXY_ROLE" value="${GALAXY_ROLE}"/>
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name ${GALAXY_ROLE} --run-list 'role[${GALAXY_ROLE}]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_clm --run-list 'role[clm]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
 				</exec>
 			</then>	
 		</if>
 		<if>
 			<equals arg1="${PROVISION_UCD_SERVER}" arg2="true" />
+		<then>
+			<exec executable="/usr/local/bin/knife"
+				dir="${GALAXY_HOME}"
+				failonerror="true"
+				resultproperty="return.code">
+					<env key="GALAXY_FLAVOR" value="t2.small"/>
+					<env key="GALAXY_AMI" value="ami-60a10117"/>
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_server --run-list 'role[ucd_server]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+			</exec>
+		</then>	
+		</if>
+		<if>
+			<equals arg1="${PROVISION_UCD_AGENT}" arg2="true" />
 		<then>			
-			<property name="GALAXY_ROLE" value="ucd_server"/>				
-			<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
-				<arg line="client delete ${GALAXY_ROLE} -y" />
-			</exec>
-			<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
-				<arg line="node delete ${GALAXY_ROLE} -y" />
-			</exec>
-			<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-				<env key="GALAXY_FLAVOR" value="t2.small"/>
-				<env key="GALAXY_AMI" value="ami-60a10117"/>
-				<env key="GALAXY_ROLE" value="${GALAXY_ROLE}"/>
-				<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name ${GALAXY_ROLE} --run-list 'role[${GALAXY_ROLE}]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+			<exec executable="/usr/local/bin/knife"
+				dir="${GALAXY_HOME}"
+				failonerror="true"
+				resultproperty="return.code">
+					<env key="GALAXY_FLAVOR" value="t2.micro"/>
+					<env key="GALAXY_AMI" value="ami-60a10117"/>
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_agent --run-list 'role[ucd_agent]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
 			</exec>
 		</then>	
 		</if>
@@ -438,6 +441,49 @@
 			</condition>
 		</fail>
 		
+	</target>
+	
+	<target name="knife cleanup">
+
+		<var name="ec2.server" value="none" />
+		
+		<exec executable="/usr/local/bin/knife"
+			dir="${GALAXY_HOME}"
+			failonerror="false"
+			resultproperty="return.code"
+			outputproperty="outputproperty">
+				<arg line="ec2 server list" />
+		</exec>
+		
+		<for list="${outputproperty}" delimiter="${line.separator}" param = "line">
+			<sequential>
+				<propertyregex property="ec2.server"
+					override="true"
+					input="@{line}"
+					regexp="^i-[0-9a-z]+"
+					select="\0"/>
+				<if>
+					<equals arg1="${ec2.server}" arg2="none" />
+				<then>
+				</then>
+				<else>
+					<exec executable="/usr/local/bin/knife"  
+						dir="${GALAXY_HOME}"
+						failonerror="false" 
+						resultproperty="return.code"
+						inputstring="Y">
+							<arg line="ec2 server delete ${ec2.server}" />
+					</exec>
+				</else>
+				</if>
+			</sequential>
+		</for>
+		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
+			<arg line="client bulk delete 'galaxy*' -y" />
+		</exec>
+		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="false" resultproperty="return.code">
+			<arg line="node bulk delete 'galaxy*' -y" />
+		</exec>
 	</target>
 	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">

@@ -56,7 +56,7 @@ end
 
 template "install.properties FIX" do
 	path "#{Chef::Config['file_cache_path']}/UCD_FIX/ibm-ucd-install/install.properties"
-	source "server.install.properties.erb"
+	source "server.fix.install.properties.erb"
   	variables (
 		lazy {
 			{
@@ -66,20 +66,14 @@ template "install.properties FIX" do
 		}
 	)
 	action :nothing
-=begin
 	notifies :run, 'execute[install server FIX]', :immediately
-=end
 end
-
-=begin
 
 execute "install server FIX" do
 	command "#{Chef::Config['file_cache_path']}/UCD_FIX/ibm-ucd-install/install-server.sh"
 	user 'root'
 	action :nothing
 end
-=end
-
 
 ["#{node['UCD']['plugins_dir']}/command/stage","#{node['UCD']['plugins_dir']}/source/stage"].each do |path|
   directory path do

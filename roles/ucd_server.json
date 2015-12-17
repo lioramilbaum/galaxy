@@ -1,3 +1,15 @@
 {
-  "run_list": [ "UCD::server", "UCD::JPetStore" ]
+  "name": "ucd_server",
+  "description": "Role for UCD Server",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+  },
+  "override_attributes": {
+  },
+  "chef_type": "role",
+  "run_list": [
+    "recipe[UCD::server]"
+  ],
+  "env_run_lists": {
+  }
 }

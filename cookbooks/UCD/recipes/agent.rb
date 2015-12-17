@@ -1,20 +1,19 @@
 include_recipe "libarchive::default"
 include_recipe "java7::default"
 
-=begin
-bash 'download ibm-ucd-agent.zip' do
-	code <<-EOH
-SERVER_PRIVATE_IP=`grep local-ipv4 /vagrant/ucd_server.txt | cut -d: -f2`
-SERVER_PRIVATE_IP=`echo $SERVER_PRIVATE_IP`
-scp -i "/home/ubuntu/.ssh/id_rsa.pem" ubuntu@$SERVER_PRIVATE_IP:/opt/ibm-ucd/server/opt/tomcat/webapps/ROOT/tools/ibm-ucd-agent.zip #{Chef::Config['file_cache_path']}
-	EOH
-end
-=end
+ucd_servers = search(:node, 'role:ucd_server')
 
-bash 'download ibm-ucd-agent.zip' do
-	code <<-EOH
-cp /opt/ibm-ucd/server/opt/tomcat/webapps/ROOT/tools/ibm-ucd-agent.zip #{Chef::Config['file_cache_path']}
-	EOH
+if ucd_servers.empty? 
+	node.default['UCD']['server_hostname']		= 'localhost'
+	node.default['UCD']['server_private_ips']	= '127.0.0.1'
+else
+    node.default['UCD']['server_hostname']		= ucd_servers[0].cloud.public_hostname[0]
+    node.default['UCD']['server_private_ips']	= ucd_servers[0].cloud.private_ips[0]
+end
+
+execute 'download agent.zip' do
+  command "scp -i '/home/ubuntu/.ssh/id_rsa.pem' ubuntu@#{node['UCD']['server_private_ips']}:/opt/ibm-ucd/server/opt/tomcat/webapps/ROOT/tools/ibm-ucd-agent.zip #{Chef::Config['file_cache_path']}"
+  action :run
 end
 
 libarchive_file "ibm-ucd-agent.zip" do

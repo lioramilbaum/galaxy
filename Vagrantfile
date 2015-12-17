@@ -107,52 +107,6 @@ Vagrant.configure("2") do |config|
 			end
 			
 		end
-		
-	end
-	
-	config.vm.define "ucd_agent" do |ucd_agent|
-		
-		ucd_agent.vm.provider "aws" do |aws, override|
-			override.vm.box		= "dummy"
-			override.vm.box_url	= "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-			
-			aws.access_key_id		= ENV['AWS_ACCESS_KEY']
-			aws.secret_access_key	= ENV['AWS_SECRET_KEY']
-			aws.keypair_name		= "id_rsa"   
-
-			aws.region				= "eu-west-1"
-    		aws.ami					= "ami-60a10117"
-   			aws.instance_type		= "t2.micro"
-    		aws.security_groups		= [ 'sg-66dc4703' ]
-    		aws.subnet_id			= "subnet-7cf03b25"
-    		aws.elastic_ip			= "true"
-
-    		override.ssh.username	= "ubuntu"
-    		override.ssh.insert_key = "true"
-    		override.ssh.private_key_path = "/Users/liora/.ssh/id_rsa.pem"
-    		
-    		aws.tags = {
-    		    	'Name' => 'ucd_agent'
-    		}
-    	end
-    	
-		config.vm.provision :host_shell do |host_shell|
-			host_shell.inline = "cmd /c metadata.bat" 
-		end
-		
-		config.vm.provision "file", source: "ucd_server.txt", destination: "/vagrant/ucd_server.txt"
-		config.vm.provision "file", source: "/Users/liora/.ssh/id_rsa.pem", destination: "/home/ubuntu/.ssh/id_rsa.pem"
-		
-    	config.vm.provision :shell, :path => "scripts/bootstrap.sh"
-    	
-		ucd_agent.vm.provision :chef_zero do |chef|  	
-			chef.environments_path = ["./environments/"]
-			chef.environment = 'curr'
-			chef.cookbooks_path = ["./cookbooks/"]
-			chef.roles_path = ["./roles/"]
-			chef.add_role "ucd_agent"
-		end
-		
 	end
 	
 	config.push.define "atlas" do |push|

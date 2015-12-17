@@ -1,5 +1,5 @@
 {
-	"name":"COMP_NAME",
+	"name":"<%= @comp_name %>",
 	"description":"",
 	"templateId":"",
 	"componentType":"STANDARD",
@@ -8,13 +8,13 @@
 	"useVfs":"true",
 	"defaultVersionType":"FULL",
 	"importAgentType":"agent",
-	"integrationAgent":"AGENT_ID",
+	"integrationAgent":"<%= @agent_id %>",
 	"inheritSystemCleanup":"true",
 	"runVersionCreationProcess":"false",
 	"existingId":"",
 	"properties": {
 		"FileSystemVersionedComponentProperties\/basePath": 
-		"/tmp/artifacts/shared/COMP_BASE"
+		"<%= @tempdir %>/artifacts/shared/<%= @comp_base %>"
 	},
 	"teamMappings":[]
 }

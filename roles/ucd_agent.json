@@ -8,7 +8,7 @@
   },
   "chef_type": "role",
   "run_list": [
-    "recipe[UCD::agent]", "recipe[UCD::JPetStore]"
+    "recipe[UCD::agent]"
   ],
   "env_run_lists": {
   }

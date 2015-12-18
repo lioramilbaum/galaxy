@@ -1,6 +1,18 @@
 include_recipe "libarchive::default"
 include_recipe "java7::default"
 
+cookbook_file "ucd_rsa.pub" do
+	user 'ubuntu'
+    path "/home/ubuntu/.ssh/ucd_rsa.pub"
+    action :create
+end
+
+execute "copy ssh public key" do
+    user 'ubuntu'
+    command "cat /home/ubuntu/.ssh/ucd_rsa.pub >> /home/ubuntu/.ssh/authorized_keys"
+    action :run
+end
+
 remote_file "ec2-metadata" do
 	source "http://s3.amazonaws.com/ec2metadata/ec2-metadata"
 	action :create
@@ -118,93 +130,7 @@ execute 'sleep' do
   action :run
 end
 
-libarchive_file "ibm-ucd-agent.zip" do
-  path "/opt/ibm-ucd/server/opt/tomcat/webapps/ROOT/tools/ibm-ucd-agent.zip"
-  extract_to "#{Chef::Config['file_cache_path']}/UCD_AGENT"
-  action :extract
-end
-
-template "#{Chef::Config['file_cache_path']}/agent.properties" do
-	source "agent.properties.erb" 
-  	variables (
-		lazy {
-			{
-				:server_hostname => node['ec2']['public_hostname'],
-				:agent_hostname => node['ec2']['public_hostname']
-			}
-		}
-	)
-  action :create
-end
-
-execute 'install-agent-from-file.sh' do
-  command "#{Chef::Config['file_cache_path']}/UCD_AGENT/ibm-ucd-agent-install/install-agent-from-file.sh #{Chef::Config['file_cache_path']}/agent.properties"
-  action :run
-end
-
-execute 'agent start' do
-  user 'root'
-  command "/opt/ibm-ucd/agent/bin/agent start"
-  action :run
-end
-
-execute 'sleep' do
-  command "sleep 1m"
-  action :run
-end
-
 execute 'Dismiss Alret' do
   command "curl -s -X POST -u admin:admin https://#{node['ec2']['public_hostname']}:8443/rest/security/userPreferences/dismissAlert/dismissed_dw --insecure"
   action :run
-end
-
-template "#{Chef::Config['file_cache_path']}/agent.json" do
-	source "agent.json.erb" 
-  	variables (
-		lazy {
-			{
-				:agent_hostname => node['ec2']['public_hostname']
-			}
-		}
-	)
-	action :create
-	notifies :run, 'execute[Configure Agent]', :immediately
-end
-
-execute 'Configure Agent' do
-  command "curl -s -X PUT -u admin:admin  -d @#{Chef::Config['file_cache_path']}/agent.json https://#{node['ec2']['public_hostname']}:8443/cli/systemConfiguration --insecure"
-  action :nothing
-end
-
-execute 'Configure1 Agent' do
-  command "curl -s -X PUT -u admin:admin https://#{node['UCD']['server_hostname']}:8443/cli/teamsecurity/tokens?user=admin&expireDate=12-31-2020-00:24"
-  action :run
-end
-
-template "#{Chef::Config['file_cache_path']}/topLevelResource.json" do
-	source "topLevelResource.json.erb" 
-	variables ({
-		:topLevel_group => "Server Agent"
-	})
-	action :create
-end
-
-template "#{Chef::Config['file_cache_path']}/agentResource.json" do
-	source "agentResource.json.erb" 
-  	variables (
-		lazy {
-			{
-				:agent_hostname => node['ec2']['public_hostname'],
-				:topLevel_group => "/Server Agent"
-			}
-		}
-	)
-	action :create
-end
-
-bash 'create Resources' do
-  code <<-EOH
-curl -s -X PUT -u admin:admin -d @#{Chef::Config['file_cache_path']}/topLevelResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
-curl -s -X PUT -u admin:admin -d @#{Chef::Config['file_cache_path']}/agentResource.json https://#{node['ec2']['public_hostname']}:8443/cli/resource/create --insecure
-  EOH
 end

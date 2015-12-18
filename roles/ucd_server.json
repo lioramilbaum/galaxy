@@ -8,7 +8,7 @@
   },
   "chef_type": "role",
   "run_list": [
-    "recipe[UCD::server]"
+    "recipe[UCD::server]","recipe[UCD::agent]"
   ],
   "env_run_lists": {
   }

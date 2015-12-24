@@ -1,0 +1,15 @@
+{
+  "name": "ucd_engine",
+  "description": "Role for UCD Engine",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+  },
+  "override_attributes": {
+  },
+  "chef_type": "role",
+  "run_list": [
+    "recipe[UCD::engine]"
+  ],
+  "env_run_lists": {
+  }
+}

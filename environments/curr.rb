@@ -14,9 +14,10 @@ override_attributes ({
         'packages' => 'com.ibm.team.install.jfs.app.gc_6.0.0.RJF-I20150519-1056-r60- com.ibm.team.install.jfs.app.jrs_6.0.0.JRS-Packaging_600-I20150519-1301 com.ibm.team.install.jfs.app.jts_6.0.0.RJF-I20150519-1056-r60- com.ibm.team.install.jfs.app.ldx_6.0.0.RJF-I20150519-1056-r60- com.ibm.team.install.jfs.app.product-clm_6.0.0.CALM60-I20150519-1808-r60 com.ibm.team.install.jfs.app.rdm_6.0.0.RDNG6_0_0-I20150519_1236 com.ibm.team.install.jfs.app.relm_6.0.0.RELM_6_0_0-I20150519-1301 com.ibm.team.install.jfs.app.rqm_6.0.0.RQM6_0_0-I20150519_1442 com.ibm.team.install.jfs.app.rtc_6.0.0.RTC-I20150519-1214-r60'
 	},
 	'UCD' => {
-	    'zip' => 'ibm-ucd-6.2.0.0.708164.zip',
-	    'fix' => 'ibm-ucd-6.2.0.1.716068.zip',
+	    'zip' => 'ibm-ucd-6.2.0.1.716068.zip',
 	    'plugins_dir' => '/opt/ibm-ucd/server/appdata/var/plugins'
+	    'engine_zip' => 'ibm-ucd-patterns-engine-6.2.0.1.715978.tgz'
+	    'designer_zip' => 'ibm-ucd-patterns-web-designer-linux-x86_64-6.2.0.1.716119.tgz'
 	},
 	'UCR' => {
 	    'zip' => 'IBM_URBANCODE_RELEASE_6.1.1.9_update.zip',

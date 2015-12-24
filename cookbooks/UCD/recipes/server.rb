@@ -52,41 +52,6 @@ execute "install server" do
 	action :nothing
 end
 
-remote_file "#{Chef::Config['file_cache_path']}/#{node['UCD']['fix']}" do
-	source "https://lmbgalaxy.s3.amazonaws.com/IBM/UCD/#{node['UCD']['fix']}"
-	action :create
-	notifies :extract, 'libarchive_file[Extracting UCD fix]', :immediately
-	only_if { node['UCD']['fix'] }
-end
-
-libarchive_file "Extracting UCD fix" do
-  path "#{Chef::Config['file_cache_path']}/#{node['UCD']['fix']}"
-  extract_to "#{Chef::Config['file_cache_path']}/UCD_FIX"
-  action :nothing
-  notifies :create, 'template[install.properties FIX]', :immediately 
-end
-
-template "install.properties FIX" do
-	path "#{Chef::Config['file_cache_path']}/UCD_FIX/ibm-ucd-install/install.properties"
-	source "server.fix.install.properties.erb"
-  	variables (
-		lazy {
-			{
-				:server_hostname => node['ec2']['public_hostname'],
-				:initial_password => node['UCD']['initial_password']
-			}
-		}
-	)
-	action :nothing
-	notifies :run, 'execute[install server FIX]', :immediately
-end
-
-execute "install server FIX" do
-	command "#{Chef::Config['file_cache_path']}/UCD_FIX/ibm-ucd-install/install-server.sh"
-	user 'root'
-	action :nothing
-end
-
 ["#{node['UCD']['plugins_dir']}/command/stage","#{node['UCD']['plugins_dir']}/source/stage"].each do |path|
   directory path do
     action :create

@@ -435,6 +435,19 @@
 			</exec>
 		</then>	
 		</if>
+		<if>
+			<equals arg1="${PROVISION_UCD_ENGINE}" arg2="true" />
+		<then>			
+			<exec executable="/usr/local/bin/knife"
+				dir="${GALAXY_HOME}"
+				failonerror="true"
+				resultproperty="return.code">
+					<env key="GALAXY_FLAVOR" value="t2.micro"/>
+					<env key="GALAXY_AMI" value="ami-78d29c0f"/>
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_engine --run-list 'role[ucd_engine]' --security-group-ids sg-0a9af76e --subnet subnet-9fb295fa" />
+			</exec>
+		</then>	
+		</if>
 		<fail>
 			<condition>
 				<isfailure code="${return.code}"/>

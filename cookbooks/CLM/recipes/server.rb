@@ -1,6 +1,5 @@
 include_recipe "libarchive::default"
 include_recipe "IM::default"
-include_recipe "CLM::rdm"
 
 package ['xvfb','xfonts-100dpi','xfonts-75dpi','xfonts-scalable','xfonts-cyrillic','libgtk2.0-0', 'libstdc++5', 'libswt-gtk-3-jni', 'libswt-gtk-3-java'] do
   action :install
@@ -10,10 +9,10 @@ remote_file "Download CLM" do
     path "#{Chef::Config['file_cache_path']}/#{node['CLM']['zip']}"
 	source "https://lmbgalaxy.s3.amazonaws.com/IBM/CLM/#{node['CLM']['zip']}"
 	action :create
-	notifies :extract, 'libarchive_file[unzip CLM zip]', :immediately
+	notifies :extract, 'libarchive_file[Extract CLM zip]', :immediately
 end
 
-libarchive_file "unzip CLM zip" do
+libarchive_file "Extract CLM zip" do
   path "#{Chef::Config['file_cache_path']}/#{node['CLM']['zip']}"
   extract_to "#{Chef::Config['file_cache_path']}/CLM"
   action :nothing
@@ -22,48 +21,88 @@ end
 
 execute 'CLM Installation' do
   user 'root'
-  command "/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:packages]} -repositories #{Chef::Config['file_cache_path']}/CLM/repository.config -acceptLicense"
+  command "ulimit -n 65536;/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:packages]} -repositories #{Chef::Config['file_cache_path']}/CLM/repository.config -acceptLicense"
   action :nothing
 end
 
 directory "/opt/IBM/JazzTeamServer/server/patch" do
-  not_if { node['CLM']['fix'].nil? }
-  action :create
-  notifies :create, 'remote_file[Download CLM Fix]', :immediately
+	not_if { node['CLM']['fix'].to_s == '' }
+	action :create
+	notifies :create, 'remote_file[Download CLM Fix]', :immediately
 end
 
 remote_file "Download CLM Fix" do
+	not_if { node['CLM']['fix'].to_s == '' }
     path "#{Chef::Config['file_cache_path']}/#{node['CLM']['fix']}"
 	source "https://lmbgalaxy.s3.amazonaws.com/IBM/CLM/#{node['CLM']['fix']}"
 	action :create
-    notifies :extract, 'libarchive_file[unzip CLM fix zip]', :immediately
+    notifies :extract, 'libarchive_file[Extract CLM fix zip]', :immediately
 end
 
-libarchive_file "unzip CLM fix zip" do
-  path "#{Chef::Config['file_cache_path']}/#{node['CLM']['fix']}"
-  extract_to "#{Chef::Config['file_cache_path']}/CLM_FIX"
-  action :nothing
-  notifies :create, 'remote_file[Copy CLM fix zip]', :immediately
+libarchive_file "Extract CLM fix zip" do
+	not_if { node['CLM']['fix'].to_s == '' }
+	path "#{Chef::Config['file_cache_path']}/#{node['CLM']['fix']}"
+	extract_to "#{Chef::Config['file_cache_path']}/CLM_FIX"
+	action :nothing
+	notifies :create, 'remote_file[Copy CLM server patch]', :immediately
 end
 
-remote_file "Copy CLM fix zip" do 
-  path "/opt/IBM/JazzTeamServer/server/patch/#{node['CLM']['fix_package']}" 
-  source "file://#{Chef::Config['file_cache_path']}/CLM_FIX/#{node['CLM']['fix_package']}"
+remote_file "Copy CLM server patch" do 
+	not_if { node['CLM']['fix'].to_s == '' }
+	path "/opt/IBM/JazzTeamServer/server/patch/#{node['CLM']['server_patch']}" 
+	source "file://#{Chef::Config['file_cache_path']}/CLM_FIX/#{node['CLM']['server_patch']}"
 end
 
-remote_file "Copy rs.war" do 
-  path "/opt/IBM/JazzTeamServer/server/tomcat/webapps/rs.war" 
-  source "file://#{Chef::Config['file_cache_path']}/CLM_FIX/rs.war"
+remote_file "Copy rs.war" do
+	not_if { node['CLM']['fix'].to_s == '' }
+	path "/opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/rs.war.zip" 
+	source "file://#{Chef::Config['file_cache_path']}/CLM_FIX/rs.war"
+end
+
+libarchive_file "Extract rs.war.zip" do
+	not_if { node['CLM']['fix'].to_s == '' }
+	path "/opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/rs.war.zip"
+	extract_to "/opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/rs.war"
+	action :extract
 end
 
 remote_file "Copy ldx.war" do 
-  path "/opt/IBM/JazzTeamServer/server/tomcat/webapps/ldx.war" 
-  source "file://#{Chef::Config['file_cache_path']}/CLM_FIX/ldx.war"
+	not_if { node['CLM']['fix'].to_s == '' }
+	path "/opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/ldx.war.zip" 
+	source "file://#{Chef::Config['file_cache_path']}/CLM_FIX/ldx.war"
+end
+
+libarchive_file "Extract ldx.war.zip" do
+	not_if { node['CLM']['fix'].to_s == '' }
+	path "/opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/ldx.war.zip"
+	extract_to "/opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/ldx.war"
+	action :extract
 end
 
 remote_file "Copy lqe.war" do 
-  path "/opt/IBM/JazzTeamServer/server/tomcat/webapps/lqe.war" 
-  source "file://#{Chef::Config['file_cache_path']}/CLM_FIX/lqe.war"
+	not_if { node['CLM']['fix'].to_s == '' }
+	path "/opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/lqe.war.zip" 
+	source "file://#{Chef::Config['file_cache_path']}/CLM_FIX/lqe.war"
+end
+
+libarchive_file "Extract lqe.war.zip" do
+	not_if { node['CLM']['fix'].to_s == '' }
+	path "/opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/lqe.war.zip"
+	extract_to "/opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/lqe.war"
+	action :extract
+end
+
+Dir['/opt/IBM/JazzTeamServer/server/conf/dcc/mapping/*'].each do |path|
+	file path do
+		action :delete
+	end
+end
+
+libarchive_file "Extract com.ibm.rational.rrdi.dcc.mapping_*.zip" do
+	not_if { node['CLM']['fix'].to_s == '' }
+	path "#{Chef::Config['file_cache_path']}/CLM_FIX/com.ibm.rational.rrdi.dcc.mapping_*.zip"
+	extract_to "/opt/IBM/JazzTeamServer/server/conf/dcc/mapping"
+	action :extract
 end
 
 template "Setup JTS.conf" do

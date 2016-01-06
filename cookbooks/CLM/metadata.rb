@@ -6,7 +6,7 @@ description      'CLM'
 long_description 'CLM'
 version          '0.0.2'
 
-%w{ libarchive IM }.each do |cookbook|
+%w{ java7 libarchive IM }.each do |cookbook|
   depends cookbook
 end
 

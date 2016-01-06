@@ -14,28 +14,20 @@ template "Setup Properties File" do
 end
 
 execute 'CLM Setup' do
-  user 'root'
-  cwd "/opt/IBM/JazzTeamServer/server"
-  command "./repotools-jts.sh -setup includeLifecycleProjectStep=true parametersfile=#{Chef::Config['file_cache_path']}/#{node['CLM'][:parametersfile]}"
-  action :nothing
-  ignore_failure true
-  notifies :run, 'execute[CLM Setup Retry]', :immediately
+	user 'root'
+	cwd "/opt/IBM/JazzTeamServer/server"
+	command "./repotools-jts.sh -setup includeLifecycleProjectStep=true parametersfile=#{Chef::Config['file_cache_path']}/#{node['CLM'][:parametersfile]}"
+	action :nothing
+	ignore_failure true
 end
 
+=begin
 execute 'CLM Setup Retry' do
-  user 'root'
-  cwd "/opt/IBM/JazzTeamServer/server"
-  command "./repotools-jts.sh -setup adminUserId=liora adminPassword=liora includeLifecycleProjectStep=true parametersfile=#{Chef::Config['file_cache_path']}/#{node['CLM'][:parametersfile]}"
-  action :run
-  ignore_failure false
-  notifies :run, 'execute[Assign build license]', :immediately
+	user 'root'
+	cwd "/opt/IBM/JazzTeamServer/server"
+	command "./repotools-jts.sh -setup adminUserId=liora adminPassword=liora includeLifecycleProjectStep=true parametersfile=#{Chef::Config['file_cache_path']}/#{node['CLM'][:parametersfile]}"
+	action :run
+	ignore_failure false
+	not_if 'execute[CLM Setup]'
 end
-
-execute 'Assign build license' do
-  user 'root'
-  cwd "/opt/IBM/JazzTeamServer/server"
-  command "./repotools-jts.sh -createUser adminUserId=liora adminPassword=liora userId=build licenseId='com.ibm.team.rtc.buildsystem'"
-  action :nothing
-  ignore_failure false
-  returns [0,22]
-end
+=end

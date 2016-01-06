@@ -24,7 +24,7 @@ hosts = [
 		ami: "ami-60a10117",
 		instance_type: "t2.small",
 		aws_tag: "ucd_server",
-		chef_role: "ucd_server",
+		chef_role: "ucd-server",
 		environment: "prev"
 	},
 	{
@@ -32,7 +32,7 @@ hosts = [
 		ami: "ami-60a10117",
 		instance_type: "t2.micro",
 		aws_tag: "ucd_agent",
-		chef_role: "ucd_agent",
+		chef_role: "ucd-agent",
 		environment: "curr"
 	},
 	{
@@ -44,11 +44,19 @@ hosts = [
 		environment: "curr"
 	},
 	{
-		name: "clm",
+		name: "clm_server",
 		ami: "ami-2a207e5d",
 		instance_type: "m3.xlarge",
-		aws_tag: "CLM",
+		aws_tag: "clm_server",
 		chef_role: "clm-server",
+		environment: "curr"
+	},
+	{
+		name: "rtc_build",
+		ami: "ami-60a10117",
+		instance_type: "t2.micro",
+		aws_tag: "rtc_build",
+		chef_role: "rtc-build",
 		environment: "curr"
 	}
 ]

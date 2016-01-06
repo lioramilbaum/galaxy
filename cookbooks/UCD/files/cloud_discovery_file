@@ -1,0 +1,159 @@
+import os
+
+DEBUG = False
+TESTING = False
+LOGTOFILE = True
+LOGFILE = '/var/log/ibm-cloud-discovery-service/ibm-cloud-discovery-service.log'
+BACKUPLOGFILE = '.ibm-cloud-discovery-service.log'
+
+# amazon content type
+AMAZON = 'amazon'
+# openstack content type
+OPENSTACK = 'openstack'
+# vmware content type
+VMWARE = 'vmware'
+# softlayer content type
+SOFTLAYER = 'softlayer'
+
+CLOUD_SETTINGS = '''
+{
+    "amazon": {
+        "regions": [
+            {
+                "id": "us-east-1",
+                "name": "US East (Northern Virginia)",
+                "images": [
+                ]
+            },
+            {
+                "id": "us-west-1",
+                "name": "US West (Northern California)",
+                "images": [
+                ]
+            },
+            {
+                "id": "us-west-2",
+                "name": "US West (Oregon)",
+                "images": [
+                ]
+            },
+            {
+                "id": "eu-west-1",
+                "name": "EU (Ireland)",
+                "images": [
+                ]
+            },
+            {
+                "id": "ap-southeast-1",
+                "name": "Asia Pacific (Singapore)",
+                "images": [
+                ]
+            },
+            {
+                "id": "ap-northeast-1",
+                "name": "Asia Pacific (Tokyo)",
+                "images": [
+                ]
+            },
+            {
+                "id": "sa-east-1",
+                "name": "South America (Sao Paulo)",
+                "images": [
+                ]
+            },
+            {
+                "id": "ap-southeast-2",
+                "name": "Asia Pacific (Sydney)",
+                "images": [
+                ]
+            },
+            {
+                "id": "eu-central-1",
+                "name": "EU (Frankfurt)",
+                "images": [
+                ]
+            },
+            {
+                "id": "us-gov-west-1",
+                "name": "AWS GovCloud (US)",
+                "images": [
+                ]
+            }
+        ]
+    },
+    "vcenter": {
+        "flavors": [
+            {
+                "flavor": "m1.tiny",
+                "memory": 512,
+                "disk": 20,
+                "vcpu": 1
+            },
+            {
+                "flavor": "m1.small",
+                "memory": 2048,
+                "disk": 20,
+                "vcpu": 2
+            },
+            {
+                "flavor": "m1.medium",
+                "memory": 4096,
+                "disk": 40,
+                "vcpu": 2
+            },
+            {
+                "flavor": "m1.large",
+                "memory": 8192,
+                "disk": 80,
+                "vcpu": 4
+            },
+            {
+                "flavor": "m1.xlarge",
+                "memory": 16384,
+                "disk": 100,
+                "vcpu": 8
+            }
+        ]
+    },
+    "regions": [
+        {
+            "id": "RegionOne",
+            "name": "RegionOne"
+        }
+    ],
+    "softlayer": {
+        "flavors": [
+            {
+                "flavor": "m1.tiny",
+                "memory": 1024,
+                "disk": 20,
+                "vcpu": 1
+            },
+            {
+                "flavor": "m1.small",
+                "memory": 2048,
+                "disk": 20,
+                "vcpu": 2
+            },
+            {
+                "flavor": "m1.medium",
+                "memory": 4096,
+                "disk": 40,
+                "vcpu": 2
+            },
+            {
+                "flavor": "m1.large",
+                "memory": 8192,
+                "disk": 80,
+                "vcpu": 4
+            },
+            {
+                "flavor": "m1.xlarge",
+                "memory": 16384,
+                "disk": 100,
+                "vcpu": 8
+            }
+        ]
+    }
+}
+'''

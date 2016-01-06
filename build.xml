@@ -202,7 +202,7 @@
 							<arg line="box update --box liora/clm" />
 						</exec>	
 						<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-							<arg line="up clm --provider=${VAGRANT_PROVIDER} --no-parallel" />
+							<arg line="up clm_server --provider=${VAGRANT_PROVIDER} --no-parallel" />
 						</exec>
 						<fail>
 							<condition>
@@ -215,7 +215,7 @@
 					</then>
 					<else>
 						<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-							<arg line="up clm --provider=${VAGRANT_PROVIDER} --no-parallel" />
+							<arg line="up clm_server --provider=${VAGRANT_PROVIDER} --no-parallel" />
 						</exec>
 						<fail>
 							<condition>
@@ -226,7 +226,14 @@
 				</if>
 			</then>	
 		</if>
-
+		<if>
+			<equals arg1="${PROVISION_RTC_BUILD}" arg2="true" />
+			<then>
+				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="up rtc_build --provider=${VAGRANT_PROVIDER} --no-parallel" />
+				</exec>
+			</then>	
+		</if>
 		<if>
 			<equals arg1="${PROVISION_RRDI}" arg2="true" />
 			<then>
@@ -405,7 +412,7 @@
 				resultproperty="return.code">
 					<env key="GALAXY_FLAVOR" value="m3.xlarge"/>
 					<env key="GALAXY_AMI" value="ami-968829e5"/>
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_clm --run-list 'role[clm]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_clm --run-list 'role[clm-server]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
 				</exec>
 			</then>	
 		</if>
@@ -418,7 +425,7 @@
 				resultproperty="return.code">
 					<env key="GALAXY_FLAVOR" value="t2.small"/>
 					<env key="GALAXY_AMI" value="ami-60a10117"/>
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_server --run-list 'role[ucd_server]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_server --run-list 'role[ucd-server]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
 			</exec>
 		</then>	
 		</if>
@@ -431,12 +438,12 @@
 				resultproperty="return.code">
 					<env key="GALAXY_FLAVOR" value="t2.micro"/>
 					<env key="GALAXY_AMI" value="ami-60a10117"/>
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_agent --run-list 'role[ucd_agent],recipe[UCD::JPetStore]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_agent --run-list 'role[ucd-agent],recipe[UCD::JPetStore]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
 			</exec>
 		</then>	
 		</if>
 		<if>
-			<equals arg1="${PROVISION_UCD_ENGINE}" arg2="true" />
+			<equals arg1="${PROVISION_UCD_DESIGNER}" arg2="true" />
 		<then>			
 			<exec executable="/usr/local/bin/knife"
 				dir="${GALAXY_HOME}"
@@ -444,7 +451,7 @@
 				resultproperty="return.code">
 					<env key="GALAXY_FLAVOR" value="t2.micro"/>
 					<env key="GALAXY_AMI" value="ami-78d29c0f"/>
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_engine --run-list 'role[ucd_engine]' --security-group-ids sg-0a9af76e --subnet subnet-9fb295fa" />
+					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_designer --ssh-user=ec2-user --run-list 'role[ucd-engine],role[ucd-designer]' --security-group-ids sg-0a9af76e --subnet subnet-9fb295fa" />
 			</exec>
 		</then>	
 		</if>

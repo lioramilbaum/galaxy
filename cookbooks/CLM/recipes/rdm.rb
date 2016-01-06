@@ -16,8 +16,16 @@ libarchive_file "unzip rdm zip" do
   notifies :run, 'execute[rdm Installation]', :immediately
 end
 
+service 'JTS' do
+	action [ :stop ]
+end
+
 execute 'rdm Installation' do
   user 'root'
-  command "/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:rdm_packages]} -repositories #{Chef::Config['file_cache_path']}/RDM/RhapsodyDM_Server/disk1/diskTag.inf -acceptLicense"
+  command "ulimit -n 65536;/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:rdm_packages]} -repositories #{Chef::Config['file_cache_path']}/RDM/RhapsodyDM_Server/disk1/diskTag.inf -acceptLicense"
   action :nothing
+end
+
+service 'JTS' do
+	action [ :start ]
 end

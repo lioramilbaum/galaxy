@@ -95,7 +95,9 @@ execute 'sleep' do
   action :run
 end
 
+=begin
 execute 'Dismiss Alret' do
   command "curl -s -X POST -u admin:admin https://#{node['ec2']['public_hostname']}:8443/rest/security/userPreferences/dismissAlert/dismissed_dw --insecure"
   action :run
 end
+=end

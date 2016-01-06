@@ -1,6 +1,7 @@
 default['UCD']['zip']					= nil
 default['UCD']['server_hostname']		= nil
 default['UCD']['server_private_ips']	= nil
+default['UCD']['rcl_hostname']			= nil
 default['UCD']['initial_password']		= "admin"
 default['UCD']['plugins_dir']			= nil
 default['UCD']['cookies']				= "/tmp/cookies.txt"

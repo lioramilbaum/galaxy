@@ -1,5 +1,5 @@
 {
-  "name": "ucd_agent",
+  "name": "ucd-agent",
   "description": "Role for UCD Agent",
   "json_class": "Chef::Role",
   "default_attributes": {

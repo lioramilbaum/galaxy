@@ -3,10 +3,10 @@ include_recipe "libarchive::default"
 remote_file "#{Chef::Config['file_cache_path']}/#{node['IM']['zip']}" do
 	source "https://lmbgalaxy.s3.amazonaws.com/IBM/IM/#{node['IM']['zip']}"
 	action :create
-	notifies :extract, 'libarchive_file[unzip IM zip]', :immediately
+	notifies :extract, 'libarchive_file[Extract IM zip]', :immediately
 end
 
-libarchive_file "unzip IM zip" do
+libarchive_file "Extract IM zip" do
   path "#{Chef::Config['file_cache_path']}/#{node['IM']['zip']}"
   extract_to "#{Chef::Config['file_cache_path']}/IBMIM"
   action :nothing

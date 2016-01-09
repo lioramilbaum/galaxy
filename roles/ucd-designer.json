@@ -1,5 +1,5 @@
 {
-  "name": "ucd_designer",
+  "name": "ucd-designer",
   "description": "Role for UCD Designer",
   "json_class": "Chef::Role",
   "default_attributes": {

@@ -1,5 +1,5 @@
 {
-  "name": "ucd_engine",
+  "name": "ucd-engine",
   "description": "Role for UCD Engine",
   "json_class": "Chef::Role",
   "default_attributes": {

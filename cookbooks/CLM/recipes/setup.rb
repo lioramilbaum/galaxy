@@ -31,3 +31,12 @@ execute 'CLM Setup Retry' do
 	not_if 'execute[CLM Setup]'
 end
 =end
+
+execute 'Assign build license' do
+  user 'root'
+  cwd "/opt/IBM/JazzTeamServer/server"
+  command "./repotools-jts.sh -createUser adminUserId=liora adminPassword=liora userId=build licenseId='com.ibm.team.rtc.buildsystem'"
+  action :nothing
+  ignore_failure false
+  returns [0,22]
+end

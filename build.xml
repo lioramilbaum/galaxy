@@ -227,14 +227,6 @@
 			</then>	
 		</if>
 		<if>
-			<equals arg1="${PROVISION_RTC_BUILD}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up rtc_build --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-			</then>	
-		</if>
-		<if>
 			<equals arg1="${PROVISION_RRDI}" arg2="true" />
 			<then>
 				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
@@ -353,7 +345,10 @@
 					</condition>
 				</fail>
 			</then>	
-		</if>		
+		</if>
+		<exec executable="say">
+			<arg line="done"/>
+		</exec>
 	</target>
 	
 	<target name="vagrant-push">
@@ -365,29 +360,15 @@
 	
 	<target name="packer-push clm">
 		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
-			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line='push -name liora/clm -var "galaxy_dir=/packer" clm.json' />
-		</exec>
-	</target>
-	
-	<target name="packer clm">
-		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
-			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line='build -debug -var "galaxy_dir=." clm.json' />
+			<env key="ATLAS_TOKEN" value="7apYkOVKRkDu6w.atlasv1.sO9l8bWVozwhibUk0xc9bYDsgyuui2e6ENJ8xym5KeU5vzOfccfkYJHyZlYT288IksY"/>
+			<arg line='push -name liora/clm clm.json' />
 		</exec>
 	</target>
 	
 	<target name="packer-push sync">
 		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line='push -name liora/sync -var "galaxy_dir=/packer" sync.json' />
-		</exec>
-	</target>
-	
-	<target name="packer sync">
-		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
-			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line='build -var "galaxy_dir=." sync.json' />
+			<arg line='push -name liora/sync sync.json' />
 		</exec>
 	</target>
 	
@@ -405,16 +386,29 @@
 		
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
-		<then>
-			<exec executable="/usr/local/bin/knife"
-				dir="${GALAXY_HOME}"
-				failonerror="true"
-				resultproperty="return.code">
-					<env key="GALAXY_FLAVOR" value="m3.xlarge"/>
-					<env key="GALAXY_AMI" value="ami-968829e5"/>
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_clm --run-list 'role[clm-server]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+			<then>
+				<exec executable="/usr/local/bin/knife"
+					dir="${GALAXY_HOME}"
+					failonerror="true"
+					resultproperty="return.code">
+						<env key="GALAXY_FLAVOR" value="m3.xlarge"/>
+						<env key="GALAXY_AMI" value="ami-60a10117"/>
+						<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_clm --run-list 'role[clm-server]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
 				</exec>
 			</then>	
+		</if>
+		<if>
+			<equals arg1="${PROVISION_CLM_BUILDENGINE}" arg2="true" />
+			<then>				
+				<exec executable="/usr/local/bin/knife"
+					dir="${GALAXY_HOME}"
+					failonerror="true"
+					resultproperty="return.code">
+						<env key="GALAXY_FLAVOR" value="t2.micro"/>
+						<env key="GALAXY_AMI" value="ami-60a10117"/>
+						<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_clm_buildengine --run-list 'role[clm-buildengine]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+				</exec>
+			</then>
 		</if>
 		<if>
 			<equals arg1="${PROVISION_UCD_SERVER}" arg2="true" />
@@ -460,6 +454,9 @@
 				<isfailure code="${return.code}"/>
 			</condition>
 		</fail>
+		<exec executable="say">
+			<arg line="done"/>
+		</exec>
 		
 	</target>
 	

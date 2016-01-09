@@ -21,7 +21,7 @@ end
 
 execute 'CLM Installation' do
   user 'root'
-  command "ulimit -n 65536;/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:packages]} -repositories #{Chef::Config['file_cache_path']}/CLM/repository.config -acceptLicense"
+  command "/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:packages]} -repositories #{Chef::Config['file_cache_path']}/CLM/repository.config -acceptLicense"
   action :nothing
 end
 
@@ -92,6 +92,8 @@ libarchive_file "Extract lqe.war.zip" do
 	action :extract
 end
 
+=begin
+
 Dir['/opt/IBM/JazzTeamServer/server/conf/dcc/mapping/*'].each do |path|
 	file path do
 		action :delete
@@ -100,10 +102,12 @@ end
 
 libarchive_file "Extract com.ibm.rational.rrdi.dcc.mapping_*.zip" do
 	not_if { node['CLM']['fix'].to_s == '' }
-	path "#{Chef::Config['file_cache_path']}/CLM_FIX/com.ibm.rational.rrdi.dcc.mapping_*.zip"
+	path "#{Chef::Config['file_cache_path']}/CLM_FIX/ccom.ibm.team.dcc.war_*.zip"
 	extract_to "/opt/IBM/JazzTeamServer/server/conf/dcc/mapping"
 	action :extract
 end
+
+=end
 
 template "Setup JTS.conf" do
   path "/etc/init/JTS.conf"

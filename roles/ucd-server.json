@@ -1,5 +1,5 @@
 {
-  "name": "ucd_server",
+  "name": "ucd-server",
   "description": "Role for UCD Server",
   "json_class": "Chef::Role",
   "default_attributes": {

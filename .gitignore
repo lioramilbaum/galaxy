@@ -5,3 +5,4 @@ packer_cache/*
 ucd_server.txt
 .chef/syntaxcache/
 remember.txt
+/ec2_amazon-ebs.pem

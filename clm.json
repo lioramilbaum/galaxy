@@ -1,13 +1,12 @@
 {
 	"variables": {
-        "atlas_username": "liora",
-        "atlas_name": "clm",
-		"galaxy_dir": "/packer",
+        "atlas_username": "{{env `ATLAS_USERNAME`}}",
+        "atlas_name": "{{env `ATLAS_NAME`}}",
 		"aws_access_key": "{{env `aws_access_key`}}",
 		"aws_secret_key": "{{env `aws_secret_key`}}",
 		"chef_dir": "/tmp/packer-chef-client",
 		"conf_dir": "/etc/chef/",
-		"atlas_token": "{{env `ATLAS_TOKEN`}}",
+		"token": "{{env `ATLAS_TOKEN`}}",
 		"hostname": "lmb-clm-server"
 	},
 	"builders": [
@@ -44,12 +43,12 @@
 		}
 	],			
 	"provisioners": [
-  	{ "type": "file", "source": "{{user `galaxy_dir`}}/nodes", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "{{user `galaxy_dir`}}/environments", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "{{user `galaxy_dir`}}/cookbooks", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "{{user `galaxy_dir`}}/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
-    { "type": "file", "source": "{{user `galaxy_dir`}}/metadata.rb", "destination": "{{user `chef_dir`}}/metadata.rb" },
-    { "type": "file", "source": "{{user `galaxy_dir`}}/scripts", "destination": "{{user `chef_dir`}}" },
+  	{ "type": "file", "source": "/packer/nodes", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "/packer/environments", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "/packer/cookbooks", "destination": "{{user `chef_dir`}}" },
+    { "type": "file", "source": "/packer/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
+    { "type": "file", "source": "/packer/metadata.rb", "destination": "{{user `chef_dir`}}/metadata.rb" },
+    { "type": "file", "source": "/packer/scripts", "destination": "{{user `chef_dir`}}" },
     {
     	"type": "shell",
     	"inline": ["/bin/sh {{user `chef_dir`}}/scripts/install_berks.sh"]
@@ -62,7 +61,7 @@
       "type": "chef-client",
       "chef_environment": "{{user `chef_env`}}",
       "server_url": "http://localhost:8889",
-      "config_template": "{{user `galaxy_dir`}}/templates/client.rb.template",
+      "config_template": "/packer/templates/client.rb.template",
       "skip_clean_node": true,
       "skip_clean_client": true,
       "run_list": [ "CLM::server" ]
@@ -70,7 +69,7 @@
   ],
   "push": {
     "name": "liora/clm",
-	"token": "{{user `atlas_token`}}",
+	"token": "{{user `token`}}",
     "vcs": true
   },
 	"post-processors": [
@@ -82,12 +81,12 @@
 		{
 			"type": "atlas",
             "only": ["amazon-ebs"],
-			"token": "{{user `atlas_token`}}",
+			"token": "{{user `token`}}",
 			"artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
 			"artifact_type": "vagrant.box",
 			"metadata": {
 				"provider": "aws",
-				"version": "0.0.18"
+				"version": "0.0.19"
 			}
 		}]
 	]

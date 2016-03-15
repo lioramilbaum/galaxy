@@ -43,13 +43,17 @@ template "install.properties" do
 		}
 	)
 	action :nothing
-	notifies :run, 'execute[install server]', :immediately
+end
+
+file "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install-server.sh" do
+	mode '0755'
+	user 'root'
 end
 
 execute "install server" do
 	command "#{Chef::Config['file_cache_path']}/UCD/ibm-ucd-install/install-server.sh"
 	user 'root'
-	action :nothing
+	action :run
 end
 
 ["#{node['UCD']['plugins_dir']}/command/stage","#{node['UCD']['plugins_dir']}/source/stage"].each do |path|
@@ -95,9 +99,7 @@ execute 'sleep' do
   action :run
 end
 
-=begin
 execute 'Dismiss Alret' do
-  command "curl -s -X POST -u admin:admin https://#{node['ec2']['public_hostname']}:8443/rest/security/userPreferences/dismissAlert/dismissed_dw --insecure"
+  command "curl -s -X POST -u admin:admin https://#{node['ec2']['public_hostname']}:8443/rest/security/userPreferences/dismissAlert/dismissed_gs --insecure"
   action :run
 end
-=end

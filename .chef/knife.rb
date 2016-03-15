@@ -10,8 +10,8 @@ role_path				 ["#{current_dir}/../roles"]
 knife[:aws_access_key_id] = ENV['AWS_ACCESS_KEY']
 knife[:aws_secret_access_key] = ENV['AWS_SECRET_KEY']
 knife[:ssh_key_name] = "id_rsa"
-knife[:flavor] = ENV['GALAXY_FLAVOR']
-knife[:image] = ENV['GALAXY_AMI']
+#knife[:flavor] = ENV['GALAXY_FLAVOR']
+#knife[:image] = ENV['GALAXY_AMI']
 knife[:ssh_user] = 'ubuntu'
 knife[:region] = 'eu-west-1'
 knife[:environment] = 'curr'

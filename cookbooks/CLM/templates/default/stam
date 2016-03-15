@@ -1,0 +1,120 @@
+//register.applications.page\:jts.register.ccm=true
+//register.applications.page\:jts.register.qm=true
+//register.applications.page\:jts.register.rm=true
+//register.applications.page\:jts.register.dm=<%= @use_rdm %>
+//register.applications.page\:jts.register.rs=true
+//register.applications.page\:jts.register.gc=true
+//register.applications.page\:jts.register.relm=true
+//register.applications.page\:jts.register.lqe=true
+//register.applications.page\:jts.register.ldx=true
+//register.applications.page\:jts.register.dcc=true
+
+//register.applications.page\:ccm.discovery.url=https\://<%= @server_hostname %>\:9443/ccm/scr
+//register.applications.page\:qm.discovery.url=https\://<%= @server_hostname %>\:9443/qm/scr
+//register.applications.page\:rm.discovery.url=https\://<%= @server_hostname %>\:9443/rm/scr
+//register.applications.page\:dm.discovery.url=https\://<%= @server_hostname %>\:9443/dm/scr
+//register.applications.page\:rs.discovery.url=https\://<%= @server_hostname %>\:9443/rs/scr
+//register.applications.page\:gc.discovery.url=https\://<%= @server_hostname %>\:9443/gc/scr
+//register.applications.page\:relm.discovery.url=https\://<%= @server_hostname %>\:9443/relm/scr
+//register.applications.page\:lqe.discovery.url=https\://<%= @server_hostname %>\:9443/lqe/scr
+//register.applications.page\:ldx.discovery.url=https\://<%= @server_hostname %>\:9443/ldx/scr
+//register.applications.page\:dcc.discovery.url=https\://<%= @server_hostname %>\:9443/dcc/scr
+
+register.applications.page\:rs.application.title=/rs
+register.applications.page\:ldx.application.title=/ldx
+register.applications.page\:relm.application.title=/relm
+register.applications.page\:gc.application.title=/gc
+register.applications.page\:ccm.application.title=/ccm
+register.applications.page\:qm.application.title=/qm
+register.applications.page\:rm.application.title=/rm
+register.applications.page\:dm.application.title=/dm
+register.applications.page\:dcc.application.title=/dcc
+register.applications.page\:lqe.application.title=/lqe
+
+register.applications.page\:jts.nonlocal.application.number=0
+
+ccm\:configure.database.page\:db.vendor=DERBY
+ccm\:configure.database.page\:db.jdbc.location=conf/ccm/derby/repositoryDB
+ccm\:data.warehouse.page\:db.type=JDBC
+ccm\:data.warehouse.page\:db.jdbc.location=//localhost\:1527/conf/jts/derby/warehouseDB
+ccm\:data.warehouse.page\:db.jdbc.password=
+ccm\:configure.database.page\:db.type=JDBC
+ccm\:data.warehouse.page\:db.vendor=derby_net
+
+lqe\:configure.database.page\:db.type=JDBC
+relm\:configure.database.page\:db.jdbc.location=conf/relm/derby/repositoryDB
+license.assignment.page\:com.ibm.xtools.dm.rhapsody.contributor.agreement=true
+license.assignment.page\:com.ibm.team.rrc.author.activate.trial=true
+license.assignment.page\:license.RationalTeamConcert=com.ibm.team.rtc.developer
+ldx\:configure.database.page\:db.type=JDBC
+lqe\:configure.trs.page\:trs.add=AddTRS
+dcc\:data.warehouse.page\:db.jdbc.password=
+license.assignment.page\:com.ibm.team.csm.user.activate.trial=true
+license.assignment.page\:com.ibm.team.csm.user.agreement=true
+data.warehouse.page\:db.vendor=DERBY
+license.assignment.page\:license.RationalDOORSNextGeneration=com.ibm.team.rrc.author
+lqe\:configure.database.page\:db.vendor=DERBY
+qm\:data.warehouse.page\:db.jdbc.password=
+create.user.page\:name=Liora Milbaum
+dm\:configure.database.page\:db.vendor=DERBY
+qm\:data.warehouse.page\:db.jdbc.location=//localhost\:1527/conf/jts/derby/warehouseDB
+dcc\:data.warehouse.page\:db.jdbc.location=//localhost\:1527/conf/jts/derby/warehouseDB
+configure.database.page\:db.jdbc.location=conf/jts/derby/repositoryDB
+license.assignment.page\:com.ibm.team.rtc.developer.agreement=true
+license.assignment.page\:license.RationalsolutionforCollaborativeLifecycleManagement=com.ibm.team.clm.contributor
+dcc\:configure.database.page\:db.type=JDBC
+dm\:configure.database.page\:db.type=JDBC
+license.assignment.page\:com.ibm.xtools.dm.rhapsody.contributor.activate.trial=true
+rm\:data.warehouse.page\:db.jdbc.password=
+rm\:data.warehouse.page\:db.vendor=derby_net
+rm\:configure.database.page\:db.vendor=DERBY
+vvc\:configure.database.page\:db.type=JDBC
+admin.access\:ws.allow.admin.access=false
+lqe\:configure.database.page\:db.location=conf/lqe/derbyDB
+data.warehouse.page\:db.type=JDBC
+license.assignment.page\:com.ibm.team.rtc.developer.activate.trial=true
+license.assignment.page\:com.ibm.rqm.tester.activate.trial=true
+create.user.page\:userId=liora
+configure.email.page\:notification.mail.enabled=false
+rm\:data.warehouse.page\:db.jdbc.location=//localhost\:1527/conf/jts/derby/warehouseDB
+qm\:data.warehouse.page\:db.vendor=derby_net
+dcc\:configure.database.page\:db.jdbc.location=conf/dcc/derby/repositoryDB
+gc\:configure.database.page\:db.vendor=DERBY
+relm\:configure.database.page\:db.vendor=DERBY
+license.assignment.page\:license.RationalEngineeringLifecycleManager=None
+data.warehouse.page\:db.net.port=1527
+com.ibm.team.lpa.deploySampleStep\:lpa.deploy.MTM=true
+configure.public.uri.page\:server.webapp.url.confirm=true
+license.assignment.page\:com.ibm.team.clm.contributor.activate.trial=true
+qm\:configure.database.page\:db.vendor=DERBY
+gc\:configure.database.page\:db.jdbc.location=conf/gc/derby/repositoryDB
+dcc\:data.warehouse.page\:db.vendor=derby_net
+license.assignment.page\:license.RationalQualityManager=com.ibm.rqm.tester
+license.assignment.page\:license.RationalRhapsodyDesignManager=com.ibm.xtools.dm.rhapsody.contributor
+license.assignment.page\:com.ibm.team.clm.contributor.agreement=true
+ldx\:configure.database.page\:db.vendor=DERBY
+configure.public.uri.page\:server.webapp.url=https\://<%= @server_hostname %>\:9443/jts
+configure.database.page\:db.vendor=DERBY
+dm\:configure.database.page\:db.jdbc.location=conf/dm/derby/repositoryDB
+user.registry.page\:user.registry.type=DETECT
+relm\:configure.database.page\:db.type=JDBC
+create.user.page\:emailAddress=liora@lmb.co.il
+qm\:data.warehouse.page\:db.type=JDBC
+license.assignment.page\:license.CLMServerMonitoring=com.ibm.team.csm.user
+vvc\:configure.database.page\:db.jdbc.location=conf/vvc/derby/repositoryDB
+rs\:com.ibm.team.jrs.setupStep\:db.jdbc.password=
+rm\:configure.database.page\:db.type=JDBC
+dcc\:configure.database.page\:db.vendor=DERBY
+qm\:configure.database.page\:db.jdbc.location=conf/qm/derby/repositoryDB
+ldx\:configure.database.page\:db.location=conf/ldx/derbyDB
+license.assignment.page\:com.ibm.team.rrc.author.agreement=true
+gc\:configure.database.page\:db.type=JDBC
+rm\:configure.database.page\:db.jdbc.location=conf/rm/derby/repositoryDB
+create.user.page\:password=liora
+data.warehouse.page\:db.jdbc.location=conf/jts/derby/warehouseDB
+qm\:configure.database.page\:db.type=JDBC
+license.assignment.page\:com.ibm.rqm.tester.agreement=true
+rm\:data.warehouse.page\:db.type=JDBC
+configure.database.page\:db.type=JDBC
+vvc\:configure.database.page\:db.vendor=DERBY
+dcc\:data.warehouse.page\:db.type=JDBC

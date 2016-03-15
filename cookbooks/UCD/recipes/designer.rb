@@ -1,7 +1,8 @@
 include_recipe 'libarchive::default'
+include_recipe 'python'
 
-ucd_servers = search(:node, 'role:ucd_server')
-if ( ucd_servers.empty? or node[:roles].include?('ucd_server') )
+ucd_servers = search(:node, 'role:ucd-server')
+if ( ucd_servers.empty? or node[:roles].include?('ucd-server') )
 	node.default['UCD']['server_hostname']	= node['ec2']['public_hostname']
 else
     node.default['UCD']['server_hostname']	= ucd_servers[0].cloud.public_hostname
@@ -9,7 +10,7 @@ end
 
 
 rcl_servers = search(:node, 'role:rcl_server')
-if ( ucd_servers.empty? or node[:roles].include?('rcl_server') )
+if ( rcl_servers.empty? or node[:roles].include?('rcl_server') )
 	node.default['UCD']['rcl_hostname']	= node['ec2']['public_hostname']
 else
     node.default['UCD']['rcl_hostname']	= rcl_servers[0].cloud.public_hostname
@@ -32,7 +33,7 @@ end
 execute 'UCD designer Installation' do
   user 'root'
   cwd "#{Chef::Config['file_cache_path']}/UCD_DESIGNER/ibm-ucd-patterns-install/web-install"
-  command "./install.sh -l -i #{node['ec2']['public_hostname']} -o https://['UCD']['server_hostname']:8443 -e http://#{node['ec2']['public_hostname']}:7575 -d derby -r 27000:node['UCD']['rcl_hostname']"
+  command "./install.sh -l -i #{node['ec2']['public_hostname']} -o https://#{node['UCD']['server_hostname']}:8443 -e http://#{node['ec2']['public_hostname']}:7575 -d derby -r 27000:#{node['UCD']['rcl_hostname']}"
   action :nothing
 end
 
@@ -63,7 +64,7 @@ service 'openstack-heat-api-cfn' do
 end
 
 service 'openstack-heat-api-cloudwatch' do
-	action [ :sretart ]
+	action [ :restart ]
 end
 
 service 'openstack-keystone' do

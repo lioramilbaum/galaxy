@@ -1,3 +1,16 @@
 {
-  "run_list": [ "CLM::server","CLM::setup", "CLM::rdm" ]
+	"name": "clm-server",
+	"description": "Role for CLM Server",
+	"json_class": "Chef::Role",
+	"default_attributes": {
+	},
+	"override_attributes": {
+	},
+	"chef_type": "role",
+	"run_list": [
+		"recipe[CLM::server]",
+		"recipe[CLM::clm_setup]"
+	],
+	"env_run_lists": {
+	}
 }

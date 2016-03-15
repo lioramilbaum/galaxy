@@ -52,11 +52,11 @@ hosts = [
 		environment: "curr"
 	},
 	{
-		name: "rtc_build",
+		name: "clm_buildengine",
 		ami: "ami-60a10117",
 		instance_type: "t2.micro",
-		aws_tag: "rtc_build",
-		chef_role: "rtc-build",
+		aws_tag: "clm_buildengine",
+		chef_role: "clm-buildengine",
 		environment: "curr"
 	}
 ]
@@ -80,8 +80,7 @@ Vagrant.configure("2") do |config|
 			
 				aws.access_key_id				= ENV['AWS_ACCESS_KEY']
 				aws.secret_access_key			= ENV['AWS_SECRET_KEY']
-				aws.keypair_name				= "id_rsa"   
-
+				aws.keypair_name				= "id_rsa"  
 				aws.region						= "eu-west-1"
     			aws.ami							= host[:ami]
    				aws.instance_type				= host[:instance_type]
@@ -101,7 +100,6 @@ Vagrant.configure("2") do |config|
     			aws.tags = {
     		    		'Name' => host[:aws_tag]
     			}
-    		
     		end
 		
 			node.vm.provision :shell, :path => "scripts/bootstrap.sh"
@@ -113,14 +111,6 @@ Vagrant.configure("2") do |config|
 				chef.roles_path = ["./roles/"]
 				chef.add_role host[:chef_role]
 			end
-			
 		end
 	end
-	
-	config.push.define "atlas" do |push|
-		push.token = "DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94" 
-		push.app = "liora/clm"
-		push.vcs = true
-	end
-	
 end

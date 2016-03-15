@@ -86,6 +86,17 @@ libarchive_file  "Extract RhapsodyModelServer linux fix" do
 	action :extract
 end
 
+remote_file "Copy dm.war.zip" do 
+	path "/opt/IBM/JazzTeamServer/server/liberty/servers/clm/apps/dm.war.zip" 
+	source "file:///opt/IBM/JazzTeamServer/server/liberty/clmServerTemplate/apps/dm.war.zip"
+end
+
+libarchive_file "Extract dm.war.zip" do
+	path "/opt/IBM/JazzTeamServer/server/liberty/servers/clm/apps/dm.war.zip"
+	extract_to "/opt/IBM/JazzTeamServer/server/liberty/servers/clm/apps/dm.war"
+	action :extract
+end
+
 service 'JTS' do
 	action :start
 	only_if { node['CLM']['use_rdm'] }

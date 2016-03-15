@@ -3,107 +3,6 @@
 	<loadproperties srcFile="conf/Galaxy.properties"/>
 	<property environment="env"/>
 	
-	<target name="base">
-		<exec executable="/usr/local/bin/vagrant" dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-			<arg line="destroy --force" />
-		</exec>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>
-		<delete file="package.box"/>
-		<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-				<arg line="up ubuntu --provider=virtualbox --no-parallel" />
-		</exec>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>
-		<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-				<arg line="package ubuntu" />
-		</exec>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>
-		<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-				<arg line="box add Opscode-ubuntu-12.04-Galaxy package.box --force" />
-		</exec>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>
-		<delete file="package.box"/>
-		<exec executable="/usr/local/bin/vagrant" dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-			<arg line="destroy --force" />
-		</exec>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>	
-
-		<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-				<arg line="up centos --provider=virtualbox --no-parallel" />
-		</exec>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>
-		<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-				<arg line="package centos" />
-		</exec>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>
-		<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-				<arg line="box add CentOS-6.6-x86_64-v20150426-Galaxy package.box --force" />
-		</exec>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>
-		<delete file="package.box"/>
-		<exec executable="/usr/local/bin/vagrant" dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-			<arg line="destroy --force" />
-		</exec>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>				
-	</target>
-	
-	<target name="init">
-
-		<fixcrlf srcdir="${GALAXY_HOME}/conf" includes="**/*.properties,**/*.yaml"
-			eol="crlf"/>
-
-		<copy file="${GALAXY_HOME}/conf/Galaxy.yaml" tofile="${GALAXY_HOME}/conf/nodes.properties" />
-		<replaceregexp file="${GALAXY_HOME}/conf/nodes.properties" match=":" replace="=" flags="g" byline="true" />
-
-		<concat destfile="${GALAXY_HOME}/conf/Galaxy.cfg">
-			<filelist dir="${GALAXY_HOME}/conf"
-				files="Galaxy.properties,Galaxy.yaml" />
-		</concat>
-		<replaceregexp file="${GALAXY_HOME}/conf/Galaxy.cfg" match=":\s+" replace="=" flags="g" byline="true" />
-		<replaceregexp file="${GALAXY_HOME}/conf/Galaxy.cfg" match="\{|\}" replace="" flags="g" byline="true" />
-		<replaceregexp file="${GALAXY_HOME}/conf/Galaxy.cfg" match="\s+=\s+" replace="=" flags="g" byline="true" />
-		<fixcrlf srcdir="${GALAXY_HOME}/conf" includes="**/*.cfg"
-			eol="lf"/>
-		
-		<loadproperties srcfile="${GALAXY_HOME}/conf/nodes.properties" />
-		
-	</target>
-	
 	<target name="destroy" depends="">
 		
 		<exec executable="/usr/local/bin/vagrant" dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
@@ -118,75 +17,21 @@
 	</target>
 	
 	<target name="up" depends="destroy">
-					
-		<if>
-			<equals arg1="${PROVISION_GIT}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up git --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
+
+		<antcall target="vagrant-node">
+			<param name="node.provision" value="${PROVISION_CLM}"/>
+			<param name="node.name" value="clm_server"/>
+		</antcall>
+
+		<antcall target="vagrant-node">
+			<param name="node.provision" value="${PROVISION_CLM_BUILDENGINE}"/>
+			<param name="node.name" value="clm_buildengine"/>
+		</antcall>
 		
-		<if>
-			<equals arg1="${PROVISION_SYNC}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up sync --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
+		<exec executable="say">
+			<arg value="done"/>
+		</exec>
 		
-		<if>
-			<equals arg1="${PROVISION_STASH}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up stash --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		
-		<if>
-			<equals arg1="${PROVISION_GITHUB}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up github --provider=aws --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		<if>
-			<equals arg1="${PROVISION_DB}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up db --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
 			<then>
@@ -194,7 +39,6 @@
 					<equals arg1="${PACKER}" arg2="true" />
 					<then>
 						<property name="ATLAS_TOKEN" value="${env.ATLAS_TOKEN}"/>
-				
 						<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true">
 							<arg line="login --token ${ATLAS_TOKEN}" />
 						</exec>
@@ -226,33 +70,6 @@
 				</if>
 			</then>	
 		</if>
-		<if>
-			<equals arg1="${PROVISION_RRDI}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up rrdi --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		
-		<if>
-			<equals arg1="${PROVISION_CI}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up ci --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
 		
 		<if>
 			<equals arg1="${PROVISION_UCD_SERVER}" arg2="true" />
@@ -267,7 +84,6 @@
 				</fail>
 			</then>	
 		</if>
-		
 		<if>
 			<equals arg1="${PROVISION_UCD_AGENT}" arg2="true" />
 			<then>
@@ -281,183 +97,84 @@
 				</fail>
 			</then>	
 		</if>
-		<if>
-			<equals arg1="${PROVISION_UCR}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up ucr --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		<if>
-			<equals arg1="${PROVISION_JIRA}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up jira --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		<if>
-			<equals arg1="${PROVISION_RLIA}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up rlia --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		<if>
-			<equals arg1="${PROVISION_ANSIBLE}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up ansible --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		<if>
-			<equals arg1="${PROVISION_CHEF}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="up chef_workstation --provider=${VAGRANT_PROVIDER} --no-parallel" />
-				</exec>
-				<fail>
-					<condition>
-						<isfailure code="${return.code}"/>
-					</condition>
-				</fail>
-			</then>	
-		</if>
-		<exec executable="say">
-			<arg line="done"/>
-		</exec>
 	</target>
 	
-	<target name="vagrant-push">
-		<exec executable="/usr/local/bin/vagrant" dir="${GALAXY_HOME}" failonerror="true">
-			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line="push" />
-		</exec>
-	</target>
+	<!-- ================================= 
+          target: vagrant-node              
+         ================================= -->
+    <target name="vagrant-node" description="provisioning vagrant node function">
+		<if>
+			<equals arg1="${node.provision}" arg2="true" />
+			<then>
+				<exec executable="/usr/local/bin/vagrant"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="up ${node.name} --no-parallel" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
+		</if>
+    </target>
 	
 	<target name="packer-push clm">
-		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
-			<env key="ATLAS_TOKEN" value="7apYkOVKRkDu6w.atlasv1.sO9l8bWVozwhibUk0xc9bYDsgyuui2e6ENJ8xym5KeU5vzOfccfkYJHyZlYT288IksY"/>
-			<arg line='push -name liora/clm clm.json' />
-		</exec>
-	</target>
-	
-	<target name="packer-push sync">
-		<exec executable="/usr/local/packer/packer" dir="${GALAXY_HOME}" failonerror="true">
+		<exec executable="/usr/local/bin/packer" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line='push -name liora/sync sync.json' />
+			<arg line='push -name liora/clm -var "galaxy_dir=/packer" clm.json' />
 		</exec>
 	</target>
 	
 	<target name="knife server create" depends="knife cleanup">
 		
 		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-			<arg line="cookbook upload -a --force" />
+			<arg line="upload . --force" />
 		</exec>
-		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-			<arg line="upload roles" />
-		</exec>	
-		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-			<arg line="upload environments" />
-		</exec>	
 		
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
-			<then>
-				<exec executable="/usr/local/bin/knife"
-					dir="${GALAXY_HOME}"
-					failonerror="true"
-					resultproperty="return.code">
-						<env key="GALAXY_FLAVOR" value="m3.xlarge"/>
-						<env key="GALAXY_AMI" value="ami-60a10117"/>
-						<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_clm --run-list 'role[clm-server]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
+			<then>				
+				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="ec2 server create -r 'role[clm-server], role[rdm-server]' -i '~/.ssh/id_rsa.pem' -I ami-2a207e5d -f m3.xlarge --node-name galaxy_clm_server --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa --ebs-size '100'" />
 				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
 			</then>	
 		</if>
-		<if>
-			<equals arg1="${PROVISION_CLM_BUILDENGINE}" arg2="true" />
-			<then>				
-				<exec executable="/usr/local/bin/knife"
-					dir="${GALAXY_HOME}"
-					failonerror="true"
-					resultproperty="return.code">
-						<env key="GALAXY_FLAVOR" value="t2.micro"/>
-						<env key="GALAXY_AMI" value="ami-60a10117"/>
-						<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_clm_buildengine --run-list 'role[clm-buildengine]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
-				</exec>
-			</then>
-		</if>
+		
 		<if>
 			<equals arg1="${PROVISION_UCD_SERVER}" arg2="true" />
-		<then>
-			<exec executable="/usr/local/bin/knife"
-				dir="${GALAXY_HOME}"
-				failonerror="true"
-				resultproperty="return.code">
-					<env key="GALAXY_FLAVOR" value="t2.small"/>
-					<env key="GALAXY_AMI" value="ami-60a10117"/>
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_server --run-list 'role[ucd-server]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
-			</exec>
-		</then>	
+			<then>				
+				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="ec2 server create -r 'role[ucd-server]' -i '~/.ssh/id_rsa.pem' -I ami-60a10117 -f t2.small --node-name galaxy_ucd_server --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa --ebs-size '100'" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
 		</if>
-		<if>
-			<equals arg1="${PROVISION_UCD_AGENT}" arg2="true" />
-		<then>			
-			<exec executable="/usr/local/bin/knife"
-				dir="${GALAXY_HOME}"
-				failonerror="true"
-				resultproperty="return.code">
-					<env key="GALAXY_FLAVOR" value="t2.micro"/>
-					<env key="GALAXY_AMI" value="ami-60a10117"/>
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_agent --run-list 'role[ucd-agent],recipe[UCD::JPetStore]' --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa" />
-			</exec>
-		</then>	
-		</if>
+		
 		<if>
 			<equals arg1="${PROVISION_UCD_DESIGNER}" arg2="true" />
-		<then>			
-			<exec executable="/usr/local/bin/knife"
-				dir="${GALAXY_HOME}"
-				failonerror="true"
-				resultproperty="return.code">
-					<env key="GALAXY_FLAVOR" value="t2.micro"/>
-					<env key="GALAXY_AMI" value="ami-78d29c0f"/>
-					<arg line="ec2 server create -i '~/.ssh/id_rsa.pem' --node-name galaxy_ucd_designer --ssh-user=ec2-user --run-list 'role[ucd-engine],role[ucd-designer]' --security-group-ids sg-0a9af76e --subnet subnet-9fb295fa" />
-			</exec>
-		</then>	
+			<then>				
+				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+					<arg line="ec2 server create -r 'role[ucd-designer]' -i '~/.ssh/id_rsa.pem' -I ami-60a10117 -f t2.small --node-name galaxy_ucd_designer --security-group-ids sg-91979ef5 --subnet subnet-9fb295fa --ebs-size '100'" />
+				</exec>
+				<fail>
+					<condition>
+						<isfailure code="${return.code}"/>
+					</condition>
+				</fail>
+			</then>	
 		</if>
-		<fail>
-			<condition>
-				<isfailure code="${return.code}"/>
-			</condition>
-		</fail>
 		<exec executable="say">
 			<arg line="done"/>
 		</exec>
-		
 	</target>
 	
 	<target name="knife cleanup">

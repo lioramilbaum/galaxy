@@ -7,7 +7,9 @@
 		"chef_dir": "/tmp/packer-chef-client",
 		"conf_dir": "/etc/chef/",
 		"token": "{{env `ATLAS_TOKEN`}}",
-		"hostname": "lmb-clm-server"
+		"hostname": "lmb-clm-server",
+		"galaxy_home": "{{env `galaxy_home`}}",
+		"chef_env": "curr"
 	},
 	"builders": [
 		{
@@ -40,54 +42,68 @@
 					"delete_on_termination": true
 				}
 			]
+		},
+		{
+			"type": "docker",
+			"image": "ubuntu:12.04",
+			"volumes": { "/Users/liora/Downloads": "/tmp/src/" },
+			"export_path": "clm.tar"
 		}
 	],			
 	"provisioners": [
-  	{ "type": "file", "source": "/packer/nodes", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "/packer/environments", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "/packer/cookbooks", "destination": "{{user `chef_dir`}}" },
-    { "type": "file", "source": "/packer/Berksfile", "destination": "{{user `chef_dir`}}/Berksfile" },
-    { "type": "file", "source": "/packer/metadata.rb", "destination": "{{user `chef_dir`}}/metadata.rb" },
-    { "type": "file", "source": "/packer/scripts", "destination": "{{user `chef_dir`}}" },
-    {
-    	"type": "shell",
-    	"inline": ["/bin/sh {{user `chef_dir`}}/scripts/install_berks.sh"]
-    },     
-    {
-    	"type": "shell",
-    	"inline": ["berks vendor -b /tmp/packer-chef-client/Berksfile /tmp/chef-cookbooks"]
-    }, 
-    {
-      "type": "chef-client",
-      "chef_environment": "{{user `chef_env`}}",
-      "server_url": "http://localhost:8889",
-      "config_template": "/packer/templates/client.rb.template",
-      "skip_clean_node": true,
-      "skip_clean_client": true,
-      "run_list": [ "CLM::server" ]
-    }
-  ],
-  "push": {
-    "name": "liora/clm",
-	"token": "{{user `token`}}",
-    "vcs": true
-  },
-	"post-processors": [
-		[{
-			"type": "vagrant",
-			"output": "clm-ubuntu12.04.box",
-			"keep_input_artifact": false
+		{
+			"type": "shell",
+			"inline": [
+				"echo 'Installing packages'",
+				"echo `hostname`",
+				"apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 4E5E17B5",
+				"apt-get update",
+				"apt-get -y install sudo curl",
+				"echo 'done'"
+			]
 		},
 		{
-			"type": "atlas",
-            "only": ["amazon-ebs"],
-			"token": "{{user `token`}}",
-			"artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
-			"artifact_type": "vagrant.box",
-			"metadata": {
-				"provider": "aws",
-				"version": "0.0.19"
-			}
-		}]
+			"type": "shell",
+			"inline": [
+				"echo 'creating chef/packer directories'",
+				"sudo mkdir -p /tmp/packer-chef-client",
+				"sudo chmod 777 /tmp/packer-chef-client",
+				"sudo mkdir -p /etc/chef",
+				"sudo chmod 777 /etc/chef",
+				"echo 'done'"
+			]
+		},
+		{
+			"type": "file",
+			"source": "{{user `galaxy_home`}}/.chef/lmb-validator.pem",
+			"destination": "/tmp/packer-chef-client/lmb-validator.pem"
+		},
+		{
+			"type": "shell",
+			"inline": [
+				"sudo chmod 400 /tmp/packer-chef-client/lmb-validator.pem"
+			]
+		},
+		{
+			"type": "file",
+			"source": "{{user `galaxy_home`}}/.chef/lmb-validator.pem",
+			"destination": "/etc/chef/validation.pem"
+		},
+		{
+			"type": "shell",
+			"inline": [
+				"sudo chmod 400 /etc/chef/validation.pem"
+			]
+		},
+		{
+			"type": "chef-client",
+			"server_url": "https://api.opscode.com/organizations/lmb",
+			"validation_client_name": "lmb-validator",
+			"validation_key_path": "{{user `galaxy_home`}}/.chef/lmb-validator.pem",
+			"run_list": [
+				"role[clm-server]"
+			],
+			"chef_environment": "{{user `chef_env`}}"
+		}
 	]
 }

@@ -1,21 +1,6 @@
 include_recipe "libarchive::default"
 include_recipe "IM::default"
 
-remote_file "Download rdm zip" do
-    path "#{Chef::Config['file_cache_path']}/#{node['CLM']['rdm_zip']}"
-	source "https://lmbgalaxy.s3.amazonaws.com/IBM/CLM/#{node['CLM']['rdm_zip']}"
-	action :create
-	notifies :extract, 'libarchive_file[Extract rdm zip]', :immediately
-	only_if { node['CLM']['use_rdm'] }
-end
-
-libarchive_file "Extract rdm zip" do
-  path "#{Chef::Config['file_cache_path']}/#{node['CLM']['rdm_zip']}"
-  extract_to "#{Chef::Config['file_cache_path']}/RDM"
-  action :nothing
-	only_if { node['CLM']['use_rdm'] }
-end
-
 service 'JTS' do
 	action :stop
 	only_if { node['CLM']['use_rdm'] }
@@ -23,10 +8,12 @@ end
 
 execute 'rdm Installation' do
 	user 'root'
-	command "/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:rdm_packages]} -repositories #{Chef::Config['file_cache_path']}/RDM/RhapsodyDM_Server/disk1/diskTag.inf -acceptLicense"
+	command "/opt/IBM/InstallationManager/eclipse/tools/imcl install #{node['CLM'][:rdm_packages]} -repositories #{Chef::Config['file_cache_path']}/CLM/repository.config -acceptLicense"
 	action :run
 	only_if { node['CLM']['use_rdm'] }
 end
+
+=begin
 
 directory "/opt/IBM/JazzTeamServer/server/patch" do
 	not_if { node['CLM']['rdm_fix'].to_s == '' }
@@ -96,6 +83,8 @@ libarchive_file "Extract dm.war.zip" do
 	extract_to "/opt/IBM/JazzTeamServer/server/liberty/servers/clm/apps/dm.war"
 	action :extract
 end
+
+=end
 
 service 'JTS' do
 	action :start

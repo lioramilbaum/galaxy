@@ -1,0 +1,31 @@
+#
+#Sun Mar 20 11:21:01 UTC 2016
+license.assignment.page\:license.RationalQualityManager=com.ibm.rqm.tester
+register.applications.page\:jts.nonlocal.application.number=0
+data.warehouse.page\:db.vendor=DERBY
+license.assignment.page\:com.ibm.team.clm.stakeholder.activate.trial=true
+license.assignment.page\:com.ibm.team.csm.user.agreement=true
+user.registry.page\:user.registry.type=DETECT
+configure.database.page\:db.type=JDBC
+license.assignment.page\:com.ibm.xtools.dm.rhapsody.manager.activate.trial=true
+license.assignment.page\:com.ibm.team.clm.stakeholder.agreement=true
+license.assignment.page\:license.RationalDOORSNextGeneration=com.ibm.team.rrc.author
+configure.email.page\:notification.mail.enabled=false
+configure.database.page\:db.jdbc.location=conf/jts/derby/repositoryDB
+license.assignment.page\:com.ibm.team.rtc.developer.agreement=true
+license.assignment.page\:com.ibm.xtools.dm.rhapsody.manager.agreement=true
+license.assignment.page\:com.ibm.team.rrc.author.agreement=true
+license.assignment.page\:license.CLMServerMonitoring=com.ibm.team.csm.user
+data.warehouse.page\:db.net.port=1527
+license.assignment.page\:license.RationalEngineeringLifecycleManager=com.ibm.team.relm.user
+license.assignment.page\:license.RationalsolutionforCollaborativeLifecycleManagement=com.ibm.team.clm.stakeholder
+license.assignment.page\:com.ibm.team.csm.user.activate.trial=true
+configure.database.page\:db.vendor=DERBY
+data.warehouse.page\:db.type=JDBC
+ 25 license.assignment.page\:com.ibm.team.rrc.author.activate.trial=true
+ 26 data.warehouse.page\:db.jdbc.location=conf/jts/derby/warehouseDB
+ 27 license.assignment.page\:license.RationalRhapsodyDesignManager=com.ibm.xtools.dm.rhapsody.manager
+ 28 license.assignment.page\:com.ibm.team.rtc.developer.activate.trial=true
+ 29 license.assignment.page\:license.RationalTeamConcert=com.ibm.team.rtc.developer
+                                                                           
+"/var/tmp/liora.txt" 29L, 1835C                                                                             1,1           Top

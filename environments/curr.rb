@@ -4,24 +4,23 @@ description "curr"
 override_attributes ({
     'CLM' => {
         'version' => '6.0.1',
-        'clm_zip' => 'JTS-CCM-QM-RM-JRS-RELM-repo-6.0.1.zip',
-        'clm_packages' => 'com.ibm.team.install.jfs.app.gc_6.0.1000.RJF-I20151106-1823-r601- com.ibm.team.install.jfs.app.jrs_6.0.1000.JRS-Packaging_601-I20151106-2026 com.ibm.team.install.jfs.app.jts_6.0.1000.RJF-I20151106-1823-r601- com.ibm.team.install.jfs.app.ldx_6.0.1000.RJF-I20151106-1823-r601- com.ibm.team.install.jfs.app.product-clm_6.0.1000.CALM601-I20151110-0007-r601 com.ibm.team.install.jfs.app.rdm_6.0.1000.RDNG6_0_1-I20151106_1951 com.ibm.team.install.jfs.app.relm_6.0.1000.RELM_6_0_1-I20151106-2026 com.ibm.team.install.jfs.app.rqm_6.0.1000.RQM6_0_1-I20151109_2311 com.ibm.team.install.jfs.app.rtc_6.0.1000.RTC-I20151109-2045-r601',
-        'clm_fix' => "CLM_601_iFix001.zip",
-        'clm_server_patch' =>  'CLM_server_patch_6.0.1.0-CALM601M-I20151217-2117.zip',
-        'clm_mapping_file' => 'com.ibm.rational.rrdi.dcc.mapping_5.0.0.v20151217_0334.zip',
+        'clm_zip' => 'JTS-CCM-QM-RM-JRS-DM-RELM-repo-6.0.1.zip',
+        'clm_packages' => 'com.ibm.team.install.jfs.app.gc_6.0.1000.RJF-I20151106-1823-r601- com.ibm.team.install.jfs.app.jrs_6.0.1000.JRS-Packaging_601-I20151106-2026 com.ibm.team.install.jfs.app.jts_6.0.1000.RJF-I20151106-1823-r601- com.ibm.team.install.jfs.app.ldx_6.0.1000.RJF-I20151106-1823-r601- com.ibm.team.install.jfs.app.product-sse_6.0.1000.SSE601-I20160105-1633-r601 com.ibm.team.install.jfs.app.rdm_6.0.1000.RDNG6_0_1-I20151106_1951 com.ibm.team.install.jfs.app.relm_6.0.1000.RELM_6_0_1-I20151106-2026 com.ibm.team.install.jfs.app.rhapsodydm_6.0.1000.Rhapsody601-I20151112_0802 com.ibm.team.install.jfs.app.rqm_6.0.1000.RQM6_0_1-I20151109_2311 com.ibm.team.install.jfs.app.rtc_6.0.1000.RTC-I20151109-2045-r601',     
+        'clm_fix' => "CLM_601_iFix003.zip",
+        'clm_server_patch' =>  'CLM_server_patch_6.0.1.0-CALM601M-I20160225-2211.zip',
+        'clm_mapping_file' => 'com.ibm.rational.rrdi.dcc.mapping_6.0.1.v20160223_0325.zip',
         'use_build' => 'false',
         'build_zip' => 'RTC-BuildSystem-Toolkit-repo-6.0.1.zip',
         'build_packages' => 'com.ibm.team.install.rtc.buildsystem_6.0.1000.RTC-I20151109-2045-r601',
-        'rdm_zip' => 'Rhapsody-DM-Servers-6.0.1.zip',
-        'rdm_packages' => 'com.ibm.team.install.jfs.app.product-rhapsody-dm_6.0.1000.CALMDM601-I20151110-0007-r601 com.ibm.team.install.jfs.app.rhapsodydm_6.0.1000.Rhapsody601-I20151112_0802',
-        'rdm_fix' => 'DM_601_iFix_1.zip',
-        'rdm_server_patch' => 'DM.patch_6.0.1.v20151224-0433.zip',			
-        'RhapsodyModelServer_fix' => 'Rhapsody_DM_ModelServer_601_iFix_1.zip',
-		'RhapsodyModelServer_linux_fix' => 'rhapsody-ms-binaries-linux_6.0.1.20151223_216_9646652.zip',
+        'rdm_packages' => 'com.ibm.team.install.jfs.app.rdm_6.0.1000.RDNG6_0_1-I20151106_1951 com.ibm.team.install.jfs.app.rhapsodydm_6.0.1000.Rhapsody601-I20151112_0802',     
+        'rdm_fix' => '',
+        'rdm_server_patch' => '',			
+        'RhapsodyModelServer_fix' => '',
+		'RhapsodyModelServer_linux_fix' => '',
         'use_rdm' => 'true'
 	},
 	'UCD' => {
-	    'zip' => 'ibm-ucd-6.2.1.0.748433.zip',
+	    'zip' => 'ibm-ucd-6.2.1.0.ifix01767250.zip',
 	    'plugins_dir' => '/opt/ibm-ucd/server/appdata/var/plugins'
 	    'engine_zip' => 'ibm-ucd-patterns-engine-6.2.1.0.748802.tgz'
 	    'designer_zip' => 'ibm-ucd-patterns-web-designer-linux-x86_64-6.2.1.0.748638.tgz'

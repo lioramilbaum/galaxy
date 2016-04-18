@@ -121,7 +121,18 @@
 	<target name="packer-push clm">
 		<exec executable="/usr/local/bin/packer" dir="${GALAXY_HOME}" failonerror="true">
 			<env key="ATLAS_TOKEN" value="DCn3cXyWFXN6zwAUcX5iRsyyeqQPn7mARsxxsV8ys5tdexprXyZgUaY6JNRG5mQFu94"/>
-			<arg line='push -name liora/clm -var "galaxy_dir=/packer" clm.json' />
+			<arg line='push -name liora/clm -var "galaxy_home=/packer" clm.json' />
+		</exec>
+	</target>
+	
+	<target name="packer clm">
+		
+		<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
+			<arg line="upload . --force" />
+		</exec>
+		
+		<exec executable="/usr/local/bin/packer" dir="${GALAXY_HOME}" failonerror="true">
+			<arg line='build -var "galaxy_home=${GALAXY_HOME}" -only=docker clm.json' />
 		</exec>
 	</target>
 	
@@ -134,8 +145,11 @@
 		<if>
 			<equals arg1="${PROVISION_CLM}" arg2="true" />
 			<then>				
-				<exec executable="/usr/local/bin/knife"  dir="${GALAXY_HOME}" failonerror="true" resultproperty="return.code">
-					<arg line="ec2 server create -r 'role[clm-server], role[rdm-server]' -i '~/.ssh/id_rsa.pem' -I ami-2a207e5d -f m3.xlarge --node-name galaxy_clm_server --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa --ebs-size '100'" />
+				<exec executable="/usr/local/bin/knife"
+					dir="${GALAXY_HOME}"
+					failonerror="true"
+					resultproperty="return.code">
+						<arg line="ec2 server create -r 'role[clm-server]' -i '~/.ssh/id_rsa.pem' -I ami-2a207e5d -f m3.xlarge --node-name galaxy_clm_server --security-group-ids sg-66dc4703 --subnet subnet-9fb295fa --ebs-size '100'" />
 				</exec>
 				<fail>
 					<condition>

@@ -1,9 +1,22 @@
-log_level         :info
-log_location      STDOUT
-local_mode        true
-chef_zero.enabled true
-ssl_verify_mode   "verify_peer"
-environment_path  "/tmp/packer-chef-client/environments"
-cookbook_path     [ "/tmp/chef-cookbooks" ]
-node_name         "packer-ami-build"
-environment       "curr"
+log_level			:info
+log_location		STDOUT
+chef_server_url		"{{.ServerUrl}}"
+client_key			"{{.ClientKey}}"
+{{if ne .EncryptedDataBagSecretPath ""}}
+encrypted_data_bag_secret "{{.EncryptedDataBagSecretPath}}"
+{{end}}
+{{if ne .ValidationClientName ""}}
+validation_client_name "{{.ValidationClientName}}"
+{{else}}
+validation_client_name "chef-validator"
+{{end}}
+{{if ne .ValidationKeyPath ""}}
+validation_key "{{.ValidationKeyPath}}"
+{{end}}
+node_name "{{.NodeName}}"
+{{if ne .ChefEnvironment ""}}
+environment "{{.ChefEnvironment}}"
+{{end}}
+{{if ne .SslVerifyMode ""}}
+ssl_verify_mode :{{.SslVerifyMode}}
+{{end}}

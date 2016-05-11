@@ -27,7 +27,7 @@
 			"use_rdm": "true"
 		},
 		"UCD": {
-			"zip": "ibm-ucd-6.2.1.0.ifix01767250.zip",
+			"zip": "ibm-ucd-6.2.1.0.748433.zip",
 			"plugins_dir": "/opt/ibm-ucd/server/appdata/var/plugins",
 			"engine_zip": "ibm-ucd-patterns-engine-6.2.1.0.748802.tgz",	
 			"designer_zip": "ibm-ucd-patterns-web-designer-linux-x86_64-6.2.1.0.748638.tgz"

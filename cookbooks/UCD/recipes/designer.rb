@@ -1,5 +1,6 @@
 include_recipe 'libarchive::default'
 include_recipe 'python'
+include_recipe "java7::default"
 
 ucd_servers = search(:node, 'role:ucd-server')
 if ( ucd_servers.empty? or node[:roles].include?('ucd-server') )

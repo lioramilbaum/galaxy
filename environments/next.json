@@ -9,19 +9,29 @@
     },
 	"override_attributes": {
 		"CLM": {
-			"version": "6.0.1M3",
-			"zip": "JTS-CCM-QM-RM-JRS-RELM-repo-6.0.1M3.zip",
-			"fix": "",
-			"server_patch":  "",
-			"build_zip": "",
+			"version": "6.0.2",
+			"clm_zip": "JTS-CCM-QM-RM-JRS-DM-RELM-repo-6.0.2.zip",
+			"clm_packages": "com.ibm.team.install.jfs.app.gc_6.0.2000.RJF-SERVER-I20160322-2253-r602- com.ibm.team.install.jfs.app.jrs_6.0.2000.JRS-Packaging_602-I20160323-0002 com.ibm.team.install.jfs.app.jts_6.0.2000.RJF-SERVER-I20160322-2253-r602- com.ibm.team.install.jfs.app.ldx_6.0.2000.RJF-SERVER-I20160322-2253-r602- com.ibm.team.install.jfs.app.product-sse_6.0.2000.SSE602-I20160328-1351-r602 com.ibm.team.install.jfs.app.rdm_6.0.2000.RDNG6_0_2-I20160322_2352 com.ibm.team.install.jfs.app.rqm_6.0.2000.RQM6_0_2-I20160323_2245 com.ibm.team.install.jfs.app.rtc_6.0.2000.RTC-SERVER-I20160323-2215-r602",
+			"clm_packages1": "com.ibm.team.install.jfs.app.gc_6.0.2000.RJF-SERVER-I20160322-2253-r602- com.ibm.team.install.jfs.app.jrs_6.0.2000.JRS-Packaging_602-I20160323-0002 com.ibm.team.install.jfs.app.jts_6.0.2000.RJF-SERVER-I20160322-2253-r602- com.ibm.team.install.jfs.app.ldx_6.0.2000.RJF-SERVER-I20160322-2253-r602- com.ibm.team.install.jfs.app.product-sse_6.0.2000.SSE602-I20160328-1351-r602 com.ibm.team.install.jfs.app.rdm_6.0.2000.RDNG6_0_2-I20160322_2352 com.ibm.team.install.jfs.app.relm_6.0.2000.RELM_6_0_2-I20160323-0002 com.ibm.team.install.jfs.app.rhapsodydm_6.0.2000.Rhapsody602-I20160327_0720 com.ibm.team.install.jfs.app.rqm_6.0.2000.RQM6_0_2-I20160323_2245 com.ibm.team.install.jfs.app.rtc_6.0.2000.RTC-SERVER-I20160323-2215-r602",
+			"clm_fix": "",
+			"clm_server_patch": "",
+			"clm_mapping_file": "",
+			"use_build": "false",
+			"build_zip": "RTC-BuildSystem-Toolkit-repo-6.0.2.zip",
 			"build_packages": "",
 			"rdm_zip": "",
-			"rdm_packages": "",
-			"packages": ""
+			"rdm_packages": "",     
+			"rdm_fix": "",
+			"rdm_server_patch": "",
+			"RhapsodyModelServer_fix": "",
+			"RhapsodyModelServer_linux_fix": "",
+			"use_rdm": "true"
 		},
 		"UCD": {
-			"zip": "ibm-ucd-6.1.3.0.695062.zip",
-			"plugins_dir": "/opt/ibm-ucd/server/appdata/var/plugins"
+			"zip": "ibm-ucd-6.2.1.0.ifix01767250.zip",
+			"plugins_dir": "/opt/ibm-ucd/server/appdata/var/plugins",
+			"engine_zip": "ibm-ucd-patterns-engine-6.2.1.0.748802.tgz",	
+			"designer_zip": "ibm-ucd-patterns-web-designer-linux-x86_64-6.2.1.0.748638.tgz"
 		},
 		"UCR": {
 			"zip": "IBM_URBANCODE_RELEASE_6.1.1.9_update.zip"
